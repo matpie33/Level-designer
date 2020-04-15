@@ -3,9 +3,14 @@ import com.jme3.system.AppSettings;
 
 import java.awt.*;
 
-public class LevelEditor  extends SimpleApplication {
+public class LevelEditor extends SimpleApplication {
 
-	public static void main (String [] args){
+	public static void main(String[] args) {
+		LevelEditor levelEditor = loadGame();
+
+	}
+
+	private static LevelEditor loadGame() {
 		LevelEditor gameApplication = new LevelEditor();
 		AppSettings settings = new AppSettings(true);
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -14,10 +19,12 @@ public class LevelEditor  extends SimpleApplication {
 		gameApplication.setShowSettings(false);
 		gameApplication.setSettings(settings);
 		gameApplication.start();
+		return gameApplication;
 	}
 
 	@Override
 	public void simpleInitApp() {
-
+		ModelsLoader modelsLoader = new ModelsLoader(assetManager);
+		modelsLoader.loadModels();
 	}
 }
