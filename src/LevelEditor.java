@@ -2,9 +2,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.CameraNode;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.CameraControl;
 import com.jme3.system.AppSettings;
 
 import java.awt.*;
@@ -12,7 +10,9 @@ import java.util.List;
 
 public class LevelEditor extends SimpleApplication {
 
-	private CameraController cameraController;
+	private ModelSelectionController modelSelectionController;
+	private SelectionStateDTO selectionStateDTO;
+	private KeysSetup keysSetup;
 
 	public static void main(String[] args) {
 		 loadGame();
@@ -39,13 +39,17 @@ public class LevelEditor extends SimpleApplication {
 		ModelToSceneAdder modelToSceneAdder = new ModelToSceneAdder(rootNode);
 		modelToSceneAdder.addSpatials(spatials);
 		initCrossHairs();
-		cameraController = new CameraController(cam, rootNode);
+		selectionStateDTO = new SelectionStateDTO();
+		modelSelectionController = new ModelSelectionController(cam, rootNode,
+				selectionStateDTO);
+		keysSetup=  new KeysSetup(inputManager, modelSelectionController);
+		keysSetup.setUp();
 	}
 
 	@Override
 	public void simpleUpdate(float tpf) {
 
-		cameraController.update();
+		modelSelectionController.update();
 		super.simpleUpdate(tpf);
 	}
 
