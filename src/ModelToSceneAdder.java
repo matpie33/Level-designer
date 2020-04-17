@@ -7,7 +7,7 @@ import java.util.List;
 public class ModelToSceneAdder {
 
 	private Node rootNode;
-	private Vector3f firstObjectCoordinate = new Vector3f(0, 0, -20);
+	private Vector3f firstObjectCoordinate = new Vector3f(0, -10, -20);
 
 	public ModelToSceneAdder(Node rootNode) {
 		this.rootNode = rootNode;

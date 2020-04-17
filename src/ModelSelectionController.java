@@ -94,8 +94,10 @@ public class ModelSelectionController {
 	}
 
 	public void selectCurrentSpatial() {
-		if (selectionStateDTO.getCurrentlyHoveredModel() != null
-				&& selectionStateDTO.getCurrentlySelectedModel() == null) {
+		if (selectionStateDTO.getCurrentlySelectedModel() != null){
+			unselectCurrentSpatial();
+		}
+		if (selectionStateDTO.getCurrentlyHoveredModel() != null) {
 
 			markCurrentModelAsSelected();
 		}
