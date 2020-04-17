@@ -7,6 +7,53 @@ public class SelectionStateDTO {
 
 	private Geometry currentlySelectedModel;
 	private ColorRGBA previousColorOfSelectedModel;
+	private boolean movingForward;
+	private boolean movingBackward;
+	private boolean movingLeft;
+	private boolean movingRight;
+	private boolean movingUp;
+	private boolean movingDown;
+
+
+	public boolean isMovingUp() {
+		return movingUp;
+	}
+
+	public void setMovingUp(boolean movingUp) {
+		this.movingUp = movingUp;
+	}
+
+	public boolean isMovingDown() {
+		return movingDown;
+	}
+
+	public void setMovingDown(boolean movingDown) {
+		this.movingDown = movingDown;
+	}
+
+	public boolean isMovingBackward() {
+		return movingBackward;
+	}
+
+	public void setMovingBackward(boolean movingBackward) {
+		this.movingBackward = movingBackward;
+	}
+
+	public boolean isMovingLeft() {
+		return movingLeft;
+	}
+
+	public void setMovingLeft(boolean movingLeft) {
+		this.movingLeft = movingLeft;
+	}
+
+	public boolean isMovingRight() {
+		return movingRight;
+	}
+
+	public void setMovingRight(boolean movingRight) {
+		this.movingRight = movingRight;
+	}
 
 	public Geometry getCurrentlyHoveredModel() {
 		return currentlyHoveredModel;
@@ -51,4 +98,13 @@ public class SelectionStateDTO {
 		currentlyHoveredModel = null;
 		previousColorOfHoveredModel = null;
 	}
+
+	public void setMovingForward(boolean movingForward) {
+		this.movingForward = movingForward;
+	}
+
+	public boolean isMovingForward() {
+		return movingForward;
+	}
+
 }

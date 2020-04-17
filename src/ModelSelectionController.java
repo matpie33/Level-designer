@@ -35,7 +35,8 @@ public class ModelSelectionController {
 		if (collisionResults.size() > 0) {
 			CollisionResult closestCollision = collisionResults.getClosestCollision();
 			Geometry geometry = closestCollision.getGeometry();
-			if (geometry.equals(selectionStateDTO.getCurrentlySelectedModel())) {
+			if (geometry.equals(
+					selectionStateDTO.getCurrentlySelectedModel())) {
 				return;
 			}
 			clearPreviouslyHoveredModel();
@@ -110,7 +111,7 @@ public class ModelSelectionController {
 	}
 
 	public void unselectCurrentSpatial() {
-		if (selectionStateDTO.getCurrentlySelectedModel()==null){
+		if (selectionStateDTO.getCurrentlySelectedModel() == null) {
 			return;
 		}
 		setColor(selectionStateDTO.getCurrentlySelectedModel(),

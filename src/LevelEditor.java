@@ -13,9 +13,10 @@ public class LevelEditor extends SimpleApplication {
 	private ModelSelectionController modelSelectionController;
 	private SelectionStateDTO selectionStateDTO;
 	private KeysSetup keysSetup;
+	private SelectedObjectMovementController selectedObjectMovementController;
 
 	public static void main(String[] args) {
-		 loadGame();
+		loadGame();
 
 	}
 
@@ -42,8 +43,10 @@ public class LevelEditor extends SimpleApplication {
 		selectionStateDTO = new SelectionStateDTO();
 		modelSelectionController = new ModelSelectionController(cam, rootNode,
 				selectionStateDTO);
-		keysSetup=  new KeysSetup(inputManager, modelSelectionController);
+		keysSetup = new KeysSetup(inputManager, modelSelectionController,
+				selectionStateDTO);
 		keysSetup.setUp();
+		selectedObjectMovementController = new SelectedObjectMovementController(selectionStateDTO);
 	}
 
 	@Override
@@ -51,6 +54,8 @@ public class LevelEditor extends SimpleApplication {
 
 		modelSelectionController.update();
 		super.simpleUpdate(tpf);
+		selectedObjectMovementController.update();
+
 	}
 
 	private void addLight() {
@@ -62,12 +67,16 @@ public class LevelEditor extends SimpleApplication {
 	protected void initCrossHairs() {
 		guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
 		BitmapText ch = new BitmapText(guiFont, false);
-		ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+		ch.setSize(guiFont.getCharSet()
+						  .getRenderedSize() * 2);
 		ch.setText("+"); // crosshairs
 		ch.setLocalTranslation( // center
-				settings.getWidth() / 2 - ch.getLineWidth()/2,
-				settings.getHeight() / 2 + ch.getLineHeight()/2, 0);
+				settings.getWidth() / 2 - ch.getLineWidth() / 2,
+				settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
 		guiNode.attachChild(ch);
 	}
 
+	public void setFlyCameraEnabled(boolean enable) {
+		flyCam.setEnabled(enable);
+	}
 }
