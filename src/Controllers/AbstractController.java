@@ -1,3 +1,5 @@
+package Controllers;
+
 public interface AbstractController {
 
 	public void update ();

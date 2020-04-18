@@ -1,9 +1,15 @@
+package main;
+
+import Controllers.AbstractController;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
+import initialization.ControllersInitializer;
+import initialization.ModelToSceneAdder;
+import initialization.ModelsLoader;
 
 import java.awt.*;
 import java.util.List;

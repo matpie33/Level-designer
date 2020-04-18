@@ -1,3 +1,5 @@
+package initialization;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.scene.Spatial;

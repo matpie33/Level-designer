@@ -1,3 +1,5 @@
+package DTO;
+
 public class KeyModifiersStateDTO {
 
 	private boolean controlPressed;

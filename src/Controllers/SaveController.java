@@ -1,3 +1,6 @@
+package Controllers;
+
+import DTO.SelectionStateDTO;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 

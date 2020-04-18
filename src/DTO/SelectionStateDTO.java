@@ -1,3 +1,5 @@
+package DTO;
+
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 
