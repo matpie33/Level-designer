@@ -10,7 +10,7 @@ import com.jme3.system.AppSettings;
 import initialization.ControllersInitializer;
 import initialization.ModelToSceneAdder;
 import initialization.ModelsLoader;
-import saveAndLoad.LoadFile;
+import saveAndLoad.FileLoad;
 
 import java.awt.*;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
-	private LoadFile loadFile = new LoadFile();
+	private FileLoad fileLoad = new FileLoad();
 
 	public static void main(String[] args) {
 		loadGame();
@@ -50,7 +50,7 @@ public class LevelEditor extends SimpleApplication {
 
 		initCrossHairs();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
-		loadFile.readFile("level.txt");
+		fileLoad.readFile("level.txt");
 
 	}
 

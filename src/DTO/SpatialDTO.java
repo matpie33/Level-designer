@@ -35,7 +35,7 @@ public class SpatialDTO {
 
 	@Override
 	public String toString() {
-		return " path: " + pathToModel + "Pos: " + position + " rotation: "
+		return " path: " + pathToModel + " Pos: " + position + " rotation: "
 				+ rotation;
 	}
 }
