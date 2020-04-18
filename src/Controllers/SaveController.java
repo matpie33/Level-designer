@@ -3,11 +3,13 @@ package Controllers;
 import DTO.SelectionStateDTO;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import saveAndLoad.FileSaveAndLoad;
 
 public class SaveController implements AbstractController {
 
 	private SelectionStateDTO selectionStateDTO;
 	private Node rootNode;
+	private FileSaveAndLoad fileSaveAndLoad = new FileSaveAndLoad();
 
 	public SaveController(SelectionStateDTO selectionStateDTO, Node rootNode) {
 		this.selectionStateDTO = selectionStateDTO;
@@ -23,11 +25,7 @@ public class SaveController implements AbstractController {
 	public void update() {
 		if (selectionStateDTO.isSaveRequested()) {
 			selectionStateDTO.setSaveRequested(false);
-			for (Spatial child : rootNode.getChildren()) {
-				System.out.println("child: " + child.getName() + " coord: "
-						+ child.getWorldTranslation() + " rotation: "
-						+ child.getWorldRotation());
-			}
+			fileSaveAndLoad.save(rootNode.getChildren());
 		}
 	}
 
