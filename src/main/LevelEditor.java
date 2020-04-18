@@ -1,6 +1,7 @@
 package main;
 
 import Controllers.AbstractController;
+import DTO.SpatialDTO;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
@@ -19,6 +20,7 @@ public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
 	private FileLoad fileLoad = new FileLoad();
+	private final static boolean readFromFile = true;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -42,15 +44,19 @@ public class LevelEditor extends SimpleApplication {
 				guiFont);
 		controllersInitializer.initilize();
 		flyCam.setMoveSpeed(50f);
-		ModelsLoader modelsLoader = new ModelsLoader(assetManager);
-		List<Spatial> spatials = modelsLoader.loadModels();
 		addLight();
 		ModelToSceneAdder modelToSceneAdder = new ModelToSceneAdder(rootNode);
+		ModelsLoader modelsLoader = new ModelsLoader(assetManager);
+		if (readFromFile){
+			List<SpatialDTO> spatialDTOS = fileLoad.readFile("level.txt");
+			modelToSceneAdder.addSpatialData(spatialDTOS);
+		}
+		List<Spatial> spatials = modelsLoader.loadModels();
 		modelToSceneAdder.addSpatials(spatials);
 
 		initCrossHairs();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
-		fileLoad.readFile("level.txt");
+
 
 	}
 

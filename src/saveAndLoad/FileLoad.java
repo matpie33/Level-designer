@@ -14,13 +14,12 @@ import java.util.List;
 
 public class FileLoad {
 
-
-	public void readFile(String filePath) {
+	public List<SpatialDTO> readFile(String filePath) {
 		List<String> lines = readLinesFromFile(filePath);
-		readSpatials(lines);
+		return readSpatials(lines);
 	}
 
-	private void readSpatials(List<String> lines) {
+	private List<SpatialDTO> readSpatials(List<String> lines) {
 		List<SpatialDTO> spatials = new ArrayList<>();
 		SpatialDTO currentlyReadedSpatial = null;
 		for (String line : lines) {
@@ -32,6 +31,7 @@ public class FileLoad {
 				readParams(line, currentlyReadedSpatial);
 			}
 		}
+		return spatials;
 	}
 
 	private void readParams(String line, SpatialDTO currentlyReadedSpatial) {
