@@ -35,8 +35,8 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(MOVE_BACKWARD, new KeyTrigger(KeyInput.KEY_G));
 		inputManager.addMapping(MOVE_LEFT, new KeyTrigger(KeyInput.KEY_F));
 		inputManager.addMapping(MOVE_RIGHT, new KeyTrigger(KeyInput.KEY_H));
-		inputManager.addMapping(MOVE_UP, new KeyTrigger(KeyInput.KEY_Y));
-		inputManager.addMapping(MOVE_DOWN, new KeyTrigger(KeyInput.KEY_R));
+		inputManager.addMapping(MOVE_UP, new KeyTrigger(KeyInput.KEY_5));
+		inputManager.addMapping(MOVE_DOWN, new KeyTrigger(KeyInput.KEY_B));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
 				MOVE_DOWN);

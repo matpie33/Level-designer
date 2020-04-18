@@ -2,6 +2,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 
@@ -46,7 +47,8 @@ public class LevelEditor extends SimpleApplication {
 		keysSetup = new KeysSetup(inputManager, modelSelectionController,
 				selectionStateDTO);
 		keysSetup.setUp();
-		selectedObjectMovementController = new SelectedObjectMovementController(selectionStateDTO);
+		selectedObjectMovementController = new SelectedObjectMovementController(
+				selectionStateDTO, cam);
 	}
 
 	@Override

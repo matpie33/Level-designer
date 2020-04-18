@@ -4,41 +4,61 @@ import com.jme3.scene.Geometry;
 
 public class SelectedObjectMovementController {
 
+	public static final float SLOW_CAMERA_SPEED = 0.01f;
 	private SelectionStateDTO selectionStateDTO;
+	private Camera camera;
 
-	public SelectedObjectMovementController(SelectionStateDTO selectionStateDTO) {
+	public SelectedObjectMovementController(SelectionStateDTO selectionStateDTO,
+			Camera camera) {
 		this.selectionStateDTO = selectionStateDTO;
+		this.camera = camera;
 	}
 
 	public void update() {
 		Geometry currentlySelectedModel = selectionStateDTO.getCurrentlySelectedModel();
 		if (currentlySelectedModel != null) {
 			if (selectionStateDTO.isMovingForward()) {
-				moveInDirection(currentlySelectedModel, Vector3f.UNIT_Z, -1);
+				Vector3f dir = camera.getDirection();
+				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),
+						Math.round(dir.getY()), Math.round(dir.getZ()));
+				currentlySelectedModel.setLocalTranslation(
+						currentlySelectedModel.getLocalTranslation()
+											  .add(xyzDir.mult(
+													  SLOW_CAMERA_SPEED)));
 			}
 			if (selectionStateDTO.isMovingBackward()) {
-				moveInDirection(currentlySelectedModel, Vector3f.UNIT_Z, 1);
+				Vector3f dir = camera.getDirection();
+				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),
+						Math.round(dir.getY()), Math.round(dir.getZ()));
+				currentlySelectedModel.setLocalTranslation(
+						currentlySelectedModel.getLocalTranslation()
+											  .add(xyzDir.mult(-SLOW_CAMERA_SPEED)));
 			}
 			if (selectionStateDTO.isMovingRight()) {
-				moveInDirection(currentlySelectedModel, Vector3f.UNIT_X, 1);
+				currentlySelectedModel.setLocalTranslation(
+						currentlySelectedModel.getLocalTranslation()
+											  .add(camera.getLeft()
+														 .mult(-SLOW_CAMERA_SPEED)));
 			}
 			if (selectionStateDTO.isMovingLeft()) {
-				moveInDirection(currentlySelectedModel, Vector3f.UNIT_X, -1);
+				currentlySelectedModel.setLocalTranslation(
+						currentlySelectedModel.getLocalTranslation()
+											  .add(camera.getLeft()
+														 .mult(SLOW_CAMERA_SPEED)));
 			}
 			if (selectionStateDTO.isMovingUp()) {
-				moveInDirection(currentlySelectedModel, Vector3f.UNIT_Y, 1);
+				currentlySelectedModel.setLocalTranslation(
+						currentlySelectedModel.getLocalTranslation()
+											  .add(camera.getUp()
+														 .mult(SLOW_CAMERA_SPEED)));
 			}
 			if (selectionStateDTO.isMovingDown()) {
-				moveInDirection(currentlySelectedModel, Vector3f.UNIT_Y, -1);
+				currentlySelectedModel.setLocalTranslation(
+						currentlySelectedModel.getLocalTranslation()
+											  .add(camera.getUp()
+														 .mult(-SLOW_CAMERA_SPEED)));
 			}
 		}
-	}
-
-	private void moveInDirection(Geometry currentlySelectedModel,
-			Vector3f unitZ, int multiplier) {
-		currentlySelectedModel.setLocalTranslation(
-				currentlySelectedModel.getLocalTranslation()
-									  .add(unitZ.mult(multiplier * 0.01f)));
 	}
 
 }
