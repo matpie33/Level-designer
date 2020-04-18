@@ -1,7 +1,7 @@
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
-public class SaveController {
+public class SaveController implements AbstractController {
 
 	private SelectionStateDTO selectionStateDTO;
 	private Node rootNode;
@@ -11,6 +11,12 @@ public class SaveController {
 		this.rootNode = rootNode;
 	}
 
+	@Override
+	public void setUp() {
+
+	}
+
+	@Override
 	public void update() {
 		if (selectionStateDTO.isSaveRequested()) {
 			selectionStateDTO.setSaveRequested(false);

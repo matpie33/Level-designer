@@ -2,9 +2,10 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
+import com.jme3.scene.control.AbstractControl;
 import com.jme3.system.AppSettings;
 
-public class ExitController {
+public class ExitController implements AbstractController {
 
 	public static final String CONFIRM_TEXT = "Are you sure? Press 'y' or 'n'.";
 	private SelectionStateDTO selectionStateDTO;
@@ -23,10 +24,12 @@ public class ExitController {
 		this.settings = settings;
 	}
 
+	@Override
 	public void setUp() {
 		createExitConfirmationText();
 	}
 
+	@Override
 	public void update() {
 		if (selectionStateDTO.isExitRequested() && !guiNode.hasChild(
 				exitConfirmText)) {

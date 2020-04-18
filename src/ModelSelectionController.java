@@ -10,7 +10,7 @@ import com.jme3.scene.Node;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class ModelSelectionController {
+public class ModelSelectionController implements AbstractController {
 
 	private Camera camera;
 	private Node rootNode;
@@ -28,6 +28,12 @@ public class ModelSelectionController {
 		this.selectionStateDTO = selectionStateDTO;
 	}
 
+	@Override
+	public void setUp() {
+
+	}
+
+	@Override
 	public void update() {
 		Ray ray = new Ray(camera.getLocation(), camera.getDirection());
 		CollisionResults collisionResults = new CollisionResults();
