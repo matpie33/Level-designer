@@ -7,6 +7,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import main.LevelEditor;
+import saveAndLoad.FileSaveAndLoad;
 
 public class ExitController implements AbstractController {
 
@@ -17,14 +18,17 @@ public class ExitController implements AbstractController {
 	private BitmapText exitConfirmText;
 	private LevelEditor levelEditor;
 	private AppSettings settings;
+	private FileSaveAndLoad fileSaveAndLoad;
 
 	public ExitController(SelectionStateDTO selectionStateDTO, Node guiNode,
-			BitmapFont guiFont, LevelEditor levelEditor, AppSettings settings) {
+			BitmapFont guiFont, LevelEditor levelEditor, AppSettings settings,
+			FileSaveAndLoad fileSaveAndLoad) {
 		this.selectionStateDTO = selectionStateDTO;
 		this.guiNode = guiNode;
 		this.guiFont = guiFont;
 		this.levelEditor = levelEditor;
 		this.settings = settings;
+		this.fileSaveAndLoad = fileSaveAndLoad;
 	}
 
 	@Override
@@ -39,6 +43,8 @@ public class ExitController implements AbstractController {
 			guiNode.attachChild(exitConfirmText);
 		}
 		if (Boolean.TRUE.equals(selectionStateDTO.isExitConfirmed())) {
+			fileSaveAndLoad.save(levelEditor.getRootNode()
+											.getChildren());
 			levelEditor.stop();
 		}
 		if (Boolean.FALSE.equals(selectionStateDTO.isExitConfirmed())) {

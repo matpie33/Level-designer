@@ -5,6 +5,7 @@ import DTO.SelectionStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.system.AppSettings;
 import main.LevelEditor;
+import saveAndLoad.FileSaveAndLoad;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,8 @@ public class ControllersInitializer {
 		controllers.add(new SelectedObjectMovementController(selectionStateDTO,
 				levelEditor.getCamera()));
 		controllers.add(new ExitController(selectionStateDTO,
-				levelEditor.getGuiNode(), guiFont, levelEditor, settings));
+				levelEditor.getGuiNode(), guiFont, levelEditor, settings,
+				new FileSaveAndLoad()));
 		controllers.add(new SaveController(selectionStateDTO,
 				levelEditor.getRootNode()));
 	}
