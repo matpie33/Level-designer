@@ -15,6 +15,7 @@ public class LevelEditor extends SimpleApplication {
 	private KeysSetup keysSetup;
 	private SelectedObjectMovementController selectedObjectMovementController;
 	private ExitController exitController;
+	private SaveController saveController;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -53,6 +54,7 @@ public class LevelEditor extends SimpleApplication {
 		exitController = new ExitController(selectionStateDTO, guiNode,
 				guiFont, this, settings);
 		exitController.setUp();
+		saveController = new SaveController(selectionStateDTO, rootNode);
 
 	}
 
@@ -61,8 +63,9 @@ public class LevelEditor extends SimpleApplication {
 
 		exitController.update();
 		modelSelectionController.update();
-		super.simpleUpdate(tpf);
 		selectedObjectMovementController.update();
+		saveController.update();
+		super.simpleUpdate(tpf);
 
 	}
 
@@ -84,7 +87,4 @@ public class LevelEditor extends SimpleApplication {
 		guiNode.attachChild(ch);
 	}
 
-	public void setFlyCameraEnabled(boolean enable) {
-		flyCam.setEnabled(enable);
-	}
 }

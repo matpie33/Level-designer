@@ -15,6 +15,7 @@ public class SelectionStateDTO {
 	private boolean movingDown;
 	private boolean exitRequested;
 	private Boolean exitConfirmed;
+	private boolean saveRequested;
 
 	public boolean isMovingUp() {
 		return movingUp;
@@ -122,5 +123,13 @@ public class SelectionStateDTO {
 
 	public void setExitConfirmed(Boolean exitConfirmed) {
 		this.exitConfirmed = exitConfirmed;
+	}
+
+	public boolean isSaveRequested() {
+		return saveRequested;
+	}
+
+	public void setSaveRequested(boolean saveRequested) {
+		this.saveRequested = saveRequested;
 	}
 }

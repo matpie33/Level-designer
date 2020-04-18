@@ -8,6 +8,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 public class KeysSetup implements ActionListener {
 
 	public static final String SELECT_MODEL = "select";
+	public static final String CONTROL_KEY = "control";
 	public static final String MOVE_FORWARD = "moveForward";
 	public static final String MOVE_BACKWARD = "moveBackward";
 	public static final String MOVE_LEFT = "moveLeft";
@@ -17,16 +18,19 @@ public class KeysSetup implements ActionListener {
 	public static final String CONFIRM_EXIT = "confirmExit";
 	public static final String REJECT_EXIT = "rejectExit";
 	public static final String EXIT = "exit";
+	public static final String SAVE = "save";
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
 	private SelectionStateDTO selectionStateDTO;
+	private KeyModifiersStateDTO keyModifiersStateDTO;
 
 	public KeysSetup(InputManager inputManager,
 			ModelSelectionController modelSelectionController, SelectionStateDTO selectionStateDTO) {
 		this.inputManager = inputManager;
 		this.modelSelectionController = modelSelectionController;
 		this.selectionStateDTO = selectionStateDTO;
+		keyModifiersStateDTO = new KeyModifiersStateDTO();
 	}
 
 	public void setUp() {
@@ -43,9 +47,11 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(EXIT, new KeyTrigger(KeyInput.KEY_ESCAPE));
 		inputManager.addMapping(CONFIRM_EXIT, new KeyTrigger(KeyInput.KEY_Y));
 		inputManager.addMapping(REJECT_EXIT, new KeyTrigger(KeyInput.KEY_N));
+		inputManager.addMapping(SAVE, new KeyTrigger(KeyInput.KEY_S));
+		inputManager.addMapping(CONTROL_KEY, new KeyTrigger(KeyInput.KEY_LCONTROL));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
-				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT);
+				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY);
 	}
 
 	@Override
@@ -86,6 +92,14 @@ public class KeysSetup implements ActionListener {
 			if (selectionStateDTO.isExitRequested() && isPressed){
 				selectionStateDTO.setExitConfirmed(false);
 				selectionStateDTO.setExitRequested(false);
+			}
+		}
+		if (CONTROL_KEY.equals(name)){
+			keyModifiersStateDTO.setControlPressed(isPressed);
+		}
+		if (SAVE.equals(name) && isPressed){
+			if (keyModifiersStateDTO.isControlPressed()){
+				selectionStateDTO.setSaveRequested(true);
 			}
 		}
 	}

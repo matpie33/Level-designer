@@ -1,6 +1,7 @@
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 public class SelectedObjectMovementController {
 
@@ -15,8 +16,9 @@ public class SelectedObjectMovementController {
 	}
 
 	public void update() {
-		Geometry currentlySelectedModel = selectionStateDTO.getCurrentlySelectedModel();
-		if (currentlySelectedModel != null) {
+		Spatial model = selectionStateDTO.getCurrentlySelectedModel();
+		if (model != null) {
+			Node currentlySelectedModel = model.getParent();
 			if (selectionStateDTO.isMovingForward()) {
 				Vector3f dir = camera.getDirection();
 				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),
@@ -32,7 +34,8 @@ public class SelectedObjectMovementController {
 						Math.round(dir.getY()), Math.round(dir.getZ()));
 				currentlySelectedModel.setLocalTranslation(
 						currentlySelectedModel.getLocalTranslation()
-											  .add(xyzDir.mult(-SLOW_CAMERA_SPEED)));
+											  .add(xyzDir.mult(
+													  -SLOW_CAMERA_SPEED)));
 			}
 			if (selectionStateDTO.isMovingRight()) {
 				currentlySelectedModel.setLocalTranslation(
