@@ -41,11 +41,13 @@ public class ControllersInitializer {
 		keysSetup.setUp();
 		controllers.add(new SelectedObjectMovementController(selectionStateDTO,
 				levelEditor.getCamera()));
-		controllers.add(new ExitController(selectionStateDTO,
-				levelEditor.getGuiNode(), guiFont, levelEditor, settings,
-				new FileSaveAndLoad()));
+		controllers.add(
+				new ExitController(selectionStateDTO, levelEditor.getGuiNode(),
+						guiFont, levelEditor, settings, new FileSaveAndLoad()));
 		controllers.add(new SaveController(selectionStateDTO,
 				levelEditor.getRootNode()));
+		controllers.add(new ModelDuplicationController(selectionStateDTO,
+				levelEditor.getRootNode(), modelSelectionController));
 	}
 
 	public List<AbstractController> getControllers() {

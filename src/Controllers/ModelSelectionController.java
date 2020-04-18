@@ -71,6 +71,16 @@ public class ModelSelectionController implements AbstractController {
 		}
 	}
 
+	public void returnCurrentlySelectedModelToPreviousColor (){
+		setColor(selectionStateDTO.getCurrentlySelectedModel(),
+				selectionStateDTO.getPreviousColorOfSelectedModel());
+	}
+
+	public void returnCurrentlySelectedModelToSelectionMarkerColor() {
+		setColor(selectionStateDTO.getCurrentlySelectedModel(),
+				COLOR_OF_SELECTED_MODEL);
+	}
+
 	private ColorRGBA setColor(Geometry geometry, ColorRGBA color) {
 		ColorRGBA previousColorOfHoveredModel = null;
 		Optional<MatParam> optionalMaterial = geometry.getMaterial()

@@ -24,6 +24,7 @@ public class KeysSetup implements ActionListener {
 	public static final String REJECT_EXIT = "rejectExit";
 	public static final String EXIT = "exit";
 	public static final String SAVE = "save";
+	public static final String DUPLICATE_MODEL = "duplicate";
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
@@ -31,7 +32,8 @@ public class KeysSetup implements ActionListener {
 	private KeyModifiersStateDTO keyModifiersStateDTO;
 
 	public KeysSetup(InputManager inputManager,
-			ModelSelectionController modelSelectionController, SelectionStateDTO selectionStateDTO) {
+			ModelSelectionController modelSelectionController,
+			SelectionStateDTO selectionStateDTO) {
 		this.inputManager = inputManager;
 		this.modelSelectionController = modelSelectionController;
 		this.selectionStateDTO = selectionStateDTO;
@@ -53,10 +55,14 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(CONFIRM_EXIT, new KeyTrigger(KeyInput.KEY_Y));
 		inputManager.addMapping(REJECT_EXIT, new KeyTrigger(KeyInput.KEY_N));
 		inputManager.addMapping(SAVE, new KeyTrigger(KeyInput.KEY_S));
-		inputManager.addMapping(CONTROL_KEY, new KeyTrigger(KeyInput.KEY_LCONTROL));
+		inputManager.addMapping(DUPLICATE_MODEL,
+				new KeyTrigger(KeyInput.KEY_D));
+		inputManager.addMapping(CONTROL_KEY,
+				new KeyTrigger(KeyInput.KEY_LCONTROL));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
-				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY);
+				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY,
+				DUPLICATE_MODEL);
 	}
 
 	@Override
@@ -89,22 +95,28 @@ public class KeysSetup implements ActionListener {
 			selectionStateDTO.setExitRequested(true);
 		}
 		if (CONFIRM_EXIT.equals(name)) {
-			if (selectionStateDTO.isExitRequested() && isPressed){
+			if (selectionStateDTO.isExitRequested() && isPressed) {
 				selectionStateDTO.setExitConfirmed(true);
 			}
 		}
 		if (REJECT_EXIT.equals(name)) {
-			if (selectionStateDTO.isExitRequested() && isPressed){
+			if (selectionStateDTO.isExitRequested() && isPressed) {
 				selectionStateDTO.setExitConfirmed(false);
 				selectionStateDTO.setExitRequested(false);
 			}
 		}
-		if (CONTROL_KEY.equals(name)){
+		if (CONTROL_KEY.equals(name)) {
 			keyModifiersStateDTO.setControlPressed(isPressed);
 		}
-		if (SAVE.equals(name) && isPressed){
-			if (keyModifiersStateDTO.isControlPressed()){
+		if (SAVE.equals(name) && isPressed) {
+			if (keyModifiersStateDTO.isControlPressed()) {
 				selectionStateDTO.setSaveRequested(true);
+			}
+		}
+		if (DUPLICATE_MODEL.equals(name) && isPressed) {
+			if (keyModifiersStateDTO.isControlPressed()
+					&& selectionStateDTO.getCurrentlySelectedModel() != null) {
+				selectionStateDTO.setDuplicateModel(true);
 			}
 		}
 	}

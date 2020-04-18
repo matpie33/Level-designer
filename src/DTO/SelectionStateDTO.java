@@ -18,6 +18,7 @@ public class SelectionStateDTO {
 	private boolean exitRequested;
 	private Boolean exitConfirmed;
 	private boolean saveRequested;
+	private boolean duplicateModel;
 
 	public boolean isMovingUp() {
 		return movingUp;
@@ -133,5 +134,13 @@ public class SelectionStateDTO {
 
 	public void setSaveRequested(boolean saveRequested) {
 		this.saveRequested = saveRequested;
+	}
+
+	public boolean isDuplicateModel() {
+		return duplicateModel;
+	}
+
+	public void setDuplicateModel(boolean duplicateModel) {
+		this.duplicateModel = duplicateModel;
 	}
 }
