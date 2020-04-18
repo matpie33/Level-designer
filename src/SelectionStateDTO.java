@@ -13,7 +13,8 @@ public class SelectionStateDTO {
 	private boolean movingRight;
 	private boolean movingUp;
 	private boolean movingDown;
-
+	private boolean exitRequested;
+	private Boolean exitConfirmed;
 
 	public boolean isMovingUp() {
 		return movingUp;
@@ -107,4 +108,19 @@ public class SelectionStateDTO {
 		return movingForward;
 	}
 
+	public void setExitRequested(boolean isPressed) {
+		exitRequested = isPressed;
+	}
+
+	public boolean isExitRequested() {
+		return exitRequested;
+	}
+
+	public Boolean isExitConfirmed() {
+		return exitConfirmed;
+	}
+
+	public void setExitConfirmed(Boolean exitConfirmed) {
+		this.exitConfirmed = exitConfirmed;
+	}
 }

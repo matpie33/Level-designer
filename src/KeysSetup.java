@@ -14,6 +14,9 @@ public class KeysSetup implements ActionListener {
 	public static final String MOVE_RIGHT = "moveRight";
 	public static final String MOVE_UP = "moveUp";
 	public static final String MOVE_DOWN = "moveDown";
+	public static final String CONFIRM_EXIT = "confirmExit";
+	public static final String REJECT_EXIT = "rejectExit";
+	public static final String EXIT = "exit";
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
@@ -37,9 +40,12 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(MOVE_RIGHT, new KeyTrigger(KeyInput.KEY_H));
 		inputManager.addMapping(MOVE_UP, new KeyTrigger(KeyInput.KEY_5));
 		inputManager.addMapping(MOVE_DOWN, new KeyTrigger(KeyInput.KEY_B));
+		inputManager.addMapping(EXIT, new KeyTrigger(KeyInput.KEY_ESCAPE));
+		inputManager.addMapping(CONFIRM_EXIT, new KeyTrigger(KeyInput.KEY_Y));
+		inputManager.addMapping(REJECT_EXIT, new KeyTrigger(KeyInput.KEY_N));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
-				MOVE_DOWN);
+				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT);
 	}
 
 	@Override
@@ -67,6 +73,20 @@ public class KeysSetup implements ActionListener {
 		}
 		if (MOVE_DOWN.equals(name)) {
 			selectionStateDTO.setMovingDown(isPressed);
+		}
+		if (EXIT.equals(name) && isPressed) {
+			selectionStateDTO.setExitRequested(true);
+		}
+		if (CONFIRM_EXIT.equals(name)) {
+			if (selectionStateDTO.isExitRequested() && isPressed){
+				selectionStateDTO.setExitConfirmed(true);
+			}
+		}
+		if (REJECT_EXIT.equals(name)) {
+			if (selectionStateDTO.isExitRequested() && isPressed){
+				selectionStateDTO.setExitConfirmed(false);
+				selectionStateDTO.setExitRequested(false);
+			}
 		}
 	}
 }

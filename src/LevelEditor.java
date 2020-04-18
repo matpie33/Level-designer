@@ -2,7 +2,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 
@@ -15,6 +14,7 @@ public class LevelEditor extends SimpleApplication {
 	private SelectionStateDTO selectionStateDTO;
 	private KeysSetup keysSetup;
 	private SelectedObjectMovementController selectedObjectMovementController;
+	private ExitController exitController;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -49,11 +49,17 @@ public class LevelEditor extends SimpleApplication {
 		keysSetup.setUp();
 		selectedObjectMovementController = new SelectedObjectMovementController(
 				selectionStateDTO, cam);
+		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+		exitController = new ExitController(selectionStateDTO, guiNode,
+				guiFont, this, settings);
+		exitController.setUp();
+
 	}
 
 	@Override
 	public void simpleUpdate(float tpf) {
 
+		exitController.update();
 		modelSelectionController.update();
 		super.simpleUpdate(tpf);
 		selectedObjectMovementController.update();
