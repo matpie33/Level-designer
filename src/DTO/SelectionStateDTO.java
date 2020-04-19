@@ -19,6 +19,15 @@ public class SelectionStateDTO {
 	private Boolean exitConfirmed;
 	private boolean saveRequested;
 	private boolean duplicateModel;
+	private boolean deleteRequested;
+
+	public boolean isDeleteRequested() {
+		return deleteRequested;
+	}
+
+	public void setDeleteRequested(boolean deleteRequested) {
+		this.deleteRequested = deleteRequested;
+	}
 
 	public boolean isMovingUp() {
 		return movingUp;

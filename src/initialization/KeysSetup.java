@@ -25,6 +25,7 @@ public class KeysSetup implements ActionListener {
 	public static final String EXIT = "exit";
 	public static final String SAVE = "save";
 	public static final String DUPLICATE_MODEL = "duplicate";
+	public static final String DELETE_MODEL = "delete";
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
@@ -54,6 +55,8 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(EXIT, new KeyTrigger(KeyInput.KEY_ESCAPE));
 		inputManager.addMapping(CONFIRM_EXIT, new KeyTrigger(KeyInput.KEY_Y));
 		inputManager.addMapping(REJECT_EXIT, new KeyTrigger(KeyInput.KEY_N));
+		inputManager.addMapping(DELETE_MODEL,
+				new KeyTrigger(KeyInput.KEY_DELETE));
 		inputManager.addMapping(SAVE, new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping(DUPLICATE_MODEL,
 				new KeyTrigger(KeyInput.KEY_C));
@@ -62,7 +65,7 @@ public class KeysSetup implements ActionListener {
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
 				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY,
-				DUPLICATE_MODEL);
+				DUPLICATE_MODEL, DELETE_MODEL);
 	}
 
 	@Override
@@ -90,6 +93,11 @@ public class KeysSetup implements ActionListener {
 		}
 		if (MOVE_DOWN.equals(name)) {
 			selectionStateDTO.setMovingDown(isPressed);
+		}
+		if (DELETE_MODEL.equals(name) && isPressed) {
+			if (selectionStateDTO.getCurrentlySelectedModel()!= null){
+				selectionStateDTO.setDeleteRequested(true);
+			}
 		}
 		if (EXIT.equals(name) && isPressed) {
 			selectionStateDTO.setExitRequested(true);

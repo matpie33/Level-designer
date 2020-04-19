@@ -48,6 +48,7 @@ public class ControllersInitializer {
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(selectionStateDTO,
 				levelEditor.getRootNode(), modelSelectionController));
+		controllers.add(new ModelDeleteController(selectionStateDTO));
 	}
 
 	public List<AbstractController> getControllers() {
