@@ -9,7 +9,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import initialization.ControllersInitializer;
-import initialization.ModelToSceneAdder;
 import initialization.ModelsLoader;
 import saveAndLoad.FileLoad;
 
@@ -45,14 +44,12 @@ public class LevelEditor extends SimpleApplication {
 		controllersInitializer.initilize();
 		flyCam.setMoveSpeed(50f);
 		addLight();
-		ModelToSceneAdder modelToSceneAdder = new ModelToSceneAdder(rootNode);
-		ModelsLoader modelsLoader = new ModelsLoader(assetManager);
+		ModelsLoader modelsLoader = new ModelsLoader(assetManager, rootNode);
 		if (readFromFile){
 			List<SpatialDTO> spatialDTOS = fileLoad.readFile("level.txt");
-			modelToSceneAdder.addSpatialData(spatialDTOS);
+			modelsLoader.addSpatialData(spatialDTOS);
 		}
-		List<Spatial> spatials = modelsLoader.loadModels();
-		modelToSceneAdder.addSpatials(spatials);
+		modelsLoader.loadModels();
 
 		initCrossHairs();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);

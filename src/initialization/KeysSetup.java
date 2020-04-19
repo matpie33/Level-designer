@@ -56,7 +56,7 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(REJECT_EXIT, new KeyTrigger(KeyInput.KEY_N));
 		inputManager.addMapping(SAVE, new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping(DUPLICATE_MODEL,
-				new KeyTrigger(KeyInput.KEY_D));
+				new KeyTrigger(KeyInput.KEY_C));
 		inputManager.addMapping(CONTROL_KEY,
 				new KeyTrigger(KeyInput.KEY_LCONTROL));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
