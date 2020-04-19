@@ -21,22 +21,24 @@ public class ModelDuplicationController implements AbstractController {
 
 	@Override
 	public void update() {
-		if (applicationStateDTO.isDuplicateModel()) {
+		if (applicationStateDTO.isDuplicateModelRequested()
+				&& applicationStateDTO.getCurrentlySelectedModel() != null) {
 
 			modelSelectionController.returnCurrentlySelectedModelToPreviousColor();
-			applicationStateDTO.setDuplicateModel(false);
+			applicationStateDTO.setDuplicateModelRequested(false);
 			Node parent = applicationStateDTO.getCurrentlySelectedModel()
 											 .getParent();
-			if (parent == previousDuplicatedModel){
+			if (parent == previousDuplicatedModel) {
 				coordinateOffsetFromDuplicatedModel += OFFSET;
 			}
-			else{
+			else {
 				coordinateOffsetFromDuplicatedModel = OFFSET;
 			}
 			Node clone = parent.clone(true);
 			clone.setLocalTranslation(clone.getLocalTranslation()
 										   .setX(clone.getLocalTranslation()
-													  .getX() + coordinateOffsetFromDuplicatedModel));
+													  .getX()
+												   + coordinateOffsetFromDuplicatedModel));
 			rootNode.attachChild(clone);
 			previousDuplicatedModel = parent;
 			modelSelectionController.returnCurrentlySelectedModelToSelectionMarkerColor();

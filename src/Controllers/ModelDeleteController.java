@@ -13,10 +13,12 @@ public class ModelDeleteController implements AbstractController {
 
 	@Override
 	public void update() {
-		if (applicationStateDTO.isDeleteRequested()){
+		if (applicationStateDTO.getCurrentlySelectedModel() != null
+				&& applicationStateDTO.isDeleteRequested()) {
 			applicationStateDTO.setDeleteRequested(false);
 			Geometry selectedModel = applicationStateDTO.getCurrentlySelectedModel();
-			selectedModel.getParent().removeFromParent();
+			selectedModel.getParent()
+						 .removeFromParent();
 		}
 	}
 

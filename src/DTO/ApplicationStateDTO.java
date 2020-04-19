@@ -18,7 +18,7 @@ public class ApplicationStateDTO {
 	private boolean exitRequested;
 	private Boolean exitConfirmed;
 	private boolean saveRequested;
-	private boolean duplicateModel;
+	private boolean duplicateModelRequested;
 	private boolean deleteRequested;
 
 	public boolean isDeleteRequested() {
@@ -145,11 +145,11 @@ public class ApplicationStateDTO {
 		this.saveRequested = saveRequested;
 	}
 
-	public boolean isDuplicateModel() {
-		return duplicateModel;
+	public boolean isDuplicateModelRequested() {
+		return duplicateModelRequested;
 	}
 
-	public void setDuplicateModel(boolean duplicateModel) {
-		this.duplicateModel = duplicateModel;
+	public void setDuplicateModelRequested(boolean duplicateModelRequested) {
+		this.duplicateModelRequested = duplicateModelRequested;
 	}
 }

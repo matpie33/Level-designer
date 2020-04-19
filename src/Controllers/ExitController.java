@@ -42,14 +42,17 @@ public class ExitController implements AbstractController {
 				exitConfirmText)) {
 			guiNode.attachChild(exitConfirmText);
 		}
-		if (Boolean.TRUE.equals(applicationStateDTO.isExitConfirmed())) {
+		if (applicationStateDTO.isExitRequested() && Boolean.TRUE.equals(
+				applicationStateDTO.isExitConfirmed())) {
 			fileSaveAndLoad.save(levelEditor.getRootNode()
 											.getChildren());
 			levelEditor.stop();
 		}
-		if (Boolean.FALSE.equals(applicationStateDTO.isExitConfirmed())) {
+		if (applicationStateDTO.isExitRequested() && Boolean.FALSE.equals(
+				applicationStateDTO.isExitConfirmed())) {
 			guiNode.detachChild(exitConfirmText);
 			applicationStateDTO.setExitConfirmed(null);
+			applicationStateDTO.setExitRequested(false);
 		}
 
 	}

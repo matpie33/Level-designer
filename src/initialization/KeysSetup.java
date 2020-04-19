@@ -1,8 +1,8 @@
 package initialization;
 
 import Controllers.ModelSelectionController;
-import DTO.KeyModifiersStateDTO;
 import DTO.ApplicationStateDTO;
+import DTO.KeyModifiersStateDTO;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -95,23 +95,17 @@ public class KeysSetup implements ActionListener {
 			applicationStateDTO.setMovingDown(isPressed);
 		}
 		if (DELETE_MODEL.equals(name) && isPressed) {
-			if (applicationStateDTO.getCurrentlySelectedModel()!= null){
-				applicationStateDTO.setDeleteRequested(true);
-			}
+			applicationStateDTO.setDeleteRequested(true);
 		}
 		if (EXIT.equals(name) && isPressed) {
 			applicationStateDTO.setExitRequested(true);
 		}
-		if (CONFIRM_EXIT.equals(name)) {
-			if (applicationStateDTO.isExitRequested() && isPressed) {
-				applicationStateDTO.setExitConfirmed(true);
-			}
+		if (CONFIRM_EXIT.equals(name) && isPressed) {
+			applicationStateDTO.setExitConfirmed(true);
 		}
-		if (REJECT_EXIT.equals(name)) {
-			if (applicationStateDTO.isExitRequested() && isPressed) {
-				applicationStateDTO.setExitConfirmed(false);
-				applicationStateDTO.setExitRequested(false);
-			}
+		if (REJECT_EXIT.equals(name) && isPressed) {
+			applicationStateDTO.setExitConfirmed(false);
+
 		}
 		if (CONTROL_KEY.equals(name)) {
 			keyModifiersStateDTO.setControlPressed(isPressed);
@@ -122,9 +116,8 @@ public class KeysSetup implements ActionListener {
 			}
 		}
 		if (DUPLICATE_MODEL.equals(name) && isPressed) {
-			if (keyModifiersStateDTO.isControlPressed()
-					&& applicationStateDTO.getCurrentlySelectedModel() != null) {
-				applicationStateDTO.setDuplicateModel(true);
+			if (keyModifiersStateDTO.isControlPressed()) {
+				applicationStateDTO.setDuplicateModelRequested(true);
 			}
 		}
 	}
