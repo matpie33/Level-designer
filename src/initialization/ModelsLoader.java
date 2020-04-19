@@ -6,61 +6,61 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import saveAndLoad.FileLoad;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModelsLoader {
 
 	private static final String PATH_TO_MODELS = "C:/test/Games/Game/src/main/resources/models/";
 
 	private AssetManager assetManager;
-	private List<SpatialDTO> spatialData = new ArrayList<>();
 	private Vector3f currentObjectCoordinate = new Vector3f(0, -10, -20);
-	private Node rootNode;
+	private FileLoad fileLoad;
 
-	public ModelsLoader(AssetManager assetManager, Node rootNode) {
+	public ModelsLoader(AssetManager assetManager) {
 		this.assetManager = assetManager;
-		this.rootNode = rootNode;
-	}
-
-	public void loadModels() {
 		assetManager.registerLocator(PATH_TO_MODELS, FileLocator.class);
-		if (spatialData.isEmpty()) {
-			loadFromFiles();
-		}
-		else {
-			loadFromData();
-		}
+		fileLoad = new FileLoad();
 	}
 
-	private void loadFromData() {
-		spatialData.stream()
-				   .map(data -> {
-					   Spatial spatial = loadModel(data.getPathToModel());
-					   spatial.setLocalRotation(data.getRotation());
-					   spatial.setLocalTranslation(data.getPosition());
-					   return spatial;
-				   })
-				   .forEach(rootNode::attachChild);
+	public List<Spatial> loadModels() {
+
+		return loadFromFiles();
 	}
 
-	private void loadFromFiles() {
+	public List<Spatial> loadModelsFromFile(String filePath) {
+		return loadFromData(fileLoad.readFile(filePath));
+	}
+
+	private List<Spatial> loadFromData(List<SpatialDTO> spatialDTOS) {
+		return spatialDTOS.stream()
+						  .map(data -> {
+							  Spatial spatial = loadModel(
+									  data.getPathToModel());
+							  spatial.setLocalRotation(data.getRotation());
+							  spatial.setLocalTranslation(data.getPosition());
+							  return spatial;
+						  })
+						  .collect(Collectors.toList());
+	}
+
+	private List<Spatial> loadFromFiles() {
 
 		File dir = new File(PATH_TO_MODELS);
 		File[] files = dir.listFiles(
 				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
-		Arrays.stream(files)
-			  .map(file -> {
-				  Spatial spatial = loadModel("/" + file.getName());
-				  spatial.setLocalTranslation(currentObjectCoordinate);
-				  currentObjectCoordinate.setX(
-						  currentObjectCoordinate.getX() + 10);
-				  return spatial;
-			  })
-			  .forEach(rootNode::attachChild);
+		return Arrays.stream(files)
+					 .map(file -> {
+						 Spatial spatial = loadModel("/" + file.getName());
+						 spatial.setLocalTranslation(currentObjectCoordinate);
+						 currentObjectCoordinate.setX(
+								 currentObjectCoordinate.getX() + 10);
+						 return spatial;
+					 }).collect(Collectors.toList());
 	}
 
 	private boolean endsWith(String fileName, String searchedSuffix) {
@@ -70,10 +70,6 @@ public class ModelsLoader {
 
 	private Spatial loadModel(String fileName) {
 		return assetManager.loadModel(fileName);
-	}
-
-	public void addSpatialData(List<SpatialDTO> spatialDTOS) {
-		spatialData = spatialDTOS;
 	}
 
 }
