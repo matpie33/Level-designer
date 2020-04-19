@@ -1,32 +1,32 @@
 package Controllers;
 
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.scene.Node;
 
 public class ModelDuplicationController implements AbstractController {
 
-	private SelectionStateDTO selectionStateDTO;
+	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
 	private ModelSelectionController modelSelectionController;
 	private static final int OFFSET = 5;
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
 	private Node previousDuplicatedModel;
 
-	public ModelDuplicationController(SelectionStateDTO selectionStateDTO,
+	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
 			Node rootNode, ModelSelectionController modelSelectionController) {
-		this.selectionStateDTO = selectionStateDTO;
+		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
 	}
 
 	@Override
 	public void update() {
-		if (selectionStateDTO.isDuplicateModel()) {
+		if (applicationStateDTO.isDuplicateModel()) {
 
 			modelSelectionController.returnCurrentlySelectedModelToPreviousColor();
-			selectionStateDTO.setDuplicateModel(false);
-			Node parent = selectionStateDTO.getCurrentlySelectedModel()
-										   .getParent();
+			applicationStateDTO.setDuplicateModel(false);
+			Node parent = applicationStateDTO.getCurrentlySelectedModel()
+											 .getParent();
 			if (parent == previousDuplicatedModel){
 				coordinateOffsetFromDuplicatedModel += OFFSET;
 			}

@@ -2,7 +2,7 @@ package initialization;
 
 import Controllers.ModelSelectionController;
 import DTO.KeyModifiersStateDTO;
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -29,15 +29,15 @@ public class KeysSetup implements ActionListener {
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
-	private SelectionStateDTO selectionStateDTO;
+	private ApplicationStateDTO applicationStateDTO;
 	private KeyModifiersStateDTO keyModifiersStateDTO;
 
 	public KeysSetup(InputManager inputManager,
 			ModelSelectionController modelSelectionController,
-			SelectionStateDTO selectionStateDTO) {
+			ApplicationStateDTO applicationStateDTO) {
 		this.inputManager = inputManager;
 		this.modelSelectionController = modelSelectionController;
-		this.selectionStateDTO = selectionStateDTO;
+		this.applicationStateDTO = applicationStateDTO;
 		keyModifiersStateDTO = new KeyModifiersStateDTO();
 	}
 
@@ -77,40 +77,40 @@ public class KeysSetup implements ActionListener {
 			modelSelectionController.unselectCurrentSpatial();
 		}
 		if (MOVE_FORWARD.equals(name)) {
-			selectionStateDTO.setMovingForward(isPressed);
+			applicationStateDTO.setMovingForward(isPressed);
 		}
 		if (MOVE_BACKWARD.equals(name)) {
-			selectionStateDTO.setMovingBackward(isPressed);
+			applicationStateDTO.setMovingBackward(isPressed);
 		}
 		if (MOVE_LEFT.equals(name)) {
-			selectionStateDTO.setMovingLeft(isPressed);
+			applicationStateDTO.setMovingLeft(isPressed);
 		}
 		if (MOVE_RIGHT.equals(name)) {
-			selectionStateDTO.setMovingRight(isPressed);
+			applicationStateDTO.setMovingRight(isPressed);
 		}
 		if (MOVE_UP.equals(name)) {
-			selectionStateDTO.setMovingUp(isPressed);
+			applicationStateDTO.setMovingUp(isPressed);
 		}
 		if (MOVE_DOWN.equals(name)) {
-			selectionStateDTO.setMovingDown(isPressed);
+			applicationStateDTO.setMovingDown(isPressed);
 		}
 		if (DELETE_MODEL.equals(name) && isPressed) {
-			if (selectionStateDTO.getCurrentlySelectedModel()!= null){
-				selectionStateDTO.setDeleteRequested(true);
+			if (applicationStateDTO.getCurrentlySelectedModel()!= null){
+				applicationStateDTO.setDeleteRequested(true);
 			}
 		}
 		if (EXIT.equals(name) && isPressed) {
-			selectionStateDTO.setExitRequested(true);
+			applicationStateDTO.setExitRequested(true);
 		}
 		if (CONFIRM_EXIT.equals(name)) {
-			if (selectionStateDTO.isExitRequested() && isPressed) {
-				selectionStateDTO.setExitConfirmed(true);
+			if (applicationStateDTO.isExitRequested() && isPressed) {
+				applicationStateDTO.setExitConfirmed(true);
 			}
 		}
 		if (REJECT_EXIT.equals(name)) {
-			if (selectionStateDTO.isExitRequested() && isPressed) {
-				selectionStateDTO.setExitConfirmed(false);
-				selectionStateDTO.setExitRequested(false);
+			if (applicationStateDTO.isExitRequested() && isPressed) {
+				applicationStateDTO.setExitConfirmed(false);
+				applicationStateDTO.setExitRequested(false);
 			}
 		}
 		if (CONTROL_KEY.equals(name)) {
@@ -118,13 +118,13 @@ public class KeysSetup implements ActionListener {
 		}
 		if (SAVE.equals(name) && isPressed) {
 			if (keyModifiersStateDTO.isControlPressed()) {
-				selectionStateDTO.setSaveRequested(true);
+				applicationStateDTO.setSaveRequested(true);
 			}
 		}
 		if (DUPLICATE_MODEL.equals(name) && isPressed) {
 			if (keyModifiersStateDTO.isControlPressed()
-					&& selectionStateDTO.getCurrentlySelectedModel() != null) {
-				selectionStateDTO.setDuplicateModel(true);
+					&& applicationStateDTO.getCurrentlySelectedModel() != null) {
+				applicationStateDTO.setDuplicateModel(true);
 			}
 		}
 	}

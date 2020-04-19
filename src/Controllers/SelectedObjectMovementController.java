@@ -1,6 +1,6 @@
 package Controllers;
 
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -9,21 +9,22 @@ import com.jme3.scene.Spatial;
 public class SelectedObjectMovementController implements AbstractController {
 
 	public static final float SLOW_CAMERA_SPEED = 0.01f;
-	private SelectionStateDTO selectionStateDTO;
+	private ApplicationStateDTO applicationStateDTO;
 	private Camera camera;
 
-	public SelectedObjectMovementController(SelectionStateDTO selectionStateDTO,
+	public SelectedObjectMovementController(
+			ApplicationStateDTO applicationStateDTO,
 			Camera camera) {
-		this.selectionStateDTO = selectionStateDTO;
+		this.applicationStateDTO = applicationStateDTO;
 		this.camera = camera;
 	}
 
 	@Override
 	public void update() {
-		Spatial model = selectionStateDTO.getCurrentlySelectedModel();
+		Spatial model = applicationStateDTO.getCurrentlySelectedModel();
 		if (model != null) {
 			Node currentlySelectedModel = model.getParent();
-			if (selectionStateDTO.isMovingForward()) {
+			if (applicationStateDTO.isMovingForward()) {
 				Vector3f dir = camera.getDirection();
 				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),
 						Math.round(dir.getY()), Math.round(dir.getZ()));
@@ -32,7 +33,7 @@ public class SelectedObjectMovementController implements AbstractController {
 											  .add(xyzDir.mult(
 													  SLOW_CAMERA_SPEED)));
 			}
-			if (selectionStateDTO.isMovingBackward()) {
+			if (applicationStateDTO.isMovingBackward()) {
 				Vector3f dir = camera.getDirection();
 				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),
 						Math.round(dir.getY()), Math.round(dir.getZ()));
@@ -41,25 +42,25 @@ public class SelectedObjectMovementController implements AbstractController {
 											  .add(xyzDir.mult(
 													  -SLOW_CAMERA_SPEED)));
 			}
-			if (selectionStateDTO.isMovingRight()) {
+			if (applicationStateDTO.isMovingRight()) {
 				currentlySelectedModel.setLocalTranslation(
 						currentlySelectedModel.getLocalTranslation()
 											  .add(camera.getLeft()
 														 .mult(-SLOW_CAMERA_SPEED)));
 			}
-			if (selectionStateDTO.isMovingLeft()) {
+			if (applicationStateDTO.isMovingLeft()) {
 				currentlySelectedModel.setLocalTranslation(
 						currentlySelectedModel.getLocalTranslation()
 											  .add(camera.getLeft()
 														 .mult(SLOW_CAMERA_SPEED)));
 			}
-			if (selectionStateDTO.isMovingUp()) {
+			if (applicationStateDTO.isMovingUp()) {
 				currentlySelectedModel.setLocalTranslation(
 						currentlySelectedModel.getLocalTranslation()
 											  .add(camera.getUp()
 														 .mult(SLOW_CAMERA_SPEED)));
 			}
-			if (selectionStateDTO.isMovingDown()) {
+			if (applicationStateDTO.isMovingDown()) {
 				currentlySelectedModel.setLocalTranslation(
 						currentlySelectedModel.getLocalTranslation()
 											  .add(camera.getUp()

@@ -1,7 +1,7 @@
 package initialization;
 
 import Controllers.*;
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.system.AppSettings;
 import main.LevelEditor;
@@ -31,24 +31,25 @@ public class ControllersInitializer {
 	}
 
 	private void create() {
-		SelectionStateDTO selectionStateDTO = new SelectionStateDTO();
+		ApplicationStateDTO applicationStateDTO = new ApplicationStateDTO();
 		ModelSelectionController modelSelectionController = new ModelSelectionController(
 				levelEditor.getCamera(), levelEditor.getRootNode(),
-				selectionStateDTO);
+				applicationStateDTO);
 		controllers.add(modelSelectionController);
 		KeysSetup keysSetup = new KeysSetup(levelEditor.getInputManager(),
-				modelSelectionController, selectionStateDTO);
+				modelSelectionController, applicationStateDTO);
 		keysSetup.setUp();
-		controllers.add(new SelectedObjectMovementController(selectionStateDTO,
+		controllers.add(new SelectedObjectMovementController(
+				applicationStateDTO,
 				levelEditor.getCamera()));
 		controllers.add(
-				new ExitController(selectionStateDTO, levelEditor.getGuiNode(),
+				new ExitController(applicationStateDTO, levelEditor.getGuiNode(),
 						guiFont, levelEditor, settings, new FileSaveAndLoad()));
-		controllers.add(new SaveController(selectionStateDTO,
+		controllers.add(new SaveController(applicationStateDTO,
 				levelEditor.getRootNode()));
-		controllers.add(new ModelDuplicationController(selectionStateDTO,
+		controllers.add(new ModelDuplicationController(applicationStateDTO,
 				levelEditor.getRootNode(), modelSelectionController));
-		controllers.add(new ModelDeleteController(selectionStateDTO));
+		controllers.add(new ModelDeleteController(applicationStateDTO));
 	}
 
 	public List<AbstractController> getControllers() {

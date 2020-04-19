@@ -1,21 +1,21 @@
 package Controllers;
 
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.scene.Geometry;
 
 public class ModelDeleteController implements AbstractController {
 
-	private SelectionStateDTO selectionStateDTO;
+	private ApplicationStateDTO applicationStateDTO;
 
-	public ModelDeleteController(SelectionStateDTO selectionStateDTO) {
-		this.selectionStateDTO = selectionStateDTO;
+	public ModelDeleteController(ApplicationStateDTO applicationStateDTO) {
+		this.applicationStateDTO = applicationStateDTO;
 	}
 
 	@Override
 	public void update() {
-		if (selectionStateDTO.isDeleteRequested()){
-			selectionStateDTO.setDeleteRequested(false);
-			Geometry selectedModel = selectionStateDTO.getCurrentlySelectedModel();
+		if (applicationStateDTO.isDeleteRequested()){
+			applicationStateDTO.setDeleteRequested(false);
+			Geometry selectedModel = applicationStateDTO.getCurrentlySelectedModel();
 			selectedModel.getParent().removeFromParent();
 		}
 	}

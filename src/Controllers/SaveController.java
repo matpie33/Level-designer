@@ -1,18 +1,17 @@
 package Controllers;
 
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import saveAndLoad.FileSaveAndLoad;
 
 public class SaveController implements AbstractController {
 
-	private SelectionStateDTO selectionStateDTO;
+	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
 	private FileSaveAndLoad fileSaveAndLoad = new FileSaveAndLoad();
 
-	public SaveController(SelectionStateDTO selectionStateDTO, Node rootNode) {
-		this.selectionStateDTO = selectionStateDTO;
+	public SaveController(ApplicationStateDTO applicationStateDTO, Node rootNode) {
+		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 	}
 
@@ -23,8 +22,8 @@ public class SaveController implements AbstractController {
 
 	@Override
 	public void update() {
-		if (selectionStateDTO.isSaveRequested()) {
-			selectionStateDTO.setSaveRequested(false);
+		if (applicationStateDTO.isSaveRequested()) {
+			applicationStateDTO.setSaveRequested(false);
 			fileSaveAndLoad.save(rootNode.getChildren());
 		}
 	}

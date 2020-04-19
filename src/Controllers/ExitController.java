@@ -1,6 +1,6 @@
 package Controllers;
 
-import DTO.SelectionStateDTO;
+import DTO.ApplicationStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
@@ -12,7 +12,7 @@ import saveAndLoad.FileSaveAndLoad;
 public class ExitController implements AbstractController {
 
 	public static final String CONFIRM_TEXT = "Are you sure? Press 'y' or 'n'.";
-	private SelectionStateDTO selectionStateDTO;
+	private ApplicationStateDTO applicationStateDTO;
 	private Node guiNode;
 	private BitmapFont guiFont;
 	private BitmapText exitConfirmText;
@@ -20,10 +20,10 @@ public class ExitController implements AbstractController {
 	private AppSettings settings;
 	private FileSaveAndLoad fileSaveAndLoad;
 
-	public ExitController(SelectionStateDTO selectionStateDTO, Node guiNode,
+	public ExitController(ApplicationStateDTO applicationStateDTO, Node guiNode,
 			BitmapFont guiFont, LevelEditor levelEditor, AppSettings settings,
 			FileSaveAndLoad fileSaveAndLoad) {
-		this.selectionStateDTO = selectionStateDTO;
+		this.applicationStateDTO = applicationStateDTO;
 		this.guiNode = guiNode;
 		this.guiFont = guiFont;
 		this.levelEditor = levelEditor;
@@ -38,18 +38,18 @@ public class ExitController implements AbstractController {
 
 	@Override
 	public void update() {
-		if (selectionStateDTO.isExitRequested() && !guiNode.hasChild(
+		if (applicationStateDTO.isExitRequested() && !guiNode.hasChild(
 				exitConfirmText)) {
 			guiNode.attachChild(exitConfirmText);
 		}
-		if (Boolean.TRUE.equals(selectionStateDTO.isExitConfirmed())) {
+		if (Boolean.TRUE.equals(applicationStateDTO.isExitConfirmed())) {
 			fileSaveAndLoad.save(levelEditor.getRootNode()
 											.getChildren());
 			levelEditor.stop();
 		}
-		if (Boolean.FALSE.equals(selectionStateDTO.isExitConfirmed())) {
+		if (Boolean.FALSE.equals(applicationStateDTO.isExitConfirmed())) {
 			guiNode.detachChild(exitConfirmText);
-			selectionStateDTO.setExitConfirmed(null);
+			applicationStateDTO.setExitConfirmed(null);
 		}
 
 	}
