@@ -15,7 +15,6 @@ import java.util.List;
 public class ModelsLoader {
 
 	private static final String PATH_TO_MODELS = "C:/test/Games/Game/src/main/resources/models/";
-	private static final String PATH_TO_SCENE = "C:/test/Games/Game/src/main/resources/scene/";
 
 	private AssetManager assetManager;
 	private List<SpatialDTO> spatialData = new ArrayList<>();
@@ -29,7 +28,6 @@ public class ModelsLoader {
 
 	public void loadModels() {
 		assetManager.registerLocator(PATH_TO_MODELS, FileLocator.class);
-		assetManager.registerLocator(PATH_TO_SCENE, FileLocator.class);
 		if (spatialData.isEmpty()) {
 			loadFromFiles();
 		}
@@ -53,8 +51,7 @@ public class ModelsLoader {
 
 		File dir = new File(PATH_TO_MODELS);
 		File[] files = dir.listFiles(
-				(dir1, name) -> endsWith(name, ".mesh" + ".xml") || endsWith(
-						name, ".scene"));
+				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
 		Arrays.stream(files)
 			  .map(file -> {
 				  Spatial spatial = loadModel("/" + file.getName());
