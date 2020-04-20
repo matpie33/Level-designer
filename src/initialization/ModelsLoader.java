@@ -4,27 +4,36 @@ import DTO.SpatialDTO;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import saveAndLoad.FileLoad;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ModelsLoader {
 
 	private static final String PATH_TO_MODELS = "C:/test/Games/Game/src/main/resources/models/";
+	private Node rootNode;
 
 	private AssetManager assetManager;
 	private Vector3f currentObjectCoordinate = new Vector3f(0, -10, -20);
 	private FileLoad fileLoad;
 	private Set<String> pathsToFiles = new HashSet<>();
+	private Camera camera;
 
-	public ModelsLoader(AssetManager assetManager) {
+	public ModelsLoader(AssetManager assetManager, Camera camera,
+			Node rootNode) {
 		this.assetManager = assetManager;
 		assetManager.registerLocator(PATH_TO_MODELS, FileLocator.class);
 		fileLoad = new FileLoad();
+		this.camera = camera;
+		this.rootNode = rootNode;
 	}
 
 	public List<Spatial> loadModels() {
@@ -75,7 +84,8 @@ public class ModelsLoader {
 						 currentObjectCoordinate.setX(
 								 currentObjectCoordinate.getX() + 10);
 						 return spatial;
-					 }).collect(Collectors.toList());
+					 })
+					 .collect(Collectors.toList());
 	}
 
 	private boolean endsWith(String fileName, String searchedSuffix) {
@@ -85,6 +95,14 @@ public class ModelsLoader {
 
 	private Spatial loadModel(String fileName) {
 		return assetManager.loadModel(fileName);
+	}
+
+	public void addModel(String filename) {
+		Spatial spatial = loadModel(filename);
+		spatial.setLocalTranslation(camera.getLocation()
+										  .add(camera.getDirection()
+													 .mult(15)));
+		rootNode.attachChild(spatial);
 	}
 
 }

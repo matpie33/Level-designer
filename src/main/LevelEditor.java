@@ -48,11 +48,10 @@ public class LevelEditor extends SimpleApplication {
 		initCrosshair();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
 
-
 	}
 
 	private void loadModels() {
-		modelsLoader = new ModelsLoader(assetManager);
+		modelsLoader = new ModelsLoader(assetManager, cam, rootNode);
 		List<Spatial> spatials = readFromFile ?
 				modelsLoader.loadModelsFromFile("level.txt") :
 				modelsLoader.loadModels();

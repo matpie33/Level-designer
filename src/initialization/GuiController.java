@@ -15,10 +15,13 @@ public class GuiController {
 	private LevelEditor levelEditor;
 	private Node guiNode;
 	private GuiGlobals guiGlobals;
+	private ModelsLoader modelsLoader;
 
-	public GuiController(LevelEditor levelEditor, Node guiNode) {
+	public GuiController(LevelEditor levelEditor, Node guiNode,
+			ModelsLoader modelsLoader) {
 		this.levelEditor = levelEditor;
 		this.guiNode = guiNode;
+		this.modelsLoader = modelsLoader;
 	}
 
 	public void initialize() {
@@ -39,8 +42,8 @@ public class GuiController {
 		listBox.addClickCommands(source -> {
 			Integer selection = source.getSelectionModel()
 									  .getSelection();
-			System.out.println("you click: " + source.getModel()
-													 .get(selection));
+			modelsLoader.addModel((String) source.getModel()
+												  .get(selection));
 			guiNode.detachChild(container);
 			guiGlobals.setCursorEventsEnabled(false);
 		});

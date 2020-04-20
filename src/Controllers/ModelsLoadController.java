@@ -47,7 +47,7 @@ public class ModelsLoadController implements AbstractController {
 	@Override
 	public void setUp() {
 		guiController = new GuiController(levelEditor,
-				guiNode);
+				guiNode, modelsLoader);
 		guiController.initialize();
 	}
 }
