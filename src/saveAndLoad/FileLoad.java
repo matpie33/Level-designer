@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,8 @@ public class FileLoad {
 
 	private List<String> readLinesFromFile(String filePath) {
 		try {
-			return Files.readAllLines(Paths.get(filePath),
+			Path path = Paths.get(filePath);
+			return Files.readAllLines(path,
 					StandardCharsets.UTF_8);
 		}
 		catch (IOException e) {

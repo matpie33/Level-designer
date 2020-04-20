@@ -8,7 +8,7 @@ import com.jme3.scene.Spatial;
 
 public class SelectedObjectMovementController implements AbstractController {
 
-	public static final float SLOW_CAMERA_SPEED = 0.01f;
+	public static final float SLOW_CAMERA_SPEED = 0.05f;
 	private ApplicationStateDTO applicationStateDTO;
 	private Camera camera;
 
