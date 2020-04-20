@@ -80,8 +80,14 @@
         <dependency>
             <groupId>com.simsilica</groupId>
             <artifactId>lemur</artifactId>
-            <version>1.10.1</version>
+            <version>1.11.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.simsilica</groupId>
+            <artifactId>lemur-proto</artifactId>
+            <version>1.11.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>

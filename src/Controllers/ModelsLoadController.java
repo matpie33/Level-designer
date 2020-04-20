@@ -3,7 +3,7 @@ package Controllers;
 import DTO.ApplicationStateDTO;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import initialization.GuiInitializer;
+import initialization.GuiController;
 import initialization.ModelsLoader;
 import main.LevelEditor;
 
@@ -16,6 +16,7 @@ public class ModelsLoadController implements AbstractController {
 	private ModelsLoader modelsLoader;
 	private Node rootNode;
 	private LevelEditor levelEditor;
+	private GuiController guiController;
 
 	public ModelsLoadController(ApplicationStateDTO applicationStateDTO,
 			Node guiNode, ModelsLoader modelsLoader, Node rootNode,
@@ -30,9 +31,6 @@ public class ModelsLoadController implements AbstractController {
 	@Override
 	public void update() {
 		if (applicationStateDTO.isLoadModelRequested()) {
-			GuiInitializer guiInitializer = new GuiInitializer(levelEditor,
-					guiNode);
-			guiInitializer.initialize();
 			applicationStateDTO.setLoadModelRequested(false);
 			Set<String> pathsToFiles = modelsLoader.getPathsToFiles();
 			for (Spatial child : rootNode.getChildren()) {
@@ -40,11 +38,16 @@ public class ModelsLoadController implements AbstractController {
 										 .getName()
 										 .replace("/", ""));
 			}
+			guiController.addListOfModels(pathsToFiles);
+
+
 		}
 	}
 
 	@Override
 	public void setUp() {
-
+		guiController = new GuiController(levelEditor,
+				guiNode);
+		guiController.initialize();
 	}
 }
