@@ -8,6 +8,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import initialization.ControllersInitializer;
+import initialization.GuiInitializer;
 import initialization.ModelsLoader;
 
 import java.awt.*;
@@ -18,6 +19,7 @@ public class LevelEditor extends SimpleApplication {
 	private ControllersInitializer controllersInitializer;
 	private final static boolean readFromFile = true;
 	private ModelsLoader modelsLoader;
+	private GuiInitializer guiInitializer;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -45,6 +47,7 @@ public class LevelEditor extends SimpleApplication {
 		controllersInitializer.initilize();
 		initCrosshair();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+
 
 	}
 

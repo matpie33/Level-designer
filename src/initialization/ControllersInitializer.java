@@ -53,7 +53,8 @@ public class ControllersInitializer {
 				levelEditor.getRootNode(), modelSelectionController));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
-				levelEditor.getGuiNode(), modelsLoader, levelEditor.getRootNode()));
+				levelEditor.getGuiNode(), modelsLoader,
+				levelEditor.getRootNode(), levelEditor));
 	}
 
 	public List<AbstractController> getControllers() {
