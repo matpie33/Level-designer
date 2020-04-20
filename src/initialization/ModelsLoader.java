@@ -69,7 +69,7 @@ public class ModelsLoader {
 	}
 
 	public Set<String> getPathsToFiles() {
-		return pathsToFiles;
+		return new HashSet<>(pathsToFiles);
 	}
 
 	private List<Spatial> loadFromFiles() {

@@ -38,16 +38,16 @@ public class ModelsLoadController implements AbstractController {
 										 .getName()
 										 .replace("/", ""));
 			}
-			guiController.addListOfModels(pathsToFiles);
-
+			if (!pathsToFiles.isEmpty()){
+				guiController.addListOfModels(pathsToFiles);
+			}
 
 		}
 	}
 
 	@Override
 	public void setUp() {
-		guiController = new GuiController(levelEditor,
-				guiNode, modelsLoader);
+		guiController = new GuiController(levelEditor, guiNode, modelsLoader);
 		guiController.initialize();
 	}
 }
