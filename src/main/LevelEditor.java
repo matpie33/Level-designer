@@ -17,6 +17,7 @@ public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
 	private final static boolean readFromFile = true;
+	private ModelsLoader modelsLoader;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -36,19 +37,19 @@ public class LevelEditor extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp() {
-		controllersInitializer = new ControllersInitializer(settings, this,
-				guiFont);
-		controllersInitializer.initilize();
 		flyCam.setMoveSpeed(50f);
 		addLight();
 		loadModels();
+		controllersInitializer = new ControllersInitializer(settings, this,
+				guiFont, modelsLoader);
+		controllersInitializer.initilize();
 		initCrosshair();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
 
 	}
 
 	private void loadModels() {
-		ModelsLoader modelsLoader = new ModelsLoader(assetManager);
+		modelsLoader = new ModelsLoader(assetManager);
 		List<Spatial> spatials = readFromFile ?
 				modelsLoader.loadModelsFromFile("level.txt") :
 				modelsLoader.loadModels();

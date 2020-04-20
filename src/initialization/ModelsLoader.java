@@ -9,8 +9,7 @@ import com.jme3.scene.Spatial;
 import saveAndLoad.FileLoad;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ModelsLoader {
@@ -20,6 +19,7 @@ public class ModelsLoader {
 	private AssetManager assetManager;
 	private Vector3f currentObjectCoordinate = new Vector3f(0, -10, -20);
 	private FileLoad fileLoad;
+	private Set<String> pathsToFiles = new HashSet<>();
 
 	public ModelsLoader(AssetManager assetManager) {
 		this.assetManager = assetManager;
@@ -33,19 +33,34 @@ public class ModelsLoader {
 	}
 
 	public List<Spatial> loadModelsFromFile(String filePath) {
-		return loadFromData(fileLoad.readFile(filePath));
+		findAllModelsPaths();
+		List<Spatial> spatials = loadFromData(fileLoad.readFile(filePath));
+		return spatials;
+	}
+
+	private void findAllModelsPaths() {
+		File dir = new File(PATH_TO_MODELS);
+		File[] files = dir.listFiles(
+				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
+		for (File file : files) {
+			pathsToFiles.add(file.getName());
+		}
 	}
 
 	private List<Spatial> loadFromData(List<SpatialDTO> spatialDTOS) {
 		return spatialDTOS.stream()
 						  .map(data -> {
-							  Spatial spatial = loadModel(
-									  data.getPathToModel());
+							  String pathToModel = data.getPathToModel();
+							  Spatial spatial = loadModel(pathToModel);
 							  spatial.setLocalRotation(data.getRotation());
 							  spatial.setLocalTranslation(data.getPosition());
 							  return spatial;
 						  })
 						  .collect(Collectors.toList());
+	}
+
+	public Set<String> getPathsToFiles() {
+		return pathsToFiles;
 	}
 
 	private List<Spatial> loadFromFiles() {

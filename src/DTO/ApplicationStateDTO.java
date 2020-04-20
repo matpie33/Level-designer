@@ -20,6 +20,15 @@ public class ApplicationStateDTO {
 	private boolean saveRequested;
 	private boolean duplicateModelRequested;
 	private boolean deleteRequested;
+	private boolean loadModelRequested;
+
+	public boolean isLoadModelRequested() {
+		return loadModelRequested;
+	}
+
+	public void setLoadModelRequested(boolean loadModelRequested) {
+		this.loadModelRequested = loadModelRequested;
+	}
 
 	public boolean isDeleteRequested() {
 		return deleteRequested;

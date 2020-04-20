@@ -26,6 +26,7 @@ public class KeysSetup implements ActionListener {
 	public static final String SAVE = "save";
 	public static final String DUPLICATE_MODEL = "duplicate";
 	public static final String DELETE_MODEL = "delete";
+	public static final String LOAD_MODEL = "loadModel";
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
@@ -60,12 +61,14 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(SAVE, new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping(DUPLICATE_MODEL,
 				new KeyTrigger(KeyInput.KEY_C));
+		inputManager.addMapping(LOAD_MODEL,
+				new KeyTrigger(KeyInput.KEY_1));
 		inputManager.addMapping(CONTROL_KEY,
 				new KeyTrigger(KeyInput.KEY_LCONTROL));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
 				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY,
-				DUPLICATE_MODEL, DELETE_MODEL);
+				DUPLICATE_MODEL, DELETE_MODEL, LOAD_MODEL);
 	}
 
 	@Override
@@ -118,6 +121,11 @@ public class KeysSetup implements ActionListener {
 		if (DUPLICATE_MODEL.equals(name) && isPressed) {
 			if (keyModifiersStateDTO.isControlPressed()) {
 				applicationStateDTO.setDuplicateModelRequested(true);
+			}
+		}
+		if (LOAD_MODEL.equals(name) && isPressed) {
+			if (keyModifiersStateDTO.isControlPressed()) {
+				applicationStateDTO.setLoadModelRequested(true);
 			}
 		}
 	}
