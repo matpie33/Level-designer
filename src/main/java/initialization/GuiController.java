@@ -6,7 +6,7 @@ import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.ListBox;
 import com.simsilica.lemur.core.VersionedList;
 import com.simsilica.lemur.style.BaseStyles;
-import main.LevelEditor;
+import start.LevelEditor;
 
 import java.util.Set;
 
@@ -43,7 +43,7 @@ public class GuiController {
 			Integer selection = source.getSelectionModel()
 									  .getSelection();
 			modelsLoader.addModel((String) source.getModel()
-												  .get(selection));
+												 .get(selection));
 			guiNode.detachChild(container);
 			guiGlobals.setCursorEventsEnabled(false);
 		});

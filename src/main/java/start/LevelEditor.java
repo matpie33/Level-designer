@@ -1,4 +1,4 @@
-package main;
+package start;
 
 import Controllers.AbstractController;
 import com.jme3.app.SimpleApplication;
@@ -12,6 +12,7 @@ import initialization.GuiController;
 import initialization.ModelsLoader;
 
 import java.awt.*;
+import java.io.InputStream;
 import java.util.List;
 
 public class LevelEditor extends SimpleApplication {
@@ -52,8 +53,9 @@ public class LevelEditor extends SimpleApplication {
 
 	private void loadModels() {
 		modelsLoader = new ModelsLoader(assetManager, cam, rootNode);
+		InputStream inputStream = getClass().getResourceAsStream("/level.txt");
 		List<Spatial> spatials = readFromFile ?
-				modelsLoader.loadModelsFromFile("level.txt") :
+				modelsLoader.loadModelsFromFile(inputStream) :
 				modelsLoader.loadModels();
 		spatials.forEach(rootNode::attachChild);
 

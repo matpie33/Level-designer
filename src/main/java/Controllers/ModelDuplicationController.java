@@ -7,13 +7,13 @@ public class ModelDuplicationController implements AbstractController {
 
 	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
-	private ModelSelectionController modelSelectionController;
+	private Controllers.ModelSelectionController modelSelectionController;
 	private static final int OFFSET = 5;
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
 	private Node previousDuplicatedModel;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
-			Node rootNode, ModelSelectionController modelSelectionController) {
+			Node rootNode, Controllers.ModelSelectionController modelSelectionController) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;

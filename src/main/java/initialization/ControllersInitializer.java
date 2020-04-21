@@ -4,7 +4,7 @@ import Controllers.*;
 import DTO.ApplicationStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.system.AppSettings;
-import main.LevelEditor;
+import start.LevelEditor;
 import saveAndLoad.FileSaveAndLoad;
 
 import java.util.ArrayList;

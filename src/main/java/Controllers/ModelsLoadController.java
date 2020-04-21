@@ -5,7 +5,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import initialization.GuiController;
 import initialization.ModelsLoader;
-import main.LevelEditor;
+import start.LevelEditor;
 
 import java.util.Set;
 
@@ -33,11 +33,13 @@ public class ModelsLoadController implements AbstractController {
 		if (applicationStateDTO.isLoadModelRequested()) {
 			applicationStateDTO.setLoadModelRequested(false);
 			Set<String> pathsToFiles = modelsLoader.getPathsToFiles();
+			System.out.println("before: "+pathsToFiles);
 			for (Spatial child : rootNode.getChildren()) {
 				pathsToFiles.remove(child.getKey()
 										 .getName()
 										 .replace("/", ""));
 			}
+			System.out.println("after: "+pathsToFiles);
 			if (!pathsToFiles.isEmpty()){
 				guiController.addListOfModels(pathsToFiles);
 			}

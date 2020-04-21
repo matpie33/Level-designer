@@ -6,8 +6,8 @@ import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
-import main.LevelEditor;
 import saveAndLoad.FileSaveAndLoad;
+import start.LevelEditor;
 
 public class ExitController implements AbstractController {
 

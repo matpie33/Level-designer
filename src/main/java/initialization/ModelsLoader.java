@@ -10,6 +10,7 @@ import com.jme3.scene.Spatial;
 import saveAndLoad.FileLoad;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ModelsLoader {
 		return loadFromFiles();
 	}
 
-	public List<Spatial> loadModelsFromFile(String filePath) {
+	public List<Spatial> loadModelsFromFile(InputStream filePath) {
 		findAllModelsPaths();
 		List<Spatial> spatials = loadFromData(fileLoad.readFile(filePath));
 		return spatials;
@@ -98,6 +99,7 @@ public class ModelsLoader {
 	}
 
 	public void addModel(String filename) {
+		System.out.println("loading model: "+filename);
 		Spatial spatial = loadModel(filename);
 		spatial.setLocalTranslation(camera.getLocation()
 										  .add(camera.getDirection()

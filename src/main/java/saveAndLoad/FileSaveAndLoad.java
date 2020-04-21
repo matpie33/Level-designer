@@ -1,7 +1,7 @@
 package saveAndLoad;
 
-import DTO.SpatialDTO;
 import com.jme3.scene.Spatial;
+import DTO.SpatialDTO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +21,7 @@ public class FileSaveAndLoad {
 		createFile(text);
 	}
 
-	private void createFile(String text)  {
+	private void createFile(String text) {
 		Path file = Paths.get(FILENAME);
 		writeFile(text, file);
 	}

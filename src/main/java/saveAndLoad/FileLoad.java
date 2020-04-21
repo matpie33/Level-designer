@@ -5,19 +5,28 @@ import DTO.SpatialDTO;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileLoad {
 
-	public List<SpatialDTO> readFile(String filePath) {
-		List<String> lines = readLinesFromFile(filePath);
+	public List<SpatialDTO> readFile(InputStream filePath) {
+		List<String> lines = readLines(filePath);
 		return readSpatials(lines);
+	}
+
+	private List<String> readLines(InputStream filePath){
+		try {
+			return readLinesFromFile(filePath);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 	}
 
 	private List<SpatialDTO> readSpatials(List<String> lines) {
@@ -73,16 +82,16 @@ public class FileLoad {
 				Float.parseFloat(split[1]), Float.parseFloat(split[2]));
 	}
 
-	private List<String> readLinesFromFile(String filePath) {
-		try {
-			Path path = Paths.get(filePath);
-			return Files.readAllLines(path,
-					StandardCharsets.UTF_8);
+	private List<String> readLinesFromFile(InputStream filePath)
+			throws IOException {
+		InputStreamReader streamReader = new InputStreamReader(filePath);
+		BufferedReader bufferedReader = new BufferedReader(streamReader);
+		String line;
+		List<String> lines = new ArrayList<>();
+		while ((line = bufferedReader.readLine()) != null) {
+			lines.add(line);
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
+		return lines;
 	}
 
 }
