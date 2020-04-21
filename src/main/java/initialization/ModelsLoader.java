@@ -11,17 +11,14 @@ import saveAndLoad.FileLoad;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ModelsLoader {
 
-	private static final String PATH_TO_MODELS = "C:/test/Games/Game/src/main/resources/models/";
+	private static final String PATH_TO_MODELS = "C:/test";
 	private Node rootNode;
-
+	private List<String> paths = new ArrayList<>();
 	private AssetManager assetManager;
 	private Vector3f currentObjectCoordinate = new Vector3f(0, -10, -20);
 	private FileLoad fileLoad;
@@ -31,10 +28,11 @@ public class ModelsLoader {
 	public ModelsLoader(AssetManager assetManager, Camera camera,
 			Node rootNode) {
 		this.assetManager = assetManager;
-		assetManager.registerLocator(PATH_TO_MODELS, FileLocator.class);
 		fileLoad = new FileLoad();
 		this.camera = camera;
 		this.rootNode = rootNode;
+		assetManager.registerLocator(PATH_TO_MODELS, FileLocator.class);
+		paths.add(PATH_TO_MODELS);
 	}
 
 	public List<Spatial> loadModels() {
@@ -43,13 +41,12 @@ public class ModelsLoader {
 	}
 
 	public List<Spatial> loadModelsFromFile(InputStream filePath) {
-		findAllModelsPaths();
-		List<Spatial> spatials = loadFromData(fileLoad.readFile(filePath));
-		return spatials;
+		paths.forEach(this::findAllModelsPaths);
+		return loadFromData(fileLoad.readFile(filePath));
 	}
 
-	private void findAllModelsPaths() {
-		File dir = new File(PATH_TO_MODELS);
+	private void findAllModelsPaths(String path) {
+		File dir = new File(path);
 		File[] files = dir.listFiles(
 				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
 		for (File file : files) {
@@ -107,4 +104,9 @@ public class ModelsLoader {
 		rootNode.attachChild(spatial);
 	}
 
+	public void setPaths(List<String> lines) {
+		paths.addAll(lines);
+		lines.forEach(
+				path -> assetManager.registerLocator(path, FileLocator.class));
+	}
 }
