@@ -37,7 +37,11 @@ public class ModelsLoader {
 
 	public List<Spatial> loadModels() {
 
-		return loadFromFiles();
+		List<Spatial> spatials = new ArrayList<>();
+		for (String path : paths) {
+			spatials.addAll(loadFromFiles(path));
+		}
+		return spatials;
 	}
 
 	public List<Spatial> loadModelsFromFile(InputStream filePath) {
@@ -70,9 +74,9 @@ public class ModelsLoader {
 		return new HashSet<>(pathsToFiles);
 	}
 
-	private List<Spatial> loadFromFiles() {
+	private List<Spatial> loadFromFiles(String path) {
 
-		File dir = new File(PATH_TO_MODELS);
+		File dir = new File(path);
 		File[] files = dir.listFiles(
 				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
 		return Arrays.stream(files)
