@@ -16,13 +16,12 @@ import java.util.stream.Collectors;
 
 public class ModelsLoader {
 
-	private static final String PATH_TO_MODELS = "C:/test";
 	private Node rootNode;
 	private List<String> paths = new ArrayList<>();
 	private AssetManager assetManager;
 	private Vector3f currentObjectCoordinate = new Vector3f(0, -10, -20);
 	private FileLoad fileLoad;
-	private Set<String> pathsToFiles = new HashSet<>();
+	private Set<String> modelsRelativePaths = new HashSet<>();
 	private Camera camera;
 
 	public ModelsLoader(AssetManager assetManager, Camera camera,
@@ -31,50 +30,52 @@ public class ModelsLoader {
 		fileLoad = new FileLoad();
 		this.camera = camera;
 		this.rootNode = rootNode;
-		assetManager.registerLocator(PATH_TO_MODELS, FileLocator.class);
-		paths.add(PATH_TO_MODELS);
 	}
 
 	public List<Spatial> loadModels() {
 
 		List<Spatial> spatials = new ArrayList<>();
 		for (String path : paths) {
-			spatials.addAll(loadFromFiles(path));
+			spatials.addAll(loadModelsFromFile(path));
 		}
 		return spatials;
 	}
 
-	public List<Spatial> loadModelsFromFile(InputStream filePath) {
-		paths.forEach(this::findAllModelsPaths);
-		return loadFromData(fileLoad.readFile(filePath));
+	public List<Spatial> loadModelsFromLevelFile(
+			InputStream inputStreamForLevelFile) {
+		return loadModelsFromLevelData(
+				fileLoad.readFile(inputStreamForLevelFile));
 	}
 
-	private void findAllModelsPaths(String path) {
+	private void findAllModelsInPath(String path) {
 		File dir = new File(path);
 		File[] files = dir.listFiles(
 				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
 		for (File file : files) {
-			pathsToFiles.add(file.getName());
+			modelsRelativePaths.add(file.getName());
 		}
 	}
 
-	private List<Spatial> loadFromData(List<SpatialDTO> spatialDTOS) {
+	private List<Spatial> loadModelsFromLevelData(
+			List<SpatialDTO> spatialDTOS) {
 		return spatialDTOS.stream()
-						  .map(data -> {
-							  String pathToModel = data.getPathToModel();
+						  .map(spatialData -> {
+							  String pathToModel = spatialData.getPathToModel();
 							  Spatial spatial = loadModel(pathToModel);
-							  spatial.setLocalRotation(data.getRotation());
-							  spatial.setLocalTranslation(data.getPosition());
+							  spatial.setLocalRotation(
+									  spatialData.getRotation());
+							  spatial.setLocalTranslation(
+									  spatialData.getPosition());
 							  return spatial;
 						  })
 						  .collect(Collectors.toList());
 	}
 
-	public Set<String> getPathsToFiles() {
-		return new HashSet<>(pathsToFiles);
+	public Set<String> getModelsRelativePaths() {
+		return new HashSet<>(modelsRelativePaths);
 	}
 
-	private List<Spatial> loadFromFiles(String path) {
+	private List<Spatial> loadModelsFromFile(String path) {
 
 		File dir = new File(path);
 		File[] files = dir.listFiles(

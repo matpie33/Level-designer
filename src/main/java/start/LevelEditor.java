@@ -12,6 +12,8 @@ import initialization.ModelsLoader;
 import initialization.PathToModelsReader;
 
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -55,12 +57,22 @@ public class LevelEditor extends SimpleApplication {
 		List<String> paths = pathToModelsReader.readPaths();
 		modelsLoader = new ModelsLoader(assetManager, cam, rootNode);
 		modelsLoader.setPaths(paths);
-		InputStream inputStream = getClass().getResourceAsStream("/level.txt");
+		InputStream inputStream = readFile();
 		List<Spatial> spatials = readFromFile ?
-				modelsLoader.loadModelsFromFile(inputStream) :
+				modelsLoader.loadModelsFromLevelFile(inputStream) :
 				modelsLoader.loadModels();
 		spatials.forEach(rootNode::attachChild);
 
+	}
+
+	private FileInputStream readFile()  {
+		try {
+			return new FileInputStream("./level.txt");
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

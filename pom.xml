@@ -101,6 +101,9 @@
         <resources>
             <resource>
                 <directory>${basedir}</directory>
+                <includes>
+                    <include>bulletjme.dll</include>
+                </includes>
             </resource>
         </resources>
 
@@ -122,7 +125,6 @@
         </plugins>
 
     </build>
-
 
 
 </project>
