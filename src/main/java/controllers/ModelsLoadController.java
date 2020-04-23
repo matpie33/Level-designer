@@ -33,13 +33,11 @@ public class ModelsLoadController implements AbstractController {
 		if (applicationStateDTO.isLoadModelRequested()) {
 			applicationStateDTO.setLoadModelRequested(false);
 			Set<String> pathsToFiles = modelsLoader.getModelsRelativePaths();
-			System.out.println("before: "+pathsToFiles);
 			for (Spatial child : rootNode.getChildren()) {
 				pathsToFiles.remove(child.getKey()
 										 .getName()
 										 .replace("/", ""));
 			}
-			System.out.println("after: "+pathsToFiles);
 			if (!pathsToFiles.isEmpty()){
 				guiController.addListOfModels(pathsToFiles);
 			}

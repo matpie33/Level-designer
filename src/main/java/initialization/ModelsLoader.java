@@ -101,7 +101,6 @@ public class ModelsLoader {
 	}
 
 	public void addModel(String filename) {
-		System.out.println("loading model: "+filename);
 		Spatial spatial = loadModel(filename);
 		spatial.setLocalTranslation(camera.getLocation()
 										  .add(camera.getDirection()
