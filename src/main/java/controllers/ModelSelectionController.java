@@ -1,6 +1,6 @@
-package Controllers;
+package controllers;
 
-import DTO.ApplicationStateDTO;
+import dto.ApplicationStateDTO;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.MatParam;

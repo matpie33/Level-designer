@@ -1,6 +1,6 @@
-package Controllers;
+package controllers;
 
-import DTO.ApplicationStateDTO;
+import dto.ApplicationStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;

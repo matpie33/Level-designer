@@ -1,4 +1,4 @@
-package DTO;
+package dto;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;

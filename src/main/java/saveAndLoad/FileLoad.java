@@ -1,7 +1,7 @@
 package saveAndLoad;
 
-import Constants.FileConstants;
-import DTO.SpatialDTO;
+import constants.FileConstants;
+import dto.SpatialDTO;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 

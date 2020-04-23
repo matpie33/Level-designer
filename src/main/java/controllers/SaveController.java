@@ -1,6 +1,6 @@
-package Controllers;
+package controllers;
 
-import DTO.ApplicationStateDTO;
+import dto.ApplicationStateDTO;
 import com.jme3.scene.Node;
 import saveAndLoad.FileSaveAndLoad;
 

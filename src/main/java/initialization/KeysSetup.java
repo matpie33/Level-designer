@@ -1,8 +1,8 @@
 package initialization;
 
-import Controllers.ModelSelectionController;
-import DTO.ApplicationStateDTO;
-import DTO.KeyModifiersStateDTO;
+import controllers.ModelSelectionController;
+import dto.ApplicationStateDTO;
+import dto.KeyModifiersStateDTO;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;

@@ -1,7 +1,7 @@
 package saveAndLoad;
 
 import com.jme3.scene.Spatial;
-import DTO.SpatialDTO;
+import dto.SpatialDTO;
 
 import java.io.IOException;
 import java.nio.file.Files;

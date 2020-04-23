@@ -1,6 +1,6 @@
 package start;
 
-import Controllers.AbstractController;
+import controllers.AbstractController;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;

@@ -1,7 +1,7 @@
-package Controllers;
+package controllers;
 
 import com.jme3.scene.Geometry;
-import DTO.ApplicationStateDTO;
+import dto.ApplicationStateDTO;
 
 public class ModelDeleteController implements AbstractController {
 

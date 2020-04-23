@@ -1,19 +1,19 @@
-package Controllers;
+package controllers;
 
-import DTO.ApplicationStateDTO;
+import dto.ApplicationStateDTO;
 import com.jme3.scene.Node;
 
 public class ModelDuplicationController implements AbstractController {
 
 	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
-	private Controllers.ModelSelectionController modelSelectionController;
+	private controllers.ModelSelectionController modelSelectionController;
 	private static final int OFFSET = 5;
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
 	private Node previousDuplicatedModel;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
-			Node rootNode, Controllers.ModelSelectionController modelSelectionController) {
+			Node rootNode, controllers.ModelSelectionController modelSelectionController) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;

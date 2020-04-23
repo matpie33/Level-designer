@@ -1,7 +1,7 @@
 package initialization;
 
-import Controllers.*;
-import DTO.ApplicationStateDTO;
+import controllers.*;
+import dto.ApplicationStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.system.AppSettings;
 import start.LevelEditor;

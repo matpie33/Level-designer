@@ -1,6 +1,6 @@
 package initialization;
 
-import DTO.SpatialDTO;
+import dto.SpatialDTO;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.math.Vector3f;
