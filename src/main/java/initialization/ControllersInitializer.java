@@ -42,7 +42,7 @@ public class ControllersInitializer {
 				modelSelectionController, applicationStateDTO);
 		keysSetup.setUp();
 		controllers.add(
-				new SelectedObjectMovementController(applicationStateDTO,
+				new ModelMovementController(applicationStateDTO,
 						levelEditor.getCamera()));
 		controllers.add(new ExitController(applicationStateDTO,
 				levelEditor.getGuiNode(), guiFont, levelEditor, settings,

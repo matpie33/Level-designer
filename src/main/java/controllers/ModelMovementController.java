@@ -7,13 +7,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import dto.GeometryColorDTO;
 
-public class SelectedObjectMovementController implements AbstractController {
+public class ModelMovementController implements AbstractController {
 
 	public static final float SLOW_CAMERA_SPEED = 0.05f;
 	private ApplicationStateDTO applicationStateDTO;
 	private Camera camera;
 
-	public SelectedObjectMovementController(
+	public ModelMovementController(
 			ApplicationStateDTO applicationStateDTO,
 			Camera camera) {
 		this.applicationStateDTO = applicationStateDTO;
