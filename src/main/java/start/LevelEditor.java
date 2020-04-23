@@ -58,6 +58,7 @@ public class LevelEditor extends SimpleApplication {
 		modelsLoader = new ModelsLoader(assetManager, cam, rootNode);
 		modelsLoader.setPaths(paths);
 		InputStream inputStream = readFile();
+		modelsLoader.findAllModelsInPaths();
 		List<Spatial> spatials = readFromFile ?
 				modelsLoader.loadModelsFromLevelFile(inputStream) :
 				modelsLoader.loadModels();

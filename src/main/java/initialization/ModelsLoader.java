@@ -114,4 +114,8 @@ public class ModelsLoader {
 		lines.forEach(
 				path -> assetManager.registerLocator(path, FileLocator.class));
 	}
+
+	public void findAllModelsInPaths() {
+		paths.forEach(this::findAllModelsInPath);
+	}
 }
