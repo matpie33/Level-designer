@@ -112,6 +112,7 @@ public class KeysSetup implements ActionListener {
 		}
 		if (CONTROL_KEY.equals(name)) {
 			keyModifiersStateDTO.setControlPressed(isPressed);
+			applicationStateDTO.setMultiselectionEnabled(isPressed);
 		}
 		if (SAVE.equals(name) && isPressed) {
 			if (keyModifiersStateDTO.isControlPressed()) {

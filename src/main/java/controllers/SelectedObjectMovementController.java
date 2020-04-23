@@ -5,6 +5,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import dto.GeometryColorDTO;
 
 public class SelectedObjectMovementController implements AbstractController {
 
@@ -21,9 +22,14 @@ public class SelectedObjectMovementController implements AbstractController {
 
 	@Override
 	public void update() {
-		Spatial model = applicationStateDTO.getCurrentlySelectedModel();
+		for (GeometryColorDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+			move(selectedModel);
+		}
+	}
+
+	private void move(GeometryColorDTO model) {
 		if (model != null) {
-			Node currentlySelectedModel = model.getParent();
+			Node currentlySelectedModel = model.getGeometry().getParent();
 			if (applicationStateDTO.isMovingForward()) {
 				Vector3f dir = camera.getDirection();
 				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),

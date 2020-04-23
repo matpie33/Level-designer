@@ -1,19 +1,23 @@
 package controllers;
 
-import dto.ApplicationStateDTO;
 import com.jme3.scene.Node;
+import dto.ApplicationStateDTO;
+import dto.GeometryColorDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelDuplicationController implements AbstractController {
 
 	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
-	private controllers.ModelSelectionController modelSelectionController;
+	private ModelSelectionController modelSelectionController;
 	private static final int OFFSET = 5;
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
-	private Node previousDuplicatedModel;
+	private List<GeometryColorDTO> previousDuplicatedModels = new ArrayList<>();
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
-			Node rootNode, controllers.ModelSelectionController modelSelectionController) {
+			Node rootNode, ModelSelectionController modelSelectionController) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
@@ -22,25 +26,30 @@ public class ModelDuplicationController implements AbstractController {
 	@Override
 	public void update() {
 		if (applicationStateDTO.isDuplicateModelRequested()
-				&& applicationStateDTO.getCurrentlySelectedModel() != null) {
-
+				&& !applicationStateDTO.getSelectedModels()
+									   .isEmpty()) {
 			modelSelectionController.returnCurrentlySelectedModelToPreviousColor();
 			applicationStateDTO.setDuplicateModelRequested(false);
-			Node parent = applicationStateDTO.getCurrentlySelectedModel()
-											 .getParent();
-			if (parent == previousDuplicatedModel) {
+			if (previousDuplicatedModels.equals(
+					applicationStateDTO.getSelectedModels())) {
 				coordinateOffsetFromDuplicatedModel += OFFSET;
 			}
 			else {
 				coordinateOffsetFromDuplicatedModel = OFFSET;
 			}
-			Node clone = parent.clone(true);
-			clone.setLocalTranslation(clone.getLocalTranslation()
-										   .setX(clone.getLocalTranslation()
-													  .getX()
-												   + coordinateOffsetFromDuplicatedModel));
-			rootNode.attachChild(clone);
-			previousDuplicatedModel = parent;
+			previousDuplicatedModels.clear();
+			previousDuplicatedModels.addAll(applicationStateDTO.getSelectedModels());
+			for (GeometryColorDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+				Node parent = selectedModel.getGeometry()
+										   .getParent();
+				Node clone = parent.clone(true);
+				clone.setLocalTranslation(clone.getLocalTranslation()
+											   .setX(clone.getLocalTranslation()
+														  .getX()
+													   + coordinateOffsetFromDuplicatedModel));
+				rootNode.attachChild(clone);
+			}
+
 			modelSelectionController.returnCurrentlySelectedModelToSelectionMarkerColor();
 		}
 	}

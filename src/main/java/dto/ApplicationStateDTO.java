@@ -3,12 +3,16 @@ package dto;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ApplicationStateDTO {
+
+	private boolean multiselectionEnabled;
 	private Geometry currentlyHoveredModel;
 	private ColorRGBA previousColorOfHoveredModel;
 
-	private Geometry currentlySelectedModel;
-	private ColorRGBA previousColorOfSelectedModel;
+	private List<GeometryColorDTO> selectedModels = new ArrayList<>();
 	private boolean movingForward;
 	private boolean movingBackward;
 	private boolean movingLeft;
@@ -21,6 +25,19 @@ public class ApplicationStateDTO {
 	private boolean duplicateModelRequested;
 	private boolean deleteRequested;
 	private boolean loadModelRequested;
+
+	public boolean isMultiselectionEnabled() {
+		return multiselectionEnabled;
+	}
+
+	public void setMultiselectionEnabled(boolean multiselectionEnabled) {
+		this.multiselectionEnabled = multiselectionEnabled;
+	}
+
+	public List<GeometryColorDTO> getSelectedModels() {
+		return selectedModels;
+	}
+
 
 	public boolean isLoadModelRequested() {
 		return loadModelRequested;
@@ -95,26 +112,9 @@ public class ApplicationStateDTO {
 		this.previousColorOfHoveredModel = previousColorOfHoveredModel;
 	}
 
-	public Geometry getCurrentlySelectedModel() {
-		return currentlySelectedModel;
-	}
 
-	public void setCurrentlySelectedModel(Geometry currentlySelectedModel) {
-		this.currentlySelectedModel = currentlySelectedModel;
-	}
-
-	public ColorRGBA getPreviousColorOfSelectedModel() {
-		return previousColorOfSelectedModel;
-	}
-
-	public void setPreviousColorOfSelectedModel(
-			ColorRGBA previousColorOfSelectedModel) {
-		this.previousColorOfSelectedModel = previousColorOfSelectedModel;
-	}
-
-	public void clearSelectedModel() {
-		currentlySelectedModel = null;
-		previousColorOfSelectedModel = null;
+	public void clearSelectedModels() {
+		selectedModels.clear();
 	}
 
 	public void clearHoveredModel() {
@@ -160,5 +160,13 @@ public class ApplicationStateDTO {
 
 	public void setDuplicateModelRequested(boolean duplicateModelRequested) {
 		this.duplicateModelRequested = duplicateModelRequested;
+	}
+
+	public void selectModel(Geometry geometry,
+			ColorRGBA color) {
+		GeometryColorDTO geometryColor = new GeometryColorDTO();
+		geometryColor.setGeometry(geometry);
+		geometryColor.setColor(color);
+		selectedModels.add(geometryColor);
 	}
 }

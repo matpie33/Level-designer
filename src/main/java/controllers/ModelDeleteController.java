@@ -1,7 +1,7 @@
 package controllers;
 
-import com.jme3.scene.Geometry;
 import dto.ApplicationStateDTO;
+import dto.GeometryColorDTO;
 
 public class ModelDeleteController implements AbstractController {
 
@@ -13,11 +13,13 @@ public class ModelDeleteController implements AbstractController {
 
 	@Override
 	public void update() {
-		if (applicationStateDTO.getCurrentlySelectedModel() != null
-				&& applicationStateDTO.isDeleteRequested()) {
+		if (!applicationStateDTO.isDeleteRequested()) {
+			return;
+		}
+		for (GeometryColorDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 			applicationStateDTO.setDeleteRequested(false);
-			Geometry selectedModel = applicationStateDTO.getCurrentlySelectedModel();
-			selectedModel.getParent()
+			selectedModel.getGeometry()
+						 .getParent()
 						 .removeFromParent();
 		}
 	}

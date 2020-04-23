@@ -1,6 +1,5 @@
 package controllers;
 
-import dto.ApplicationStateDTO;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.MatParam;
@@ -9,6 +8,8 @@ import com.jme3.math.Ray;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import dto.ApplicationStateDTO;
+import dto.GeometryColorDTO;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -44,8 +45,7 @@ public class ModelSelectionController implements AbstractController {
 		if (collisionResults.size() > 0) {
 			CollisionResult closestCollision = collisionResults.getClosestCollision();
 			Geometry geometry = closestCollision.getGeometry();
-			if (geometry.equals(
-					applicationStateDTO.getCurrentlySelectedModel())) {
+			if (isModelSelected(geometry)) {
 				return;
 			}
 			clearPreviouslyHoveredModel();
@@ -60,25 +60,33 @@ public class ModelSelectionController implements AbstractController {
 		}
 	}
 
+	private boolean isModelSelected(Geometry geometry) {
+		return applicationStateDTO.getSelectedModels()
+								  .stream()
+								  .map(GeometryColorDTO::getGeometry)
+								  .anyMatch(selectedGeometry -> selectedGeometry.equals(geometry));
+	}
+
 	private void clearPreviouslyHoveredModel() {
 		if (applicationStateDTO.getCurrentlyHoveredModel() != null
-				&& !applicationStateDTO.getCurrentlyHoveredModel()
-									   .equals(applicationStateDTO.getCurrentlySelectedModel())) {
-
+				&& !isModelSelected(
+				applicationStateDTO.getCurrentlyHoveredModel())) {
 			setColor(applicationStateDTO.getCurrentlyHoveredModel(),
 					applicationStateDTO.getPreviousColorOfHoveredModel());
 			applicationStateDTO.clearHoveredModel();
 		}
 	}
 
-	public void returnCurrentlySelectedModelToPreviousColor (){
-		setColor(applicationStateDTO.getCurrentlySelectedModel(),
-				applicationStateDTO.getPreviousColorOfSelectedModel());
+	public void returnCurrentlySelectedModelToPreviousColor() {
+		applicationStateDTO.getSelectedModels()
+						   .forEach(model -> setColor(model.getGeometry(),
+								   model.getColorRGBA()));
 	}
 
 	public void returnCurrentlySelectedModelToSelectionMarkerColor() {
-		setColor(applicationStateDTO.getCurrentlySelectedModel(),
-				COLOR_OF_SELECTED_MODEL);
+		applicationStateDTO.getSelectedModels()
+						   .forEach(model -> setColor(model.getGeometry(),
+								   COLOR_OF_SELECTED_MODEL));
 	}
 
 	private ColorRGBA setColor(Geometry geometry, ColorRGBA color) {
@@ -113,30 +121,32 @@ public class ModelSelectionController implements AbstractController {
 	}
 
 	public void selectCurrentSpatial() {
-		if (applicationStateDTO.getCurrentlySelectedModel() != null){
-			unselectCurrentSpatial();
+		if (!applicationStateDTO.isMultiselectionEnabled()) {
+			if (!applicationStateDTO.getSelectedModels()
+									.isEmpty()) {
+				unselectCurrentSpatial();
+			}
 		}
 		if (applicationStateDTO.getCurrentlyHoveredModel() != null) {
-
 			markCurrentModelAsSelected();
 		}
+
 	}
 
 	private void markCurrentModelAsSelected() {
-		applicationStateDTO.setCurrentlySelectedModel(
-				applicationStateDTO.getCurrentlyHoveredModel());
+		applicationStateDTO.selectModel(
+				applicationStateDTO.getCurrentlyHoveredModel(),
+				applicationStateDTO.getPreviousColorOfHoveredModel());
 		setColor(applicationStateDTO.getCurrentlyHoveredModel(),
 				COLOR_OF_SELECTED_MODEL);
-		applicationStateDTO.setPreviousColorOfSelectedModel(
-				applicationStateDTO.getPreviousColorOfHoveredModel());
 	}
 
 	public void unselectCurrentSpatial() {
-		if (applicationStateDTO.getCurrentlySelectedModel() == null) {
+		if (applicationStateDTO.getSelectedModels()
+							   .isEmpty()) {
 			return;
 		}
-		setColor(applicationStateDTO.getCurrentlySelectedModel(),
-				applicationStateDTO.getPreviousColorOfSelectedModel());
-		applicationStateDTO.clearSelectedModel();
+		returnCurrentlySelectedModelToPreviousColor();
+		applicationStateDTO.clearSelectedModels();
 	}
 }
