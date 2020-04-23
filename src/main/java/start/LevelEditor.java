@@ -1,13 +1,14 @@
 package start;
 
-import controllers.AbstractController;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
+import controllers.AbstractController;
 import initialization.ControllersInitializer;
+import initialization.GhostControlInitializer;
 import initialization.ModelsLoader;
 import initialization.PathToModelsReader;
 
@@ -44,6 +45,9 @@ public class LevelEditor extends SimpleApplication {
 		flyCam.setMoveSpeed(50f);
 		addLight();
 		loadModels();
+		GhostControlInitializer ghostControlInitializer = new GhostControlInitializer(
+				stateManager);
+		ghostControlInitializer.attachGhostControl(rootNode.getChildren());
 		controllersInitializer = new ControllersInitializer(settings, this,
 				guiFont, modelsLoader);
 		controllersInitializer.initilize();
@@ -66,7 +70,7 @@ public class LevelEditor extends SimpleApplication {
 
 	}
 
-	private FileInputStream readFile()  {
+	private FileInputStream readFile() {
 		try {
 			return new FileInputStream("./level.txt");
 		}
