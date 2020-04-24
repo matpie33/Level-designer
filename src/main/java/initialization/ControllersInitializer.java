@@ -1,11 +1,11 @@
 package initialization;
 
-import controllers.*;
-import dto.ApplicationStateDTO;
 import com.jme3.font.BitmapFont;
 import com.jme3.system.AppSettings;
-import start.LevelEditor;
+import controllers.*;
+import dto.ApplicationStateDTO;
 import saveAndLoad.FileSaveAndLoad;
+import start.LevelEditor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,10 @@ public class ControllersInitializer {
 
 	private void create() {
 		ApplicationStateDTO applicationStateDTO = new ApplicationStateDTO();
+		SpatialsControlsInitializer spatialsControlsInitializer = new SpatialsControlsInitializer(
+				levelEditor.getStateManager(), applicationStateDTO);
+		spatialsControlsInitializer.attachGhostControl(levelEditor.getRootNode()
+																  .getChildren());
 		ModelSelectionController modelSelectionController = new ModelSelectionController(
 				levelEditor.getCamera(), levelEditor.getRootNode(),
 				applicationStateDTO);
@@ -41,9 +45,8 @@ public class ControllersInitializer {
 		KeysSetup keysSetup = new KeysSetup(levelEditor.getInputManager(),
 				modelSelectionController, applicationStateDTO);
 		keysSetup.setUp();
-		controllers.add(
-				new ModelMovementController(applicationStateDTO,
-						levelEditor.getCamera()));
+		controllers.add(new ModelMovementController(applicationStateDTO,
+				levelEditor.getCamera()));
 		controllers.add(new ExitController(applicationStateDTO,
 				levelEditor.getGuiNode(), guiFont, levelEditor, settings,
 				new FileSaveAndLoad()));

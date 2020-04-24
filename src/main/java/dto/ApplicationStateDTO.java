@@ -12,7 +12,7 @@ public class ApplicationStateDTO {
 	private Geometry currentlyHoveredModel;
 	private ColorRGBA previousColorOfHoveredModel;
 
-	private List<GeometryColorDTO> selectedModels = new ArrayList<>();
+	private List<GeometryDTO> selectedModels = new ArrayList<>();
 	private boolean movingForward;
 	private boolean movingBackward;
 	private boolean movingLeft;
@@ -25,6 +25,15 @@ public class ApplicationStateDTO {
 	private boolean duplicateModelRequested;
 	private boolean deleteRequested;
 	private boolean loadModelRequested;
+	private boolean isCollisionDetected;
+
+	public boolean isCollisionDetected() {
+		return isCollisionDetected;
+	}
+
+	public void setCollisionDetected(boolean collisionDetected) {
+		isCollisionDetected = collisionDetected;
+	}
 
 	public boolean isMultiselectionEnabled() {
 		return multiselectionEnabled;
@@ -34,7 +43,7 @@ public class ApplicationStateDTO {
 		this.multiselectionEnabled = multiselectionEnabled;
 	}
 
-	public List<GeometryColorDTO> getSelectedModels() {
+	public List<GeometryDTO> getSelectedModels() {
 		return selectedModels;
 	}
 
@@ -164,9 +173,9 @@ public class ApplicationStateDTO {
 
 	public void selectModel(Geometry geometry,
 			ColorRGBA color) {
-		GeometryColorDTO geometryColor = new GeometryColorDTO();
-		geometryColor.setGeometry(geometry);
-		geometryColor.setColor(color);
-		selectedModels.add(geometryColor);
+		GeometryDTO geometryDTO = new GeometryDTO();
+		geometryDTO.setGeometry(geometry);
+		geometryDTO.setColor(color);
+		selectedModels.add(geometryDTO);
 	}
 }

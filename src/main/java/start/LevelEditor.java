@@ -8,7 +8,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import controllers.AbstractController;
 import initialization.ControllersInitializer;
-import initialization.GhostControlInitializer;
 import initialization.ModelsLoader;
 import initialization.PathToModelsReader;
 
@@ -45,9 +44,6 @@ public class LevelEditor extends SimpleApplication {
 		flyCam.setMoveSpeed(50f);
 		addLight();
 		loadModels();
-		GhostControlInitializer ghostControlInitializer = new GhostControlInitializer(
-				stateManager);
-		ghostControlInitializer.attachGhostControl(rootNode.getChildren());
 		controllersInitializer = new ControllersInitializer(settings, this,
 				guiFont, modelsLoader);
 		controllersInitializer.initilize();

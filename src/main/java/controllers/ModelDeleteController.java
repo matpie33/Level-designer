@@ -1,7 +1,7 @@
 package controllers;
 
 import dto.ApplicationStateDTO;
-import dto.GeometryColorDTO;
+import dto.GeometryDTO;
 
 public class ModelDeleteController implements AbstractController {
 
@@ -16,7 +16,7 @@ public class ModelDeleteController implements AbstractController {
 		if (!applicationStateDTO.isDeleteRequested()) {
 			return;
 		}
-		for (GeometryColorDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+		for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 			applicationStateDTO.setDeleteRequested(false);
 			selectedModel.getGeometry()
 						 .getParent()

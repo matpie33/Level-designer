@@ -2,7 +2,7 @@ package controllers;
 
 import com.jme3.scene.Node;
 import dto.ApplicationStateDTO;
-import dto.GeometryColorDTO;
+import dto.GeometryDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ public class ModelDuplicationController implements AbstractController {
 	private ModelSelectionController modelSelectionController;
 	private static final int OFFSET = 5;
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
-	private List<GeometryColorDTO> previousDuplicatedModels = new ArrayList<>();
+	private List<GeometryDTO> previousDuplicatedModels = new ArrayList<>();
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
 			Node rootNode, ModelSelectionController modelSelectionController) {
@@ -39,7 +39,7 @@ public class ModelDuplicationController implements AbstractController {
 			}
 			previousDuplicatedModels.clear();
 			previousDuplicatedModels.addAll(applicationStateDTO.getSelectedModels());
-			for (GeometryColorDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+			for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 				Node parent = selectedModel.getGeometry()
 										   .getParent();
 				Node clone = parent.clone(true);

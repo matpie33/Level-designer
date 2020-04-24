@@ -4,8 +4,7 @@ import dto.ApplicationStateDTO;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import dto.GeometryColorDTO;
+import dto.GeometryDTO;
 
 public class ModelMovementController implements AbstractController {
 
@@ -22,13 +21,13 @@ public class ModelMovementController implements AbstractController {
 
 	@Override
 	public void update() {
-		for (GeometryColorDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+		for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 			move(selectedModel);
 		}
 	}
 
-	private void move(GeometryColorDTO model) {
-		if (model != null) {
+	private void move(GeometryDTO model) {
+		if (model != null && !model.isColliding()) {
 			Node currentlySelectedModel = model.getGeometry().getParent();
 			if (applicationStateDTO.isMovingForward()) {
 				Vector3f dir = camera.getDirection();

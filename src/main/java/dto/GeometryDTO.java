@@ -3,10 +3,19 @@ package dto;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 
-public class GeometryColorDTO {
+public class GeometryDTO {
 
 	private Geometry geometry;
 	private ColorRGBA colorRGBA;
+	private boolean isColliding;
+
+	public boolean isColliding() {
+		return isColliding;
+	}
+
+	public void setColliding(boolean colliding) {
+		isColliding = colliding;
+	}
 
 	public Geometry getGeometry() {
 		return geometry;

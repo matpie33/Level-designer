@@ -9,7 +9,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import dto.ApplicationStateDTO;
-import dto.GeometryColorDTO;
+import dto.GeometryDTO;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -63,7 +63,7 @@ public class ModelSelectionController implements AbstractController {
 	private boolean isModelSelected(Geometry geometry) {
 		return applicationStateDTO.getSelectedModels()
 								  .stream()
-								  .map(GeometryColorDTO::getGeometry)
+								  .map(GeometryDTO::getGeometry)
 								  .anyMatch(selectedGeometry -> selectedGeometry.equals(geometry));
 	}
 
