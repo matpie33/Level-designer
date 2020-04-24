@@ -53,7 +53,8 @@ public class ControllersInitializer {
 		controllers.add(new SaveController(applicationStateDTO,
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(applicationStateDTO,
-				levelEditor.getRootNode(), modelSelectionController));
+				levelEditor.getRootNode(), modelSelectionController,
+				spatialsControlsInitializer));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
 				levelEditor.getGuiNode(), modelsLoader,

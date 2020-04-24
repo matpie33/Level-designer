@@ -39,22 +39,26 @@ public class SpatialsControlsInitializer {
 
 	private void attachControl(List<Spatial> spatials) {
 		for (Spatial spatial : spatials) {
-			BoundingBox size = (BoundingBox) spatial.getWorldBound();
-			float maxXY = Math.max(size.getXExtent(), size.getYExtent());
-			float maximumDimension = Math.max(maxXY, size.getZExtent());
-			CollisionShape shape = new SphereCollisionShape(maximumDimension);
-			if (spatial.getKey()
-					   .getName()
-					   .contains("map")) {
-				shape = CollisionShapeFactory.createMeshShape(spatial);
-			}
-			GhostControl ghostControl = new GhostControl(shape);
-			spatial.addControl(
-					new CollisionPreventControl(applicationStateDTO));
-			spatial.addControl(ghostControl);
-			bulletAppState.getPhysicsSpace()
-						  .add(spatial);
+			attachControl(spatial);
 		}
+	}
+
+	public void attachControl(Spatial spatial) {
+		BoundingBox size = (BoundingBox) spatial.getWorldBound();
+		float maxXY = Math.max(size.getXExtent(), size.getYExtent());
+		float maximumDimension = Math.max(maxXY, size.getZExtent());
+		CollisionShape shape = new SphereCollisionShape(maximumDimension);
+		if (spatial.getKey()
+				   .getName()
+				   .contains("map")) {
+			shape = CollisionShapeFactory.createMeshShape(spatial);
+		}
+		GhostControl ghostControl = new GhostControl(shape);
+		spatial.addControl(
+				new CollisionPreventControl(applicationStateDTO));
+		spatial.addControl(ghostControl);
+		bulletAppState.getPhysicsSpace()
+					  .add(spatial);
 	}
 
 }

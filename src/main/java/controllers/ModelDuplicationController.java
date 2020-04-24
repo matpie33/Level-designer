@@ -3,6 +3,7 @@ package controllers;
 import com.jme3.scene.Node;
 import dto.ApplicationStateDTO;
 import dto.GeometryDTO;
+import initialization.SpatialsControlsInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +16,15 @@ public class ModelDuplicationController implements AbstractController {
 	private static final int OFFSET = 5;
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
 	private List<GeometryDTO> previousDuplicatedModels = new ArrayList<>();
+	private SpatialsControlsInitializer spatialsControlsInitializer;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
-			Node rootNode, ModelSelectionController modelSelectionController) {
+			Node rootNode, ModelSelectionController modelSelectionController,
+			SpatialsControlsInitializer spatialsControlsInitializer) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
+		this.spatialsControlsInitializer = spatialsControlsInitializer;
 	}
 
 	@Override
@@ -38,7 +42,8 @@ public class ModelDuplicationController implements AbstractController {
 				coordinateOffsetFromDuplicatedModel = OFFSET;
 			}
 			previousDuplicatedModels.clear();
-			previousDuplicatedModels.addAll(applicationStateDTO.getSelectedModels());
+			previousDuplicatedModels.addAll(
+					applicationStateDTO.getSelectedModels());
 			for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 				Node parent = selectedModel.getGeometry()
 										   .getParent();
@@ -48,6 +53,7 @@ public class ModelDuplicationController implements AbstractController {
 														  .getX()
 													   + coordinateOffsetFromDuplicatedModel));
 				rootNode.attachChild(clone);
+				spatialsControlsInitializer.attachControl(clone);
 			}
 
 			modelSelectionController.returnCurrentlySelectedModelToSelectionMarkerColor();
