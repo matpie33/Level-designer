@@ -1,7 +1,9 @@
 package controls;
 
+import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
@@ -15,10 +17,9 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import dto.ApplicationStateDTO;
 import dto.GeometryDTO;
+import enums.Direction;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class CollisionPreventControl extends AbstractControl
 		implements PhysicsTickListener {
@@ -97,11 +98,41 @@ public class CollisionPreventControl extends AbstractControl
 	}
 
 	private Vector3f findDirectionToMove() {
-		float biggestDistanceToObject = 0;
-		Vector3f directionWithBiggestDistanceToObject = Vector3f.UNIT_Y;
+
+		Optional<Spatial> first = getAnyOfCollidingObjects();
+		if (!first.isPresent()) {
+			return spatial.getControl(GhostControl.class)
+						  .getPhysicsLocation();
+		}
+		Spatial overlappingSpatial = first.get();
+		Direction directionToMove = getSmallestExtentOfSpatial(
+				overlappingSpatial);
+		Map<Vector3f, Float> directionAndDistanceToObstacle = findDistancesToObstaclesInAllDirections(
+				overlappingSpatial);
+
+		return decideOnDirection(directionAndDistanceToObstacle,
+				directionToMove);
+
+	}
+
+	private Optional<Spatial> getAnyOfCollidingObjects() {
+		GhostControl control = spatial.getControl(GhostControl.class);
+		return control.getOverlappingObjects()
+					  .stream()
+					  .map(PhysicsCollisionObject::getUserObject)
+					  .map(Spatial.class::cast)
+					  .filter(Objects::nonNull)
+					  .filter(spatial -> !spatial.equals(this.spatial))
+					  .findFirst();
+	}
+
+	private Map<Vector3f, Float> findDistancesToObstaclesInAllDirections(
+			Spatial overlappingSpatial) {
+		Map<Vector3f, Float> directionAndDistanceToObstacle = new HashMap<>();
+
 		for (Vector3f direction : possibleDirectionsToMove) {
-			Vector3f position = spatial.getLocalTranslation()
-									   .clone();
+			Vector3f position = overlappingSpatial.getLocalTranslation()
+												  .clone();
 			Ray ray = new Ray(position, direction);
 			CollisionResults collisionResults = new CollisionResults();
 			rootNode.collideWith(ray, collisionResults);
@@ -111,24 +142,59 @@ public class CollisionPreventControl extends AbstractControl
 				if (distance < closestCollisionDistance
 						&& !collisionResult.getGeometry()
 										   .getParent()
-										   .equals(spatial)) {
+										   .equals(this.spatial)) {
 					closestCollisionDistance = distance;
 				}
 			}
-
-			if (closestCollisionDistance == Float.MAX_VALUE) {
-				return direction;
-			}
-			else {
-				if (closestCollisionDistance > biggestDistanceToObject) {
-					directionWithBiggestDistanceToObject = direction;
-					biggestDistanceToObject = closestCollisionDistance;
-				}
-			}
+			directionAndDistanceToObstacle.put(direction,
+					closestCollisionDistance);
 
 		}
+		return directionAndDistanceToObstacle;
+	}
 
-		return directionWithBiggestDistanceToObject;
+	private Vector3f decideOnDirection(
+			Map<Vector3f, Float> directionAndDistanceToObstacle,
+			Direction directionToMove) {
+		float minDistance = Float.MAX_VALUE;
+		Vector3f vectorWithMinDistance = null;
+		for (Map.Entry<Vector3f, Float> entry : directionAndDistanceToObstacle.entrySet()) {
+			Vector3f direction = entry.getKey();
+			if (directionToMove.isVectorSameDirection(direction)
+					&& entry.getValue()
+							.equals(Float.MAX_VALUE)) {
+				return entry.getKey();
+			}
+			else if (entry.getValue() < minDistance) {
+				minDistance = entry.getValue();
+				vectorWithMinDistance = direction;
+			}
+		}
+		return vectorWithMinDistance;
+	}
+
+	private Direction getSmallestExtentOfSpatial(Spatial overlappingSpatial) {
+		BoundingBox worldBound = (BoundingBox) overlappingSpatial.getWorldBound();
+		float xExtent = worldBound.getXExtent();
+		float yExtent = worldBound.getYExtent();
+		float zExtent = worldBound.getZExtent();
+		float minXY = Math.min(xExtent, yExtent);
+		float min = Math.min(minXY, zExtent);
+		Direction direction;
+		if (min == xExtent) {
+			direction = Direction.X;
+		}
+		else if (min == yExtent) {
+			direction = Direction.Y;
+		}
+		else {
+			direction = Direction.Z;
+		}
+		return direction;
+	}
+
+	private IllegalArgumentException exc() {
+		return null;
 	}
 
 	@Override
