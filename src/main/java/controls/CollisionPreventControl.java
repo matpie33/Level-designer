@@ -75,11 +75,10 @@ public class CollisionPreventControl extends AbstractControl
 	}
 
 	private boolean overlapsOtherObjects(GhostControl control) {
-		return control.getOverlappingCount() > 1 || (
-				control.getOverlappingCount() == 1 && !spatial.equals(
-						control.getOverlappingObjects()
-							   .get(0)
-							   .getUserObject()));
+		List<PhysicsCollisionObject> overlappingObjects = control.getOverlappingObjects();
+		return overlappingObjects.size() > 1 || (overlappingObjects.size() == 1
+				&& !spatial.equals(overlappingObjects.get(0)
+													 .getUserObject()));
 	}
 
 	private void getCoordinatesToMoveTo(Vector3f directionToMove) {

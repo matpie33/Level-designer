@@ -10,7 +10,7 @@
 
     <properties>
         <jme3_groupId>org.jmonkeyengine</jme3_groupId>
-        <jme3_version>3.2.2-stable</jme3_version>
+        <jme3_version>3.2.3-stable</jme3_version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -65,11 +65,11 @@ public class SpatialsControlsInitializer {
 				rootNode, spatial, camera));
 		spatial.addControl(ghostControl);
 		bulletAppState.getPhysicsSpace()
-					  .add(spatial);
-		bulletAppState.getPhysicsSpace()
 					  .addTickListener(
 							  new CollisionPreventControl(applicationStateDTO,
 									  rootNode, spatial, camera));
+		bulletAppState.getPhysicsSpace()
+					  .add(ghostControl);
 	}
 
 }
