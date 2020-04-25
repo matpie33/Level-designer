@@ -52,6 +52,10 @@ public class ModelDuplicationController implements AbstractController {
 											   .setX(clone.getLocalTranslation()
 														  .getX()
 													   + coordinateOffsetFromDuplicatedModel));
+				int numControls = clone.getNumControls();
+				for (int i = 0; i < numControls; i++) {
+					clone.removeControl(clone.getControl(0));
+				}
 				rootNode.attachChild(clone);
 				spatialsControlsInitializer.attachControl(clone);
 			}
