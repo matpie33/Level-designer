@@ -35,7 +35,8 @@ public class ControllersInitializer {
 	private void create() {
 		ApplicationStateDTO applicationStateDTO = new ApplicationStateDTO();
 		SpatialsControlsInitializer spatialsControlsInitializer = new SpatialsControlsInitializer(
-				levelEditor.getStateManager(), applicationStateDTO);
+				levelEditor.getStateManager(), applicationStateDTO,
+				levelEditor.getRootNode(), levelEditor.getCamera());
 		spatialsControlsInitializer.attachGhostControl(levelEditor.getRootNode()
 																  .getChildren());
 		ModelSelectionController modelSelectionController = new ModelSelectionController(

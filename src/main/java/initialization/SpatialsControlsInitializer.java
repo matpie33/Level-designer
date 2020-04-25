@@ -7,6 +7,8 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controls.CollisionPreventControl;
 import dto.ApplicationStateDTO;
@@ -18,11 +20,16 @@ public class SpatialsControlsInitializer {
 	private AppStateManager appStateManager;
 	private BulletAppState bulletAppState;
 	private ApplicationStateDTO applicationStateDTO;
+	private Node rootNode;
+	private Camera camera;
 
 	public SpatialsControlsInitializer(AppStateManager appStateManager,
-			ApplicationStateDTO applicationStateDTO) {
+			ApplicationStateDTO applicationStateDTO, Node rootNode,
+			Camera camera) {
 		this.appStateManager = appStateManager;
 		this.applicationStateDTO = applicationStateDTO;
+		this.rootNode = rootNode;
+		this.camera = camera;
 	}
 
 	public void attachGhostControl(List<Spatial> spatials) {
@@ -54,11 +61,15 @@ public class SpatialsControlsInitializer {
 			shape = CollisionShapeFactory.createMeshShape(spatial);
 		}
 		GhostControl ghostControl = new GhostControl(shape);
-		spatial.addControl(
-				new CollisionPreventControl(applicationStateDTO));
+		spatial.addControl(new CollisionPreventControl(applicationStateDTO,
+				rootNode, spatial, camera));
 		spatial.addControl(ghostControl);
 		bulletAppState.getPhysicsSpace()
 					  .add(spatial);
+		bulletAppState.getPhysicsSpace()
+					  .addTickListener(
+							  new CollisionPreventControl(applicationStateDTO,
+									  rootNode, spatial, camera));
 	}
 
 }
