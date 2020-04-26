@@ -60,30 +60,42 @@ public class DuplicateObjectPositionController {
 		CollisionShape collisionShape = clonedSpatial.getControl(
 				GhostControl.class)
 													 .getCollisionShape();
-		float radius;
+		float sizeOfClonedSpatialInGivenDirection = calculatedSizeOfSpatialInGivenDirection(
+				rightDirection, collisionShape);
+		if (closestCollision.getDistance() == Float.MAX_VALUE) {
+			closestCollision.setDistance(0);
+		}
+		float distanceToMove = closestCollision.getDistance()
+				+ sizeOfClonedSpatialInGivenDirection + 0.2f;
+		Vector3f extent = rightDirection.mult(distanceToMove);
+		return position.add(extent);
+	}
+
+	private float calculatedSizeOfSpatialInGivenDirection(
+			Vector3f rightDirection, CollisionShape collisionShape) {
+		float sizeOfClonedSpatialInGivenDirection;
 		if (collisionShape instanceof SphereCollisionShape) {
-			radius = ((SphereCollisionShape) collisionShape).getRadius() * 2;
+			sizeOfClonedSpatialInGivenDirection =
+					((SphereCollisionShape) collisionShape).getRadius() * 2;
 		}
 		else if (collisionShape instanceof CapsuleCollisionShape) {
 
-			radius = ((CapsuleCollisionShape) collisionShape).getRadius() * 2;
+			sizeOfClonedSpatialInGivenDirection =
+					((CapsuleCollisionShape) collisionShape).getRadius() * 2;
 		}
 		else if (collisionShape instanceof BoxCollisionShape) {
 			boolean movesToX = rightDirection.getX() != 0;
 			Vector3f halfExtents = ((BoxCollisionShape) collisionShape).getHalfExtents();
-			radius = movesToX ? halfExtents.getX() : halfExtents.getZ();
-			radius *= 2;
+			sizeOfClonedSpatialInGivenDirection = movesToX ?
+					halfExtents.getX() :
+					halfExtents.getZ();
+			sizeOfClonedSpatialInGivenDirection *= 2;
 		}
 		else {
 			throw new UnsupportedOperationException(
 					"Unsupported shape: " + collisionShape.getClass());
 		}
-		if (closestCollision.getDistance() == Float.MAX_VALUE) {
-			closestCollision.setDistance(0);
-		}
-		float x = closestCollision.getDistance() + radius + 0.2f;
-		Vector3f extent = rightDirection.mult(x);
-		return position.add(extent);
+		return sizeOfClonedSpatialInGivenDirection;
 	}
 
 	private ArrayList<Vector3f> getPointsToCheckCollisionsWith(
