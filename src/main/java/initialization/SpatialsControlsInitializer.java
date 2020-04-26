@@ -3,10 +3,11 @@ package initialization;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -51,10 +52,9 @@ public class SpatialsControlsInitializer {
 	}
 
 	public void attachControl(Spatial spatial) {
-		BoundingBox size = (BoundingBox) spatial.getWorldBound();
-		float maxXY = Math.max(size.getXExtent(), size.getYExtent());
-		float maximumDimension = Math.max(maxXY, size.getZExtent());
-		CollisionShape shape = new SphereCollisionShape(maximumDimension);
+		CollisionShape shape = new BoxCollisionShape(
+				((BoundingBox) spatial.getWorldBound()).getExtent(
+						new Vector3f()));
 		if (spatial.getKey()
 				   .getName()
 				   .contains("map")) {

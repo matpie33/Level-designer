@@ -1,6 +1,8 @@
 package controllers;
 
 import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.GhostControl;
@@ -58,9 +60,19 @@ public class DuplicateObjectPositionController {
 		CollisionShape collisionShape = clonedSpatial.getControl(
 				GhostControl.class)
 													 .getCollisionShape();
-		float diameter;
+		float radius;
 		if (collisionShape instanceof SphereCollisionShape) {
-			diameter = ((SphereCollisionShape) collisionShape).getRadius() * 2;
+			radius = ((SphereCollisionShape) collisionShape).getRadius() * 2;
+		}
+		else if (collisionShape instanceof CapsuleCollisionShape) {
+
+			radius = ((CapsuleCollisionShape) collisionShape).getRadius() * 2;
+		}
+		else if (collisionShape instanceof BoxCollisionShape) {
+			boolean movesToX = rightDirection.getX() != 0;
+			Vector3f halfExtents = ((BoxCollisionShape) collisionShape).getHalfExtents();
+			radius = movesToX ? halfExtents.getX() : halfExtents.getZ();
+			radius *= 2;
 		}
 		else {
 			throw new UnsupportedOperationException(
@@ -69,9 +81,8 @@ public class DuplicateObjectPositionController {
 		if (closestCollision.getDistance() == Float.MAX_VALUE) {
 			closestCollision.setDistance(0);
 		}
-		float x = closestCollision.getDistance() + diameter;
-		Vector3f extent = rightDirection.mult(1.2f)
-										.mult(x);
+		float x = closestCollision.getDistance() + radius * 1.2f;
+		Vector3f extent = rightDirection.mult(x);
 		return position.add(extent);
 	}
 
