@@ -32,7 +32,7 @@ public class SpatialsControlsInitializer {
 		this.camera = camera;
 	}
 
-	public void attachGhostControl(List<Spatial> spatials) {
+	public void attachControls(List<Spatial> spatials) {
 		initializeBulletAppState();
 		attachControl(spatials);
 
@@ -61,13 +61,12 @@ public class SpatialsControlsInitializer {
 			shape = CollisionShapeFactory.createMeshShape(spatial);
 		}
 		GhostControl ghostControl = new GhostControl(shape);
-		spatial.addControl(new CollisionPreventControl(applicationStateDTO,
-				rootNode, spatial, camera));
+		CollisionPreventControl collisionPreventControl = new CollisionPreventControl(
+				applicationStateDTO, rootNode, spatial, camera);
+		spatial.addControl(collisionPreventControl);
 		spatial.addControl(ghostControl);
 		bulletAppState.getPhysicsSpace()
-					  .addTickListener(
-							  new CollisionPreventControl(applicationStateDTO,
-									  rootNode, spatial, camera));
+					  .addTickListener(collisionPreventControl);
 		bulletAppState.getPhysicsSpace()
 					  .add(ghostControl);
 	}

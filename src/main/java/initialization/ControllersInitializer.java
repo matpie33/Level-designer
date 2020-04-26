@@ -37,8 +37,8 @@ public class ControllersInitializer {
 		SpatialsControlsInitializer spatialsControlsInitializer = new SpatialsControlsInitializer(
 				levelEditor.getStateManager(), applicationStateDTO,
 				levelEditor.getRootNode(), levelEditor.getCamera());
-		spatialsControlsInitializer.attachGhostControl(levelEditor.getRootNode()
-																  .getChildren());
+		spatialsControlsInitializer.attachControls(levelEditor.getRootNode()
+															  .getChildren());
 		ModelSelectionController modelSelectionController = new ModelSelectionController(
 				levelEditor.getCamera(), levelEditor.getRootNode(),
 				applicationStateDTO);
@@ -55,7 +55,7 @@ public class ControllersInitializer {
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(applicationStateDTO,
 				levelEditor.getRootNode(), modelSelectionController,
-				spatialsControlsInitializer));
+				spatialsControlsInitializer, modelsLoader));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
 				levelEditor.getGuiNode(), modelsLoader,

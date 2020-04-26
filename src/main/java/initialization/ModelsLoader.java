@@ -96,7 +96,7 @@ public class ModelsLoader {
 					   .endsWith(searchedSuffix);
 	}
 
-	private Spatial loadModel(String fileName) {
+	public Spatial loadModel(String fileName) {
 		return assetManager.loadModel(fileName);
 	}
 

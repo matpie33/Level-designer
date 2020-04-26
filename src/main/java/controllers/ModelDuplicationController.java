@@ -1,8 +1,10 @@
 package controllers;
 
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
 import dto.GeometryDTO;
+import initialization.ModelsLoader;
 import initialization.SpatialsControlsInitializer;
 
 import java.util.ArrayList;
@@ -17,14 +19,17 @@ public class ModelDuplicationController implements AbstractController {
 	private int coordinateOffsetFromDuplicatedModel = OFFSET;
 	private List<GeometryDTO> previousDuplicatedModels = new ArrayList<>();
 	private SpatialsControlsInitializer spatialsControlsInitializer;
+	private ModelsLoader modelsLoader;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
 			Node rootNode, ModelSelectionController modelSelectionController,
-			SpatialsControlsInitializer spatialsControlsInitializer) {
+			SpatialsControlsInitializer spatialsControlsInitializer,
+			ModelsLoader modelsLoader) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
 		this.spatialsControlsInitializer = spatialsControlsInitializer;
+		this.modelsLoader = modelsLoader;
 	}
 
 	@Override
@@ -47,21 +52,23 @@ public class ModelDuplicationController implements AbstractController {
 			for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 				Node parent = selectedModel.getGeometry()
 										   .getParent();
-				Node clone = parent.clone(true);
+				Node clone = copyModel(parent);
 				clone.setLocalTranslation(clone.getLocalTranslation()
 											   .setX(clone.getLocalTranslation()
-														  .getX()
+														  .getZ()
 													   + coordinateOffsetFromDuplicatedModel));
-				int numControls = clone.getNumControls();
-				for (int i = 0; i < numControls; i++) {
-					clone.removeControl(clone.getControl(0));
-				}
 				rootNode.attachChild(clone);
-				spatialsControlsInitializer.attachControl(clone);
 			}
 
 			modelSelectionController.returnCurrentlySelectedModelToSelectionMarkerColor();
 		}
+	}
+
+	private Node copyModel(Node parent) {
+		Spatial spatial = modelsLoader.loadModel(parent.getKey()
+													   .getName());
+		spatialsControlsInitializer.attachControl(spatial);
+		return (Node) spatial;
 	}
 
 	@Override
