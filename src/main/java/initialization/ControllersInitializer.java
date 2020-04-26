@@ -1,6 +1,7 @@
 package initialization;
 
 import com.jme3.font.BitmapFont;
+import com.jme3.renderer.Camera;
 import com.jme3.system.AppSettings;
 import controllers.*;
 import dto.ApplicationStateDTO;
@@ -53,7 +54,7 @@ public class ControllersInitializer {
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(applicationStateDTO,
 				levelEditor.getRootNode(), modelSelectionController,
-				spatialsControlsInitializer, modelsLoader));
+				spatialsControlsInitializer, modelsLoader, levelEditor.getCamera()));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
 				levelEditor.getGuiNode(), modelsLoader,

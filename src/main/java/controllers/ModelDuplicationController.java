@@ -1,5 +1,8 @@
 package controllers;
 
+import com.jme3.bullet.control.GhostControl;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
@@ -7,29 +10,26 @@ import dto.GeometryDTO;
 import initialization.ModelsLoader;
 import initialization.SpatialsControlsInitializer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ModelDuplicationController implements AbstractController {
 
 	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
 	private ModelSelectionController modelSelectionController;
-	private static final int OFFSET = 5;
-	private int coordinateOffsetFromDuplicatedModel = OFFSET;
-	private List<GeometryDTO> previousDuplicatedModels = new ArrayList<>();
 	private SpatialsControlsInitializer spatialsControlsInitializer;
 	private ModelsLoader modelsLoader;
+	private DuplicateObjectPositionController duplicateObjectPositionController;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
 			Node rootNode, ModelSelectionController modelSelectionController,
 			SpatialsControlsInitializer spatialsControlsInitializer,
-			ModelsLoader modelsLoader) {
+			ModelsLoader modelsLoader, Camera camera) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
 		this.spatialsControlsInitializer = spatialsControlsInitializer;
 		this.modelsLoader = modelsLoader;
+		duplicateObjectPositionController = new DuplicateObjectPositionController(
+				camera, rootNode);
 	}
 
 	@Override
@@ -39,24 +39,15 @@ public class ModelDuplicationController implements AbstractController {
 									   .isEmpty()) {
 			modelSelectionController.returnCurrentlySelectedModelToPreviousColor();
 			applicationStateDTO.setDuplicateModelRequested(false);
-			if (previousDuplicatedModels.equals(
-					applicationStateDTO.getSelectedModels())) {
-				coordinateOffsetFromDuplicatedModel += OFFSET;
-			}
-			else {
-				coordinateOffsetFromDuplicatedModel = OFFSET;
-			}
-			previousDuplicatedModels.clear();
-			previousDuplicatedModels.addAll(
-					applicationStateDTO.getSelectedModels());
 			for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 				Node parent = selectedModel.getGeometry()
 										   .getParent();
 				Node clone = copyModel(parent);
-				clone.setLocalTranslation(clone.getLocalTranslation()
-											   .setX(clone.getLocalTranslation()
-														  .getZ()
-													   + coordinateOffsetFromDuplicatedModel));
+				Vector3f whereToPlaceClone = duplicateObjectPositionController.findWhereToPlaceClone(
+						parent);
+				clone.setLocalTranslation(whereToPlaceClone);
+				clone.getControl(GhostControl.class)
+					 .setPhysicsLocation(whereToPlaceClone);
 				rootNode.attachChild(clone);
 			}
 
