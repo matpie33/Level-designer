@@ -100,12 +100,13 @@ public class ModelsLoader {
 		return assetManager.loadModel(fileName);
 	}
 
-	public void addModel(String filename) {
+	public Spatial addModel(String filename) {
 		Spatial spatial = loadModel(filename);
 		spatial.setLocalTranslation(camera.getLocation()
 										  .add(camera.getDirection()
 													 .mult(15)));
 		rootNode.attachChild(spatial);
+		return spatial;
 	}
 
 	public void setPaths(List<String> lines) {

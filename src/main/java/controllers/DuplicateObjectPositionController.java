@@ -81,7 +81,7 @@ public class DuplicateObjectPositionController {
 		if (closestCollision.getDistance() == Float.MAX_VALUE) {
 			closestCollision.setDistance(0);
 		}
-		float x = closestCollision.getDistance() + radius * 1.2f;
+		float x = closestCollision.getDistance() + radius + 0.2f;
 		Vector3f extent = rightDirection.mult(x);
 		return position.add(extent);
 	}

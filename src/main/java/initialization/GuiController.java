@@ -1,6 +1,7 @@
 package initialization;
 
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.ListBox;
@@ -16,6 +17,7 @@ public class GuiController {
 	private Node guiNode;
 	private GuiGlobals guiGlobals;
 	private ModelsLoader modelsLoader;
+	private SpatialsControlsInitializer spatialsControlsInitializer;
 
 	public GuiController(LevelEditor levelEditor, Node guiNode,
 			ModelsLoader modelsLoader) {
@@ -28,7 +30,8 @@ public class GuiController {
 		init();
 	}
 
-	public void addListOfModels(Set<String> pathsToFiles) {
+	public void addListOfModels(Set<String> pathsToFiles,
+			SpatialsControlsInitializer spatialsControlsInitializer) {
 
 		guiGlobals.setCursorEventsEnabled(true);
 		Container container = new Container();
@@ -42,8 +45,9 @@ public class GuiController {
 		listBox.addClickCommands(source -> {
 			Integer selection = source.getSelectionModel()
 									  .getSelection();
-			modelsLoader.addModel((String) source.getModel()
-												 .get(selection));
+			Spatial spatial = modelsLoader.addModel((String) source.getModel()
+																   .get(selection));
+			spatialsControlsInitializer.attachControl(spatial);
 			guiNode.detachChild(container);
 			guiGlobals.setCursorEventsEnabled(false);
 		});
