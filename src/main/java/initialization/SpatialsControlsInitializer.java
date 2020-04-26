@@ -62,7 +62,7 @@ public class SpatialsControlsInitializer {
 		}
 		GhostControl ghostControl = new GhostControl(shape);
 		CollisionPreventControl collisionPreventControl = new CollisionPreventControl(
-				applicationStateDTO, rootNode, spatial, camera);
+				applicationStateDTO, spatial, camera);
 		spatial.addControl(collisionPreventControl);
 		spatial.addControl(ghostControl);
 		bulletAppState.getPhysicsSpace()

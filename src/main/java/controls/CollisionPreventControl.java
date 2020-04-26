@@ -4,10 +4,9 @@ import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.collision.CollisionResult;
-import com.jme3.collision.CollisionResults;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -17,20 +16,16 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import dto.ApplicationStateDTO;
 import dto.GeometryDTO;
-import enums.Direction;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class CollisionPreventControl extends AbstractControl
 		implements PhysicsTickListener {
 
 	public static final float x = 120f;
 	private ApplicationStateDTO applicationStateDTO;
-	private Node rootNode;
-	private List<Vector3f> possibleDirectionsToMove = Arrays.asList(
-			Vector3f.UNIT_X, Vector3f.UNIT_X.negate(), Vector3f.UNIT_Y,
-			Vector3f.UNIT_Y.negate(), Vector3f.UNIT_Z,
-			Vector3f.UNIT_Z.negate());
 	private Spatial spatial;
 	private boolean overlapsOtherObject;
 	private Vector3f positionToMoveTo;
@@ -39,9 +34,8 @@ public class CollisionPreventControl extends AbstractControl
 	private Camera camera;
 
 	public CollisionPreventControl(ApplicationStateDTO applicationStateDTO,
-			Node rootNode, Spatial spatial, Camera camera) {
+			Spatial spatial, Camera camera) {
 		this.applicationStateDTO = applicationStateDTO;
-		this.rootNode = rootNode;
 		this.spatial = spatial;
 		this.camera = camera;
 	}
@@ -64,7 +58,7 @@ public class CollisionPreventControl extends AbstractControl
 			return;
 		}
 		GeometryDTO geometryData = selectedModelData.get();
-		if (overlapsOtherObject) {
+		if (overlapsOtherObject && positionToMoveTo != null) {
 			control.setPhysicsLocation(positionToMoveTo.clone());
 		}
 		else {
@@ -81,37 +75,63 @@ public class CollisionPreventControl extends AbstractControl
 													 .getUserObject()));
 	}
 
-	private void getCoordinatesToMoveTo(Vector3f directionToMove) {
-		Vector3f position = spatial.getLocalTranslation()
-								   .clone();
-		if (directionToMove.getX() != 0) {
-			position.setX(position.getX() + directionToMove.getX());
-		}
-		if (directionToMove.getY() != 0) {
-			position.setY(position.getY() + directionToMove.getY());
-		}
-		if (directionToMove.getZ() != 0) {
-			position.setZ(position.getZ() + directionToMove.getZ());
-		}
-		positionToMoveTo = position;
-	}
+	private void findDirectionToMove() {
 
-	private Vector3f findDirectionToMove() {
+		Optional<GeometryDTO> selectedModelData = applicationStateDTO.getSelectedModels()
+																	 .stream()
+																	 .filter(geometryDTO -> geometryDTO.getGeometry()
+																									   .getParent()
+																									   .equals(spatial))
+																	 .findFirst();
+		if (!selectedModelData.isPresent()) {
+			return;
+		}
 
 		Optional<Spatial> first = getAnyOfCollidingObjects();
 		if (!first.isPresent()) {
-			return spatial.getControl(GhostControl.class)
-						  .getPhysicsLocation();
+			return;
 		}
 		Spatial overlappingSpatial = first.get();
-		Direction directionToMove = getSmallestExtentOfSpatial(
-				overlappingSpatial);
-		Map<Vector3f, Float> directionAndDistanceToObstacle = findDistancesToObstaclesInAllDirections(
-				overlappingSpatial);
+		CollisionShape collisionShape = overlappingSpatial.getControl(
+				GhostControl.class)
+														  .getCollisionShape();
 
-		return decideOnDirection(directionAndDistanceToObstacle,
-				directionToMove);
+		Vector3f overlappingSpatialExtents = getExtents(overlappingSpatial,
+				collisionShape);
+		Vector3f directionToMove = camera.getLeft()
+										 .negate();
+		directionToMove = new Vector3f(Math.round(directionToMove.getX()),
+				Math.round(directionToMove.getY()),
+				Math.round(directionToMove.getZ()));
 
+		Vector3f overlappingSpatialLocation = overlappingSpatial.getControl(
+				GhostControl.class)
+																.getPhysicsLocation();
+
+		CollisionShape myShape = spatial.getControl(GhostControl.class)
+										.getCollisionShape();
+		Vector3f myExtents = getExtents(spatial, myShape).mult(directionToMove);
+		Vector3f vectorToMove = overlappingSpatialExtents.mult(directionToMove)
+														 .add(myExtents)
+														 .add(directionToMove.mult(
+																 0.2f));
+		positionToMoveTo = overlappingSpatialLocation.clone()
+													 .add(vectorToMove);
+
+	}
+
+	private Vector3f getExtents(Spatial spatial,
+			CollisionShape collisionShape) {
+		Vector3f extents;
+		if (!(collisionShape instanceof BoxCollisionShape)) {
+			extents = ((BoundingBox) spatial.getWorldBound()).getExtent(
+					new Vector3f());
+		}
+		else {
+			extents = ((BoxCollisionShape) collisionShape).getHalfExtents();
+
+		}
+		return extents;
 	}
 
 	private Optional<Spatial> getAnyOfCollidingObjects() {
@@ -123,77 +143,6 @@ public class CollisionPreventControl extends AbstractControl
 					  .filter(Objects::nonNull)
 					  .filter(spatial -> !spatial.equals(this.spatial))
 					  .findFirst();
-	}
-
-	private Map<Vector3f, Float> findDistancesToObstaclesInAllDirections(
-			Spatial overlappingSpatial) {
-		Map<Vector3f, Float> directionAndDistanceToObstacle = new HashMap<>();
-
-		for (Vector3f direction : possibleDirectionsToMove) {
-			Vector3f position = overlappingSpatial.getLocalTranslation()
-												  .clone();
-			Ray ray = new Ray(position, direction);
-			CollisionResults collisionResults = new CollisionResults();
-			rootNode.collideWith(ray, collisionResults);
-			float closestCollisionDistance = Float.MAX_VALUE;
-			for (CollisionResult collisionResult : collisionResults) {
-				float distance = collisionResult.getDistance();
-				if (distance < closestCollisionDistance
-						&& !collisionResult.getGeometry()
-										   .getParent()
-										   .equals(this.spatial)) {
-					closestCollisionDistance = distance;
-				}
-			}
-			directionAndDistanceToObstacle.put(direction,
-					closestCollisionDistance);
-
-		}
-		return directionAndDistanceToObstacle;
-	}
-
-	private Vector3f decideOnDirection(
-			Map<Vector3f, Float> directionAndDistanceToObstacle,
-			Direction directionToMove) {
-		float minDistance = Float.MAX_VALUE;
-		Vector3f vectorWithMinDistance = null;
-		for (Map.Entry<Vector3f, Float> entry : directionAndDistanceToObstacle.entrySet()) {
-			Vector3f direction = entry.getKey();
-			if (directionToMove.isVectorSameDirection(direction)
-					&& entry.getValue()
-							.equals(Float.MAX_VALUE)) {
-				return entry.getKey();
-			}
-			else if (entry.getValue() < minDistance) {
-				minDistance = entry.getValue();
-				vectorWithMinDistance = direction;
-			}
-		}
-		return vectorWithMinDistance;
-	}
-
-	private Direction getSmallestExtentOfSpatial(Spatial overlappingSpatial) {
-		BoundingBox worldBound = (BoundingBox) overlappingSpatial.getWorldBound();
-		float xExtent = worldBound.getXExtent();
-		float yExtent = worldBound.getYExtent();
-		float zExtent = worldBound.getZExtent();
-		float minXY = Math.min(xExtent, yExtent);
-		float min = Math.min(minXY, zExtent);
-		Direction direction;
-		if (min == xExtent) {
-			direction = Direction.X;
-		}
-		else if (min == yExtent) {
-			direction = Direction.Y;
-		}
-		else {
-			direction = Direction.Z;
-		}
-		return direction;
-	}
-
-	private IllegalArgumentException exc() {
-		return null;
 	}
 
 	@Override
@@ -258,13 +207,8 @@ public class CollisionPreventControl extends AbstractControl
 		overlapsOtherObject = overlapsOtherObjects(
 				spatial.getControl(GhostControl.class));
 		if (overlapsOtherObject) {
-			findCoordinatesToMoveAwayFromCollision();
+			findDirectionToMove();
 		}
-	}
-
-	private void findCoordinatesToMoveAwayFromCollision() {
-		Vector3f directionToMove = findDirectionToMove();
-		getCoordinatesToMoveTo(directionToMove);
 	}
 
 }
