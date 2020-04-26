@@ -46,8 +46,6 @@ public class ControllersInitializer {
 		KeysSetup keysSetup = new KeysSetup(levelEditor.getInputManager(),
 				modelSelectionController, applicationStateDTO);
 		keysSetup.setUp();
-		controllers.add(new ModelMovementController(applicationStateDTO,
-				levelEditor.getCamera()));
 		controllers.add(new ExitController(applicationStateDTO,
 				levelEditor.getGuiNode(), guiFont, levelEditor, settings,
 				new FileSaveAndLoad()));
