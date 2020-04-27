@@ -20,6 +20,7 @@ import dto.GeometryDTO;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class CollisionPreventControl extends AbstractControl
 		implements PhysicsTickListener {
@@ -98,11 +99,6 @@ public class CollisionPreventControl extends AbstractControl
 
 		Vector3f overlappingSpatialExtents = getExtents(overlappingSpatial,
 				collisionShape);
-		Vector3f directionToMove = camera.getLeft()
-										 .negate();
-		directionToMove = new Vector3f(Math.round(directionToMove.getX()),
-				Math.round(directionToMove.getY()),
-				Math.round(directionToMove.getZ()));
 
 		Vector3f overlappingSpatialLocation = overlappingSpatial.getControl(
 				GhostControl.class)
@@ -110,14 +106,57 @@ public class CollisionPreventControl extends AbstractControl
 
 		CollisionShape myShape = spatial.getControl(GhostControl.class)
 										.getCollisionShape();
-		Vector3f myExtents = getExtents(spatial, myShape).mult(directionToMove);
+		Vector3f myExtents = getExtents(spatial, myShape);
+		Vector3f directionToMove = getDirectionToMove(overlappingSpatial,
+				overlappingSpatialExtents, myExtents);
 		Vector3f vectorToMove = overlappingSpatialExtents.mult(directionToMove)
-														 .add(myExtents)
+														 .add(myExtents.mult(
+																 directionToMove))
 														 .add(directionToMove.mult(
-																 0.2f));
+																 0.8f));
+
 		positionToMoveTo = overlappingSpatialLocation.clone()
 													 .add(vectorToMove);
+	}
 
+	private Vector3f getDirectionToMove(Spatial overlappingSpatial,
+			Vector3f overlappingSpatialExtents, Vector3f myExtents) {
+		Vector3f directionToMove;
+		Function<Vector3f, Float> getX = Vector3f::getX;
+		Function<Vector3f, Float> getY = Vector3f::getY;
+		Function<Vector3f, Float> getZ = Vector3f::getZ;
+		if (checkDirection(overlappingSpatial, myExtents,
+				overlappingSpatialExtents, getX)) {
+			float signum = Math.signum(
+					getX.apply(spatial.getLocalTranslation()) - getX.apply(
+							overlappingSpatial.getLocalTranslation()));
+			directionToMove = new Vector3f(signum, 0, 0);
+		}
+		else if (checkDirection(overlappingSpatial, myExtents,
+				overlappingSpatialExtents, getY)) {
+			float signum = Math.signum(
+					getY.apply(spatial.getLocalTranslation()) - getY.apply(
+							overlappingSpatial.getLocalTranslation()));
+			directionToMove = new Vector3f(0, signum, 0);
+		}
+		else {
+			float signum = Math.signum(
+					getZ.apply(spatial.getLocalTranslation()) - getZ.apply(
+							overlappingSpatial.getLocalTranslation()));
+			directionToMove = new Vector3f(0, 0, signum);
+		}
+		return directionToMove;
+	}
+
+	private boolean checkDirection(Spatial overlappingSpatial,
+			Vector3f myExtents, Vector3f overlappingSpatialExtents,
+			Function<Vector3f, Float> getCoordinate) {
+		Vector3f localTranslation = overlappingSpatial.getLocalTranslation();
+		float yC = getCoordinate.apply(localTranslation);
+		float yS = getCoordinate.apply(spatial.getLocalTranslation());
+		return Math.abs(yS - yC)
+				> getCoordinate.apply(myExtents) + getCoordinate.apply(
+				overlappingSpatialExtents);
 	}
 
 	private Vector3f getExtents(Spatial spatial,
