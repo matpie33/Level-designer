@@ -100,23 +100,16 @@ public class CollisionPreventControl extends AbstractControl
 		Vector3f overlappingSpatialExtents = getExtents(overlappingSpatial,
 				collisionShape);
 
-		Vector3f overlappingSpatialLocation = overlappingSpatial.getControl(
-				GhostControl.class)
-																.getPhysicsLocation();
 
 		CollisionShape myShape = spatial.getControl(GhostControl.class)
 										.getCollisionShape();
 		Vector3f myExtents = getExtents(spatial, myShape);
 		Vector3f directionToMove = getDirectionToMove(overlappingSpatial,
 				overlappingSpatialExtents, myExtents);
-		Vector3f vectorToMove = overlappingSpatialExtents.mult(directionToMove)
-														 .add(myExtents.mult(
-																 directionToMove))
-														 .add(directionToMove.mult(
-																 0.8f));
 
-		positionToMoveTo = overlappingSpatialLocation.clone()
-													 .add(vectorToMove);
+		positionToMoveTo = spatial.getLocalTranslation()
+								  .clone()
+								  .add(directionToMove.mult(0.1f));
 	}
 
 	private Vector3f getDirectionToMove(Spatial overlappingSpatial,
