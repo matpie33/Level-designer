@@ -39,7 +39,9 @@ public class DuplicateObjectPositionController {
 				Math.round(rightDirection.getY()),
 				Math.round(rightDirection.getZ()));
 		for (Vector3f vector : vectors) {
-			CollisionResult farthestCollision = collide(vector, rightDirection);
+			CollisionResults results = collide(vector, rightDirection);
+			CollisionResult farthestCollision = checkForSpaceBetweenObjectsEnoughToPutClone(
+					results, clonedSpatial, rightDirection);
 			if (farthestCollision != null) {
 				if (!farthestCollision.getGeometry()
 									  .getParent()
@@ -53,6 +55,32 @@ public class DuplicateObjectPositionController {
 		return calculateNewPosition(clonedSpatial, position, closestCollision,
 				rightDirection);
 
+	}
+
+	private CollisionResult checkForSpaceBetweenObjectsEnoughToPutClone(
+			CollisionResults results, Node clonedSpatial,
+			Vector3f rightDirection) {
+		Vector3f extentInGivenDirection = ((BoundingBox) clonedSpatial.getWorldBound()).getExtent(
+				new Vector3f())
+																					   .mult(rightDirection);
+		float lengthOfClonedObject = extentInGivenDirection.length();
+		float distanceToPreviousObject = 0;
+		CollisionResult previousCollidingObject = null;
+		for (CollisionResult result : results) {
+			float lengthOfCurrentObject = ((BoundingBox) result.getGeometry()
+															   .getWorldBound()).getExtent(
+					new Vector3f())
+																				.mult(rightDirection)
+																				.length();
+			if (result.getDistance() - distanceToPreviousObject
+					- lengthOfClonedObject - lengthOfCurrentObject
+					> lengthOfClonedObject + 0.5f) {
+				return previousCollidingObject;
+			}
+			distanceToPreviousObject = result.getDistance();
+			previousCollidingObject = result;
+		}
+		return results.getFarthestCollision();
 	}
 
 	private Vector3f calculateNewPosition(Node clonedSpatial, Vector3f position,
@@ -120,13 +148,13 @@ public class DuplicateObjectPositionController {
 		return vectors;
 	}
 
-	private CollisionResult collide(Vector3f position,
+	private CollisionResults collide(Vector3f position,
 			Vector3f rightDirection) {
 
 		Ray ray = new Ray(position, rightDirection);
 		CollisionResults collisionResults = new CollisionResults();
 		rootNode.collideWith(ray, collisionResults);
-		return collisionResults.getFarthestCollision();
+		return collisionResults;
 	}
 
 }
