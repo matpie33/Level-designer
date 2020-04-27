@@ -20,7 +20,6 @@ public class ModelDeleteController implements AbstractController {
 			return;
 		}
 		for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
-			applicationStateDTO.setDeleteRequested(false);
 			Node parent = selectedModel.getGeometry()
 									   .getParent();
 			GhostControl control = parent.getControl(GhostControl.class);
@@ -34,6 +33,8 @@ public class ModelDeleteController implements AbstractController {
 			parent.removeControl(GhostControl.class);
 			parent.removeFromParent();
 		}
+		applicationStateDTO.clearSelectedModels();
+		applicationStateDTO.setDeleteRequested(false);
 	}
 
 	@Override
