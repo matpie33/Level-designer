@@ -88,7 +88,7 @@ public class DuplicateObjectPositionController {
 		CollisionShape collisionShape = clonedSpatial.getControl(
 				GhostControl.class)
 													 .getCollisionShape();
-		float sizeOfClonedSpatialInGivenDirection = calculatedSizeOfSpatialInGivenDirection(
+		float sizeOfClonedSpatialInGivenDirection = calculateSizeOfSpatialInGivenDirection(
 				rightDirection, collisionShape);
 		if (closestCollision.getDistance() == Float.MAX_VALUE) {
 			closestCollision.setDistance(0);
@@ -99,7 +99,7 @@ public class DuplicateObjectPositionController {
 		return position.add(extent);
 	}
 
-	private float calculatedSizeOfSpatialInGivenDirection(
+	private float calculateSizeOfSpatialInGivenDirection(
 			Vector3f rightDirection, CollisionShape collisionShape) {
 		float sizeOfClonedSpatialInGivenDirection;
 		if (collisionShape instanceof SphereCollisionShape) {

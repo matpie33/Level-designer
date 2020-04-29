@@ -38,8 +38,8 @@ public class ModelToSceneAdder {
 	public void addModels(List<SpatialDTO> spatials) {
 		spatials.forEach(spatialData -> {
 			Spatial spatial = loadModel(spatialData);
-			setRotationAndLocation(spatialData, spatial);
 			addControls(spatial);
+			setRotationAndLocation(spatialData, spatial);
 			rootNode.attachChild(spatial);
 		});
 	}
@@ -48,6 +48,9 @@ public class ModelToSceneAdder {
 			Spatial spatial) {
 		spatial.setLocalRotation(spatialData.getRotation());
 		spatial.setLocalTranslation(spatialData.getPosition());
+		GhostControl control = spatial.getControl(GhostControl.class);
+		control.setPhysicsLocation(spatialData.getPosition());
+		control.getPhysicsRotation(spatialData.getRotation());
 	}
 
 	public void addControls(Spatial spatial) {
@@ -67,8 +70,6 @@ public class ModelToSceneAdder {
 		bulletAppState.getPhysicsSpace()
 					  .addTickListener(collisionPreventControl);
 		GhostControl control = new GhostControl(shape);
-		control.setPhysicsRotation(spatial.getWorldRotation());
-		control.setPhysicsLocation(spatial.getWorldTranslation());
 		spatial.addControl(control);
 		BulletAppState state = appStateManager.getState(BulletAppState.class);
 		state.getPhysicsSpace()
