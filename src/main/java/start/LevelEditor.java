@@ -5,12 +5,15 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import controllers.AbstractController;
+import dto.ApplicationStateDTO;
+import dto.SpatialDTO;
 import initialization.ControllersInitializer;
+import initialization.ModelToSceneAdder;
 import initialization.ModelsLoader;
 import initialization.PathToModelsReader;
+import saveAndLoad.FileLoad;
 
 import java.awt.*;
 import java.io.FileInputStream;
@@ -23,6 +26,9 @@ public class LevelEditor extends SimpleApplication {
 	private ControllersInitializer controllersInitializer;
 	private final static boolean readFromFile = true;
 	private ModelsLoader modelsLoader;
+	private FileLoad fileLoad;
+	private ModelToSceneAdder modelToSceneAdder;
+	private ApplicationStateDTO applicationStateDTO;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -42,11 +48,12 @@ public class LevelEditor extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp() {
+		applicationStateDTO = new ApplicationStateDTO();
 		flyCam.setMoveSpeed(50f);
 		addLight();
 		loadModels();
 		controllersInitializer = new ControllersInitializer(settings, this,
-				guiFont, modelsLoader);
+				guiFont, modelsLoader, applicationStateDTO, modelToSceneAdder);
 		controllersInitializer.initilize();
 		initCrosshair();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
@@ -60,16 +67,21 @@ public class LevelEditor extends SimpleApplication {
 		modelsLoader.setPaths(paths);
 		InputStream inputStream = readFile();
 		modelsLoader.findAllModelsInPaths();
+		initializePhysicsSpace();
+		fileLoad = new FileLoad();
+		List<SpatialDTO> spatials = readFromFile ?
+				fileLoad.readFile(inputStream) :
+				modelsLoader.loadModels();
+		modelToSceneAdder = new ModelToSceneAdder(modelsLoader, stateManager,
+				rootNode, cam, applicationStateDTO);
+		modelToSceneAdder.addModels(spatials);
+
+	}
+
+	private void initializePhysicsSpace() {
 		BulletAppState state = new BulletAppState();
 		state.setDebugEnabled(true);
 		stateManager.attach(state);
-		List<Spatial> spatials = readFromFile ?
-				modelsLoader.loadModelsFromLevelFile(inputStream, state) :
-				modelsLoader.loadModels();
-		if (readFromFile){
-			spatials.forEach(rootNode::attachChild);
-		}
-
 	}
 
 	private FileInputStream readFile() {

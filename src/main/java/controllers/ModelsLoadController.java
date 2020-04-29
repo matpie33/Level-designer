@@ -4,8 +4,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
 import initialization.GuiController;
+import initialization.ModelToSceneAdder;
 import initialization.ModelsLoader;
-import initialization.SpatialsControlsInitializer;
 import start.LevelEditor;
 
 import java.util.Set;
@@ -18,18 +18,18 @@ public class ModelsLoadController implements AbstractController {
 	private Node rootNode;
 	private LevelEditor levelEditor;
 	private GuiController guiController;
-	private SpatialsControlsInitializer spatialsControlsInitializer;
+	private ModelToSceneAdder modelToSceneAdder;
 
 	public ModelsLoadController(ApplicationStateDTO applicationStateDTO,
 			Node guiNode, ModelsLoader modelsLoader, Node rootNode,
 			LevelEditor levelEditor,
-			SpatialsControlsInitializer spatialsControlsInitializer) {
+			ModelToSceneAdder modelToSceneAdder) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.guiNode = guiNode;
 		this.modelsLoader = modelsLoader;
 		this.rootNode = rootNode;
 		this.levelEditor = levelEditor;
-		this.spatialsControlsInitializer = spatialsControlsInitializer;
+		this.modelToSceneAdder = modelToSceneAdder;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class ModelsLoadController implements AbstractController {
 			}
 			if (!pathsToFiles.isEmpty()) {
 				guiController.addListOfModels(pathsToFiles,
-						spatialsControlsInitializer);
+						modelToSceneAdder);
 			}
 
 		}

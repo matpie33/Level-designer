@@ -16,15 +16,20 @@ public class ControllersInitializer {
 	private LevelEditor levelEditor;
 	private BitmapFont guiFont;
 	private ModelsLoader modelsLoader;
-
+	private ApplicationStateDTO applicationStateDTO;
 	private List<AbstractController> controllers = new ArrayList<>();
+	private ModelToSceneAdder modelToSceneAdder;
 
 	public ControllersInitializer(AppSettings settings, LevelEditor levelEditor,
-			BitmapFont guiFont, ModelsLoader modelsLoader) {
+			BitmapFont guiFont, ModelsLoader modelsLoader,
+			ApplicationStateDTO applicationStateDTO,
+			ModelToSceneAdder modelToSceneAdder) {
 		this.settings = settings;
 		this.levelEditor = levelEditor;
 		this.guiFont = guiFont;
 		this.modelsLoader = modelsLoader;
+		this.applicationStateDTO = applicationStateDTO;
+		this.modelToSceneAdder = modelToSceneAdder;
 	}
 
 	public void initilize() {
@@ -33,12 +38,7 @@ public class ControllersInitializer {
 	}
 
 	private void create() {
-		ApplicationStateDTO applicationStateDTO = new ApplicationStateDTO();
-		SpatialsControlsInitializer spatialsControlsInitializer = new SpatialsControlsInitializer(
-				levelEditor.getStateManager(), applicationStateDTO,
-				levelEditor.getRootNode(), levelEditor.getCamera());
-		spatialsControlsInitializer.attachControls(levelEditor.getRootNode()
-															  .getChildren());
+
 		ModelSelectionController modelSelectionController = new ModelSelectionController(
 				levelEditor.getCamera(), levelEditor.getRootNode(),
 				applicationStateDTO);
@@ -53,14 +53,14 @@ public class ControllersInitializer {
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(applicationStateDTO,
 				levelEditor.getRootNode(), modelSelectionController,
-				spatialsControlsInitializer, modelsLoader,
+				modelToSceneAdder, modelsLoader,
 				levelEditor.getCamera()));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelRotationController(applicationStateDTO));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
 				levelEditor.getGuiNode(), modelsLoader,
 				levelEditor.getRootNode(), levelEditor,
-				spatialsControlsInitializer));
+				modelToSceneAdder));
 	}
 
 	public List<AbstractController> getControllers() {

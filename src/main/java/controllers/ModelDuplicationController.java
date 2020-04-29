@@ -7,26 +7,26 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
 import dto.GeometryDTO;
+import initialization.ModelToSceneAdder;
 import initialization.ModelsLoader;
-import initialization.SpatialsControlsInitializer;
 
 public class ModelDuplicationController implements AbstractController {
 
 	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
 	private ModelSelectionController modelSelectionController;
-	private SpatialsControlsInitializer spatialsControlsInitializer;
 	private ModelsLoader modelsLoader;
 	private DuplicateObjectPositionController duplicateObjectPositionController;
+	private ModelToSceneAdder modelToSceneAdder;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
 			Node rootNode, ModelSelectionController modelSelectionController,
-			SpatialsControlsInitializer spatialsControlsInitializer,
+			ModelToSceneAdder modelToSceneAdder,
 			ModelsLoader modelsLoader, Camera camera) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
-		this.spatialsControlsInitializer = spatialsControlsInitializer;
+		this.modelToSceneAdder = modelToSceneAdder;
 		this.modelsLoader = modelsLoader;
 		duplicateObjectPositionController = new DuplicateObjectPositionController(
 				camera, rootNode);
@@ -58,7 +58,7 @@ public class ModelDuplicationController implements AbstractController {
 	private Node copyModel(Node parent) {
 		Spatial spatial = modelsLoader.loadModel(parent.getKey()
 													   .getName());
-		spatialsControlsInitializer.attachControl(spatial);
+		modelToSceneAdder.addControls(spatial);
 		return (Node) spatial;
 	}
 

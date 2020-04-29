@@ -17,7 +17,6 @@ public class GuiController {
 	private Node guiNode;
 	private GuiGlobals guiGlobals;
 	private ModelsLoader modelsLoader;
-	private SpatialsControlsInitializer spatialsControlsInitializer;
 
 	public GuiController(LevelEditor levelEditor, Node guiNode,
 			ModelsLoader modelsLoader) {
@@ -31,7 +30,7 @@ public class GuiController {
 	}
 
 	public void addListOfModels(Set<String> pathsToFiles,
-			SpatialsControlsInitializer spatialsControlsInitializer) {
+			ModelToSceneAdder modelToSceneAdder) {
 
 		guiGlobals.setCursorEventsEnabled(true);
 		Container container = new Container();
@@ -47,7 +46,7 @@ public class GuiController {
 									  .getSelection();
 			Spatial spatial = modelsLoader.addModel((String) source.getModel()
 																   .get(selection));
-			spatialsControlsInitializer.attachControl(spatial);
+			modelToSceneAdder.addControls(spatial);
 			guiNode.detachChild(container);
 			guiGlobals.setCursorEventsEnabled(false);
 		});
