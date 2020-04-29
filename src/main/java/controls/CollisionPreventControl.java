@@ -49,11 +49,7 @@ public class CollisionPreventControl extends AbstractControl
 
 	private void moveOutOfCollision() {
 		GhostControl control = spatial.getControl(GhostControl.class);
-		Optional<NodeDTO> selectedModelData = applicationStateDTO.getSelectedModels()
-																 .stream()
-																 .filter(geometryDTO -> geometryDTO.getNode()
-																									   .equals(spatial))
-																 .findFirst();
+		Optional<NodeDTO> selectedModelData = getOptionallySelectedModelData();
 		if (!selectedModelData.isPresent()) {
 			return;
 		}
@@ -68,6 +64,14 @@ public class CollisionPreventControl extends AbstractControl
 		moveBasedOnKeyPress(geometryData);
 	}
 
+	private Optional<NodeDTO> getOptionallySelectedModelData() {
+		return applicationStateDTO.getSelectedModels()
+								  .stream()
+								  .filter(geometryDTO -> geometryDTO.getNode()
+																	.equals(spatial))
+								  .findFirst();
+	}
+
 	private boolean overlapsOtherObjects(GhostControl control) {
 		List<PhysicsCollisionObject> overlappingObjects = control.getOverlappingObjects();
 		return overlappingObjects.size() > 1 || (overlappingObjects.size() == 1
@@ -75,15 +79,14 @@ public class CollisionPreventControl extends AbstractControl
 													 .getUserObject()));
 	}
 
+	private boolean isThisSpatialSelected() {
+		Optional<NodeDTO> selectedModelData = getOptionallySelectedModelData();
+		return selectedModelData.isPresent();
+	}
+
 	private void findDirectionToMove() {
 
-		//TODO extract to method
-		Optional<NodeDTO> selectedModelData = applicationStateDTO.getSelectedModels()
-																 .stream()
-																 .filter(geometryDTO -> geometryDTO.getNode()
-																									   .equals(spatial))
-																 .findFirst();
-		if (!selectedModelData.isPresent()) {
+		if (!isThisSpatialSelected()) {
 			return;
 		}
 
