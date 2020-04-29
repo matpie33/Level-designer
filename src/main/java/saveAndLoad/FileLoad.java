@@ -14,14 +14,14 @@ import java.util.List;
 
 public class FileLoad {
 
-	public List<SpatialDTO> readFile(InputStream filePath) {
-		List<String> lines = readLines(filePath);
+	public List<SpatialDTO> readFile(InputStream fileInputStream) {
+		List<String> lines = readLines(fileInputStream);
 		return readSpatials(lines);
 	}
 
-	private List<String> readLines(InputStream filePath){
+	private List<String> readLines(InputStream fileInputStream){
 		try {
-			return readLinesFromFile(filePath);
+			return readLinesFromFile(fileInputStream);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
