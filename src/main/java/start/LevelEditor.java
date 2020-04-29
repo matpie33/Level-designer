@@ -24,7 +24,7 @@ import java.util.List;
 public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
-	private final static boolean readFromFile = true;
+	private final static boolean readFromFile = false;
 	private ModelsLoader modelsLoader;
 	private FileLoad fileLoad;
 	private ModelToSceneAdder modelToSceneAdder;

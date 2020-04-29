@@ -4,7 +4,7 @@ import com.jme3.bullet.control.GhostControl;
 import com.jme3.scene.Node;
 import controls.CollisionPreventControl;
 import dto.ApplicationStateDTO;
-import dto.GeometryDTO;
+import dto.NodeDTO;
 
 public class ModelDeleteController implements AbstractController {
 
@@ -19,19 +19,18 @@ public class ModelDeleteController implements AbstractController {
 		if (!applicationStateDTO.isDeleteRequested()) {
 			return;
 		}
-		for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
-			Node parent = selectedModel.getGeometry()
-									   .getParent();
-			GhostControl control = parent.getControl(GhostControl.class);
-			CollisionPreventControl collisionPreventControl = parent.getControl(
+		for (NodeDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+			Node selectedNode = selectedModel.getNode();
+			GhostControl control = selectedNode.getControl(GhostControl.class);
+			CollisionPreventControl collisionPreventControl = selectedNode.getControl(
 					CollisionPreventControl.class);
 			control.getPhysicsSpace()
 				   .removeTickListener(collisionPreventControl);
 			control.getPhysicsSpace()
 				   .remove(control);
-			parent.removeControl(CollisionPreventControl.class);
-			parent.removeControl(GhostControl.class);
-			parent.removeFromParent();
+			selectedNode.removeControl(CollisionPreventControl.class);
+			selectedNode.removeControl(GhostControl.class);
+			selectedNode.removeFromParent();
 		}
 		applicationStateDTO.clearSelectedModels();
 		applicationStateDTO.setDeleteRequested(false);

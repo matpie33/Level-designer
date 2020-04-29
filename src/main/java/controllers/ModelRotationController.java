@@ -4,7 +4,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import dto.ApplicationStateDTO;
-import dto.GeometryDTO;
+import dto.NodeDTO;
 
 public class ModelRotationController implements AbstractController {
 	private ApplicationStateDTO applicationStateDTO;
@@ -22,9 +22,8 @@ public class ModelRotationController implements AbstractController {
 		if (applicationStateDTO.getSelectedModels() != null
 				&& applicationStateDTO.isRotationRequested()) {
 			applicationStateDTO.setRotationRequested(false);
-			for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
-				selectedModel.getGeometry()
-							 .getParent()
+			for (NodeDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+				selectedModel.getNode()
 							 .rotate(BY_Y_90_DEGREE_ROTATION);
 			}
 		}

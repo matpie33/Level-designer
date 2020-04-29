@@ -9,7 +9,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import dto.ApplicationStateDTO;
-import dto.GeometryDTO;
+import dto.NodeDTO;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -44,7 +44,8 @@ public class ModelSelectionController implements AbstractController {
 		rootNode.collideWith(ray, collisionResults);
 		if (collisionResults.size() > 0) {
 			CollisionResult closestCollision = collisionResults.getClosestCollision();
-			Geometry geometry = closestCollision.getGeometry();
+			Node geometry = closestCollision.getGeometry()
+											.getParent();
 			if (isModelSelected(geometry)) {
 				return;
 			}
@@ -60,11 +61,12 @@ public class ModelSelectionController implements AbstractController {
 		}
 	}
 
-	private boolean isModelSelected(Geometry geometry) {
+	private boolean isModelSelected(Node node) {
 		return applicationStateDTO.getSelectedModels()
 								  .stream()
-								  .map(GeometryDTO::getGeometry)
-								  .anyMatch(selectedGeometry -> selectedGeometry.equals(geometry));
+								  .map(NodeDTO::getNode)
+								  .anyMatch(selectedNode -> selectedNode.equals(
+										  node));
 	}
 
 	private void clearPreviouslyHoveredModel() {
@@ -79,18 +81,19 @@ public class ModelSelectionController implements AbstractController {
 
 	public void returnCurrentlySelectedModelToPreviousColor() {
 		applicationStateDTO.getSelectedModels()
-						   .forEach(model -> setColor(model.getGeometry(),
+						   .forEach(model -> setColor(model.getNode(),
 								   model.getColorRGBA()));
 	}
 
 	public void returnCurrentlySelectedModelToSelectionMarkerColor() {
 		applicationStateDTO.getSelectedModels()
-						   .forEach(model -> setColor(model.getGeometry(),
+						   .forEach(model -> setColor(model.getNode(),
 								   COLOR_OF_SELECTED_MODEL));
 	}
 
-	private ColorRGBA setColor(Geometry geometry, ColorRGBA color) {
+	private ColorRGBA setColor(Node node, ColorRGBA color) {
 		ColorRGBA previousColorOfHoveredModel = null;
+		Geometry geometry = (Geometry) node.getChild(0);
 		Optional<MatParam> optionalMaterial = geometry.getMaterial()
 													  .getMaterialDef()
 													  .getMaterialParams()

@@ -1,7 +1,7 @@
 package dto;
 
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.List;
 public class ApplicationStateDTO {
 
 	private boolean multiselectionEnabled;
-	private Geometry currentlyHoveredModel;
+	private Node currentlyHoveredModel;
 	private ColorRGBA previousColorOfHoveredModel;
 
-	private List<GeometryDTO> selectedModels = new ArrayList<>();
+	private List<NodeDTO> selectedModels = new ArrayList<>();
 	private boolean movingForward;
 	private boolean movingBackward;
 	private boolean movingLeft;
@@ -52,7 +52,7 @@ public class ApplicationStateDTO {
 		this.multiselectionEnabled = multiselectionEnabled;
 	}
 
-	public List<GeometryDTO> getSelectedModels() {
+	public List<NodeDTO> getSelectedModels() {
 		return selectedModels;
 	}
 
@@ -113,11 +113,11 @@ public class ApplicationStateDTO {
 		this.movingRight = movingRight;
 	}
 
-	public Geometry getCurrentlyHoveredModel() {
+	public Node getCurrentlyHoveredModel() {
 		return currentlyHoveredModel;
 	}
 
-	public void setCurrentlyHoveredModel(Geometry currentlyHoveredModel) {
+	public void setCurrentlyHoveredModel(Node currentlyHoveredModel) {
 		this.currentlyHoveredModel = currentlyHoveredModel;
 	}
 
@@ -180,11 +180,11 @@ public class ApplicationStateDTO {
 		this.duplicateModelRequested = duplicateModelRequested;
 	}
 
-	public void selectModel(Geometry geometry,
+	public void selectModel(Node node,
 			ColorRGBA color) {
-		GeometryDTO geometryDTO = new GeometryDTO();
-		geometryDTO.setGeometry(geometry);
-		geometryDTO.setColor(color);
-		selectedModels.add(geometryDTO);
+		NodeDTO nodeDTO = new NodeDTO();
+		nodeDTO.setNode(node);
+		nodeDTO.setColor(color);
+		selectedModels.add(nodeDTO);
 	}
 }

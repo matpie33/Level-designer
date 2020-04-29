@@ -6,7 +6,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
-import dto.GeometryDTO;
+import dto.NodeDTO;
 import initialization.ModelToSceneAdder;
 import initialization.ModelsLoader;
 
@@ -39,12 +39,11 @@ public class ModelDuplicationController implements AbstractController {
 									   .isEmpty()) {
 			modelSelectionController.returnCurrentlySelectedModelToPreviousColor();
 			applicationStateDTO.setDuplicateModelRequested(false);
-			for (GeometryDTO selectedModel : applicationStateDTO.getSelectedModels()) {
-				Node parent = selectedModel.getGeometry()
-										   .getParent();
-				Node clone = copyModel(parent);
+			for (NodeDTO selectedModel : applicationStateDTO.getSelectedModels()) {
+				Node selectedNode = selectedModel.getNode();
+				Node clone = copyModel(selectedNode);
 				Vector3f whereToPlaceClone = duplicateObjectPositionController.findWhereToPlaceClone(
-						parent);
+						selectedNode);
 				clone.setLocalTranslation(whereToPlaceClone);
 				clone.getControl(GhostControl.class)
 					 .setPhysicsLocation(whereToPlaceClone);

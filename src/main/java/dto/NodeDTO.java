@@ -1,11 +1,11 @@
 package dto;
 
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 
-public class GeometryDTO {
+public class NodeDTO {
 
-	private Geometry geometry;
+	private Node node;
 	private ColorRGBA colorRGBA;
 	private boolean isColliding;
 
@@ -17,12 +17,12 @@ public class GeometryDTO {
 		isColliding = colliding;
 	}
 
-	public Geometry getGeometry() {
-		return geometry;
+	public Node getNode() {
+		return node;
 	}
 
-	public void setGeometry(Geometry geometry) {
-		this.geometry = geometry;
+	public void setNode(Node node) {
+		this.node = node;
 	}
 
 	public ColorRGBA getColorRGBA() {

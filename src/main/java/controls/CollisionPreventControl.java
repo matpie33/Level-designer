@@ -15,7 +15,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import dto.ApplicationStateDTO;
-import dto.GeometryDTO;
+import dto.NodeDTO;
 
 import java.util.List;
 import java.util.Objects;
@@ -49,16 +49,15 @@ public class CollisionPreventControl extends AbstractControl
 
 	private void moveOutOfCollision() {
 		GhostControl control = spatial.getControl(GhostControl.class);
-		Optional<GeometryDTO> selectedModelData = applicationStateDTO.getSelectedModels()
-																	 .stream()
-																	 .filter(geometryDTO -> geometryDTO.getGeometry()
-																									   .getParent()
+		Optional<NodeDTO> selectedModelData = applicationStateDTO.getSelectedModels()
+																 .stream()
+																 .filter(geometryDTO -> geometryDTO.getNode()
 																									   .equals(spatial))
-																	 .findFirst();
+																 .findFirst();
 		if (!selectedModelData.isPresent()) {
 			return;
 		}
-		GeometryDTO geometryData = selectedModelData.get();
+		NodeDTO geometryData = selectedModelData.get();
 		if (overlapsOtherObject && positionToMoveTo != null) {
 			control.setPhysicsLocation(positionToMoveTo.clone());
 		}
@@ -78,12 +77,12 @@ public class CollisionPreventControl extends AbstractControl
 
 	private void findDirectionToMove() {
 
-		Optional<GeometryDTO> selectedModelData = applicationStateDTO.getSelectedModels()
-																	 .stream()
-																	 .filter(geometryDTO -> geometryDTO.getGeometry()
-																									   .getParent()
+		//TODO extract to method
+		Optional<NodeDTO> selectedModelData = applicationStateDTO.getSelectedModels()
+																 .stream()
+																 .filter(geometryDTO -> geometryDTO.getNode()
 																									   .equals(spatial))
-																	 .findFirst();
+																 .findFirst();
 		if (!selectedModelData.isPresent()) {
 			return;
 		}
@@ -99,7 +98,6 @@ public class CollisionPreventControl extends AbstractControl
 
 		Vector3f overlappingSpatialExtents = getExtents(overlappingSpatial,
 				collisionShape);
-
 
 		CollisionShape myShape = spatial.getControl(GhostControl.class)
 										.getCollisionShape();
@@ -182,11 +180,10 @@ public class CollisionPreventControl extends AbstractControl
 
 	}
 
-	private void moveBasedOnKeyPress(GeometryDTO model) {
+	private void moveBasedOnKeyPress(NodeDTO model) {
 		if (model != null && !model.isColliding()) {
-			Node currentlySelectedModel = model.getGeometry()
-											   .getParent();
-			GhostControl control = currentlySelectedModel.getControl(
+			Node currentlySelectedNode = model.getNode();
+			GhostControl control = currentlySelectedNode.getControl(
 					GhostControl.class);
 			if (applicationStateDTO.isMovingForward()) {
 				Vector3f dir = camera.getDirection();
