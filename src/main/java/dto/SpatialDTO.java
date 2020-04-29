@@ -2,12 +2,22 @@ package dto;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 
 public class SpatialDTO {
 
 	private Vector3f position= Vector3f.ZERO;
 	private Quaternion rotation = new Quaternion();
 	private String pathToModel;
+	private Spatial spatial;
+
+	public Spatial getSpatial() {
+		return spatial;
+	}
+
+	public void setSpatial(Spatial spatial) {
+		this.spatial = spatial;
+	}
 
 	public Vector3f getPosition() {
 		return position;
