@@ -56,6 +56,7 @@ public class ControllersInitializer {
 				spatialsControlsInitializer, modelsLoader,
 				levelEditor.getCamera()));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
+		controllers.add(new ModelRotationController(applicationStateDTO));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
 				levelEditor.getGuiNode(), modelsLoader,
 				levelEditor.getRootNode(), levelEditor,

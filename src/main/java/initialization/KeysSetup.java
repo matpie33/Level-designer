@@ -13,6 +13,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 public class KeysSetup implements ActionListener {
 
 	public static final String SELECT_MODEL = "select";
+	public static final String ROTATE = "rotate";
 	public static final String CONTROL_KEY = "control";
 	public static final String MOVE_FORWARD = "moveForward";
 	public static final String MOVE_BACKWARD = "moveBackward";
@@ -54,6 +55,7 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(MOVE_UP, new KeyTrigger(KeyInput.KEY_5));
 		inputManager.addMapping(MOVE_DOWN, new KeyTrigger(KeyInput.KEY_B));
 		inputManager.addMapping(EXIT, new KeyTrigger(KeyInput.KEY_ESCAPE));
+		inputManager.addMapping(ROTATE, new KeyTrigger(KeyInput.KEY_R));
 		inputManager.addMapping(CONFIRM_EXIT, new KeyTrigger(KeyInput.KEY_Y));
 		inputManager.addMapping(REJECT_EXIT, new KeyTrigger(KeyInput.KEY_N));
 		inputManager.addMapping(DELETE_MODEL,
@@ -68,7 +70,7 @@ public class KeysSetup implements ActionListener {
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
 				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY,
-				DUPLICATE_MODEL, DELETE_MODEL, LOAD_MODEL);
+				DUPLICATE_MODEL, DELETE_MODEL, LOAD_MODEL, ROTATE);
 	}
 
 	@Override
@@ -108,7 +110,9 @@ public class KeysSetup implements ActionListener {
 		}
 		if (REJECT_EXIT.equals(name) && isPressed) {
 			applicationStateDTO.setExitConfirmed(false);
-
+		}
+		if (ROTATE.equals(name) ) {
+			applicationStateDTO.setRotationRequested(isPressed);
 		}
 		if (CONTROL_KEY.equals(name)) {
 			keyModifiersStateDTO.setControlPressed(isPressed);

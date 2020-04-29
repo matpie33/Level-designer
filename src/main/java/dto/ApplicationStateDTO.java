@@ -26,6 +26,15 @@ public class ApplicationStateDTO {
 	private boolean deleteRequested;
 	private boolean loadModelRequested;
 	private boolean isCollisionDetected;
+	private boolean isRotationRequested;
+
+	public boolean isRotationRequested() {
+		return isRotationRequested;
+	}
+
+	public void setRotationRequested(boolean rotationRequested) {
+		isRotationRequested = rotationRequested;
+	}
 
 	public boolean isCollisionDetected() {
 		return isCollisionDetected;

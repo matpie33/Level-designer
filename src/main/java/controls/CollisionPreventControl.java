@@ -65,8 +65,8 @@ public class CollisionPreventControl extends AbstractControl
 		else {
 			geometryData.setColliding(false);
 			positionToMoveTo = null;
-			moveBasedOnKeyPress(geometryData);
 		}
+		moveBasedOnKeyPress(geometryData);
 	}
 
 	private boolean overlapsOtherObjects(GhostControl control) {

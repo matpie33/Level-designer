@@ -1,12 +1,17 @@
 package initialization;
 
-import dto.SpatialDTO;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import dto.SpatialDTO;
 import saveAndLoad.FileLoad;
 
 import java.io.File;
@@ -42,9 +47,9 @@ public class ModelsLoader {
 	}
 
 	public List<Spatial> loadModelsFromLevelFile(
-			InputStream inputStreamForLevelFile) {
+			InputStream inputStreamForLevelFile, BulletAppState state) {
 		return loadModelsFromLevelData(
-				fileLoad.readFile(inputStreamForLevelFile));
+				fileLoad.readFile(inputStreamForLevelFile), state);
 	}
 
 	private void findAllModelsInPath(String path) {
@@ -56,16 +61,23 @@ public class ModelsLoader {
 		}
 	}
 
-	private List<Spatial> loadModelsFromLevelData(
-			List<SpatialDTO> spatialDTOS) {
+	private List<Spatial> loadModelsFromLevelData(List<SpatialDTO> spatialDTOS,
+			BulletAppState state) {
 		return spatialDTOS.stream()
 						  .map(spatialData -> {
 							  String pathToModel = spatialData.getPathToModel();
 							  Spatial spatial = loadModel(pathToModel);
+							  CollisionShape shape = new BoxCollisionShape(
+									  ((BoundingBox) spatial.getWorldBound()).getExtent(
+											  new Vector3f()));
+							  GhostControl control = new GhostControl(shape);
+							  control.setPhysicsRotation(spatial.getWorldRotation());
+							  spatial.addControl(control);
 							  spatial.setLocalRotation(
 									  spatialData.getRotation());
 							  spatial.setLocalTranslation(
 									  spatialData.getPosition());
+							  state.getPhysicsSpace().add(control);
 							  return spatial;
 						  })
 						  .collect(Collectors.toList());

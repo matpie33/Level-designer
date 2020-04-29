@@ -1,6 +1,7 @@
 package start;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
@@ -59,10 +60,15 @@ public class LevelEditor extends SimpleApplication {
 		modelsLoader.setPaths(paths);
 		InputStream inputStream = readFile();
 		modelsLoader.findAllModelsInPaths();
+		BulletAppState state = new BulletAppState();
+		state.setDebugEnabled(true);
+		stateManager.attach(state);
 		List<Spatial> spatials = readFromFile ?
-				modelsLoader.loadModelsFromLevelFile(inputStream) :
+				modelsLoader.loadModelsFromLevelFile(inputStream, state) :
 				modelsLoader.loadModels();
-		spatials.forEach(rootNode::attachChild);
+		if (readFromFile){
+			spatials.forEach(rootNode::attachChild);
+		}
 
 	}
 

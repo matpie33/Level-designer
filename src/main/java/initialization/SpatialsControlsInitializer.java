@@ -34,16 +34,10 @@ public class SpatialsControlsInitializer {
 	}
 
 	public void attachControls(List<Spatial> spatials) {
-		initializeBulletAppState();
 		attachControl(spatials);
 
 	}
 
-	private void initializeBulletAppState() {
-		bulletAppState = new BulletAppState();
-		bulletAppState.setDebugEnabled(true);
-		appStateManager.attach(bulletAppState);
-	}
 
 	private void attachControl(List<Spatial> spatials) {
 		for (Spatial spatial : spatials) {
@@ -60,15 +54,12 @@ public class SpatialsControlsInitializer {
 				   .contains("map")) {
 			shape = CollisionShapeFactory.createMeshShape(spatial);
 		}
-		GhostControl ghostControl = new GhostControl(shape);
 		CollisionPreventControl collisionPreventControl = new CollisionPreventControl(
 				applicationStateDTO, spatial, camera);
 		spatial.addControl(collisionPreventControl);
-		spatial.addControl(ghostControl);
+		BulletAppState bulletAppState = appStateManager.getState(BulletAppState.class);
 		bulletAppState.getPhysicsSpace()
-					  .addTickListener(collisionPreventControl);
-		bulletAppState.getPhysicsSpace()
-					  .add(ghostControl);
+						   .addTickListener(collisionPreventControl);
 	}
 
 }
