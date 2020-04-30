@@ -8,6 +8,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
 import controllers.AbstractController;
 import dto.ApplicationStateDTO;
+import dto.OptionsDTO;
 import dto.SpatialDTO;
 import initialization.ControllersInitializer;
 import initialization.ModelToSceneAdder;
@@ -50,6 +51,7 @@ public class LevelEditor extends SimpleApplication {
 	public void simpleInitApp() {
 		applicationStateDTO = new ApplicationStateDTO();
 		flyCam.setMoveSpeed(50f);
+		initializeOptions();
 		addLight();
 		loadModels();
 		controllersInitializer = new ControllersInitializer(settings, this,
@@ -58,6 +60,11 @@ public class LevelEditor extends SimpleApplication {
 		initCrosshair();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
 
+	}
+
+	private void initializeOptions() {
+		OptionsDTO optionsDTO = OptionsDTO.getInstance();
+		optionsDTO.setModelMovementSpeed(0.3f);
 	}
 
 	private void loadModels() {

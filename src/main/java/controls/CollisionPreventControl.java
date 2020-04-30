@@ -16,6 +16,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import dto.ApplicationStateDTO;
 import dto.NodeDTO;
+import dto.OptionsDTO;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +32,6 @@ public class CollisionPreventControl extends AbstractControl
 	private boolean overlapsOtherObject;
 	private Vector3f positionToMoveTo;
 
-	public static final float SLOW_CAMERA_SPEED = 0.3f;
 	private Camera camera;
 
 	public CollisionPreventControl(ApplicationStateDTO applicationStateDTO,
@@ -188,13 +188,15 @@ public class CollisionPreventControl extends AbstractControl
 			Node currentlySelectedNode = model.getNode();
 			GhostControl control = currentlySelectedNode.getControl(
 					GhostControl.class);
+			float movementSpeed = OptionsDTO.getInstance()
+											.getModelMovementSpeed();
 			if (applicationStateDTO.isMovingForward()) {
 				Vector3f dir = camera.getDirection();
 				Vector3f xyzDir = new Vector3f(Math.round(dir.getX()),
 						Math.round(dir.getY()), Math.round(dir.getZ()));
 				control.setPhysicsLocation(control.getPhysicsLocation()
 												  .add(xyzDir.mult(
-														  SLOW_CAMERA_SPEED)));
+														  movementSpeed)));
 			}
 			if (applicationStateDTO.isMovingBackward()) {
 				Vector3f dir = camera.getDirection();
@@ -202,27 +204,27 @@ public class CollisionPreventControl extends AbstractControl
 						Math.round(dir.getY()), Math.round(dir.getZ()));
 				control.setPhysicsLocation(control.getPhysicsLocation()
 												  .add(xyzDir.mult(
-														  -SLOW_CAMERA_SPEED)));
+														  -movementSpeed)));
 			}
 			if (applicationStateDTO.isMovingRight()) {
 				control.setPhysicsLocation(control.getPhysicsLocation()
 												  .add(camera.getLeft()
-															 .mult(-SLOW_CAMERA_SPEED)));
+															 .mult(-movementSpeed)));
 			}
 			if (applicationStateDTO.isMovingLeft()) {
 				control.setPhysicsLocation(control.getPhysicsLocation()
 												  .add(camera.getLeft()
-															 .mult(SLOW_CAMERA_SPEED)));
+															 .mult(movementSpeed)));
 			}
 			if (applicationStateDTO.isMovingUp()) {
 				control.setPhysicsLocation(control.getPhysicsLocation()
 												  .add(camera.getUp()
-															 .mult(SLOW_CAMERA_SPEED)));
+															 .mult(movementSpeed)));
 			}
 			if (applicationStateDTO.isMovingDown()) {
 				control.setPhysicsLocation(control.getPhysicsLocation()
 												  .add(camera.getUp()
-															 .mult(-SLOW_CAMERA_SPEED)));
+															 .mult(-movementSpeed)));
 			}
 		}
 	}

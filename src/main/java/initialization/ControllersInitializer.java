@@ -53,14 +53,15 @@ public class ControllersInitializer {
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(applicationStateDTO,
 				levelEditor.getRootNode(), modelSelectionController,
-				modelToSceneAdder, modelsLoader,
-				levelEditor.getCamera()));
+				modelToSceneAdder, modelsLoader, levelEditor.getCamera()));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelRotationController(applicationStateDTO));
+		controllers.add(
+				new AccelerationDecelerationController(applicationStateDTO,
+						levelEditor.getFlyByCamera()));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
 				levelEditor.getGuiNode(), modelsLoader,
-				levelEditor.getRootNode(), levelEditor,
-				modelToSceneAdder));
+				levelEditor.getRootNode(), levelEditor, modelToSceneAdder));
 	}
 
 	public List<AbstractController> getControllers() {

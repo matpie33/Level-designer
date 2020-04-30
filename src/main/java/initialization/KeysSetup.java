@@ -1,14 +1,14 @@
 package initialization;
 
-import controllers.ModelSelectionController;
-import dto.ApplicationStateDTO;
-import dto.KeyModifiersStateDTO;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import controllers.ModelSelectionController;
+import dto.ApplicationStateDTO;
+import dto.KeyModifiersStateDTO;
 
 public class KeysSetup implements ActionListener {
 
@@ -28,6 +28,8 @@ public class KeysSetup implements ActionListener {
 	public static final String DUPLICATE_MODEL = "duplicate";
 	public static final String DELETE_MODEL = "delete";
 	public static final String LOAD_MODEL = "loadModel";
+	public static final String ACCELERATE = "accelerate";
+	public static final String DECELERATE = "decelerate";
 	private static final String UNSELECT_MODEL = "unselect";
 	private InputManager inputManager;
 	private ModelSelectionController modelSelectionController;
@@ -63,14 +65,16 @@ public class KeysSetup implements ActionListener {
 		inputManager.addMapping(SAVE, new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping(DUPLICATE_MODEL,
 				new KeyTrigger(KeyInput.KEY_C));
-		inputManager.addMapping(LOAD_MODEL,
-				new KeyTrigger(KeyInput.KEY_1));
+		inputManager.addMapping(ACCELERATE, new KeyTrigger(KeyInput.KEY_F6));
+		inputManager.addMapping(DECELERATE, new KeyTrigger(KeyInput.KEY_F5));
+		inputManager.addMapping(LOAD_MODEL, new KeyTrigger(KeyInput.KEY_1));
 		inputManager.addMapping(CONTROL_KEY,
 				new KeyTrigger(KeyInput.KEY_LCONTROL));
 		inputManager.addListener(this, SELECT_MODEL, UNSELECT_MODEL,
 				MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP,
 				MOVE_DOWN, EXIT, CONFIRM_EXIT, REJECT_EXIT, SAVE, CONTROL_KEY,
-				DUPLICATE_MODEL, DELETE_MODEL, LOAD_MODEL, ROTATE);
+				DUPLICATE_MODEL, DELETE_MODEL, LOAD_MODEL, ROTATE, ACCELERATE,
+				DECELERATE);
 	}
 
 	@Override
@@ -111,8 +115,14 @@ public class KeysSetup implements ActionListener {
 		if (REJECT_EXIT.equals(name) && isPressed) {
 			applicationStateDTO.setExitConfirmed(false);
 		}
-		if (ROTATE.equals(name) ) {
+		if (ROTATE.equals(name)) {
 			applicationStateDTO.setRotationRequested(isPressed);
+		}
+		if (ACCELERATE.equals(name)) {
+			applicationStateDTO.setAccelerationRequested(isPressed);
+		}
+		if (DECELERATE.equals(name)) {
+			applicationStateDTO.setDecelerationRequested(isPressed);
 		}
 		if (CONTROL_KEY.equals(name)) {
 			keyModifiersStateDTO.setControlPressed(isPressed);

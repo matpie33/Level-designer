@@ -27,6 +27,24 @@ public class ApplicationStateDTO {
 	private boolean loadModelRequested;
 	private boolean isCollisionDetected;
 	private boolean isRotationRequested;
+	private boolean isAccelerationRequested;
+	private boolean isDecelerationRequested;
+
+	public boolean isDecelerationRequested() {
+		return isDecelerationRequested;
+	}
+
+	public void setDecelerationRequested(boolean decelerationRequested) {
+		isDecelerationRequested = decelerationRequested;
+	}
+
+	public boolean isAccelerationRequested() {
+		return isAccelerationRequested;
+	}
+
+	public void setAccelerationRequested(boolean accelerationRequested) {
+		isAccelerationRequested = accelerationRequested;
+	}
 
 	public boolean isRotationRequested() {
 		return isRotationRequested;
