@@ -35,58 +35,53 @@ public class CollisionListener implements PhysicsCollisionListener {
 								  .findFirst();
 	}
 
-	private boolean isSpatialNotSelected(Spatial nodeA) {
-		Optional<NodeDTO> selectedModelData = getOptionallySelectedModelData(
-				nodeA);
-		return !selectedModelData.isPresent();
-	}
+	private Vector3f findDirectionToMove(Spatial spatialToMove,
+			Spatial spatialToStay) {
 
-	private Vector3f findDirectionToMove(Spatial nodeA, Spatial nodeB) {
-
-		Vector3f overlappingSpatialExtents = getExtents(nodeB);
-		Vector3f myExtents = getExtents(nodeA);
-		Vector3f directionToMove = getDirectionToMove(nodeB,
-				overlappingSpatialExtents, myExtents, nodeA);
+		Vector3f overlappingSpatialExtents = getExtents(spatialToStay);
+		Vector3f myExtents = getExtents(spatialToMove);
+		Vector3f directionToMove = getDirectionToMove(spatialToStay,
+				overlappingSpatialExtents, myExtents, spatialToMove);
 
 		return directionToMove.mult(0.1f);
 	}
 
-	private Vector3f getDirectionToMove(Spatial overlappingSpatial,
+	private Vector3f getDirectionToMove(Spatial spatialToStay,
 			Vector3f overlappingSpatialExtents, Vector3f myExtents,
-			Spatial me) {
+			Spatial spatialToMove) {
 		Vector3f directionToMove;
 		Function<Vector3f, Float> getX = Vector3f::getX;
 		Function<Vector3f, Float> getY = Vector3f::getY;
 		Function<Vector3f, Float> getZ = Vector3f::getZ;
-		if (checkDirection(overlappingSpatial, myExtents,
-				overlappingSpatialExtents, getX, me)) {
+		if (checkDirection(spatialToStay, myExtents, overlappingSpatialExtents,
+				getX, spatialToMove)) {
 			float signum = Math.signum(
-					getX.apply(me.getLocalTranslation()) - getX.apply(
-							overlappingSpatial.getLocalTranslation()));
+					getX.apply(spatialToMove.getLocalTranslation())
+							- getX.apply(spatialToStay.getLocalTranslation()));
 			directionToMove = new Vector3f(signum, 0, 0);
 		}
-		else if (checkDirection(overlappingSpatial, myExtents,
-				overlappingSpatialExtents, getY, me)) {
+		else if (checkDirection(spatialToStay, myExtents,
+				overlappingSpatialExtents, getY, spatialToMove)) {
 			float signum = Math.signum(
-					getY.apply(me.getLocalTranslation()) - getY.apply(
-							overlappingSpatial.getLocalTranslation()));
+					getY.apply(spatialToMove.getLocalTranslation())
+							- getY.apply(spatialToStay.getLocalTranslation()));
 			directionToMove = new Vector3f(0, signum, 0);
 		}
 		else {
 			float signum = Math.signum(
-					getZ.apply(me.getLocalTranslation()) - getZ.apply(
-							overlappingSpatial.getLocalTranslation()));
+					getZ.apply(spatialToMove.getLocalTranslation())
+							- getZ.apply(spatialToStay.getLocalTranslation()));
 			directionToMove = new Vector3f(0, 0, signum);
 		}
 		return directionToMove;
 	}
 
-	private boolean checkDirection(Spatial overlappingSpatial,
-			Vector3f myExtents, Vector3f overlappingSpatialExtents,
-			Function<Vector3f, Float> getCoordinate, Spatial me) {
-		Vector3f localTranslation = overlappingSpatial.getLocalTranslation();
+	private boolean checkDirection(Spatial spatialToStay, Vector3f myExtents,
+			Vector3f overlappingSpatialExtents,
+			Function<Vector3f, Float> getCoordinate, Spatial spatialToMove) {
+		Vector3f localTranslation = spatialToStay.getLocalTranslation();
 		float yC = getCoordinate.apply(localTranslation);
-		float yS = getCoordinate.apply(me.getLocalTranslation());
+		float yS = getCoordinate.apply(spatialToMove.getLocalTranslation());
 		return Math.abs(yS - yC)
 				> getCoordinate.apply(myExtents) + getCoordinate.apply(
 				overlappingSpatialExtents);
@@ -101,12 +96,18 @@ public class CollisionListener implements PhysicsCollisionListener {
 	public void collision(PhysicsCollisionEvent physicsCollisionEvent) {
 
 		Spatial nodeA = physicsCollisionEvent.getNodeA();
-		if (isSpatialNotSelected(nodeA) && isSpatialNotSelected(
-				physicsCollisionEvent.getNodeB())) {
+		Spatial nodeB = physicsCollisionEvent.getNodeB();
+		Optional<NodeDTO> nodeASelection = getOptionallySelectedModelData(
+				nodeA);
+		Optional<NodeDTO> nodeBSelection = getOptionallySelectedModelData(
+				nodeB);
+		if (!nodeASelection.isPresent() && !nodeBSelection.isPresent()) {
 			return;
 		}
-		Vector3f directionToMove = findDirectionToMove(nodeA,
-				physicsCollisionEvent.getNodeB());
-		moveInDirection(nodeA, directionToMove);
+		Spatial spatialToMove = nodeASelection.isPresent() ? nodeA : nodeB;
+		Spatial spatialToStay = nodeASelection.isPresent() ? nodeB : nodeA;
+		Vector3f directionToMove = findDirectionToMove(spatialToMove,
+				spatialToStay);
+		moveInDirection(spatialToMove, directionToMove);
 	}
 }
