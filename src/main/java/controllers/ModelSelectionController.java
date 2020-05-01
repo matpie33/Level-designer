@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
@@ -68,7 +69,7 @@ public class ModelSelectionController implements AbstractController {
 		for (Node spatial = closestCollision.getGeometry()
 											.getParent();
 			 spatial != null; spatial = spatial.getParent()) {
-			if (spatial.getControl(GhostControl.class) != null) {
+			if (spatial.getControl(CharacterControl.class) != null) {
 				return spatial;
 			}
 		}

@@ -1,7 +1,6 @@
 package start;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
@@ -10,10 +9,7 @@ import controllers.AbstractController;
 import dto.ApplicationStateDTO;
 import dto.OptionsDTO;
 import dto.SpatialDTO;
-import initialization.ControllersInitializer;
-import initialization.ModelToSceneAdder;
-import initialization.ModelsLoader;
-import initialization.PathToModelsReader;
+import initialization.*;
 import saveAndLoad.FileLoad;
 
 import java.awt.*;
@@ -25,11 +21,12 @@ import java.util.List;
 public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
-	private final static boolean readFromFile = true;
+	private final static boolean readFromFile = false;
 	private ModelsLoader modelsLoader;
 	private FileLoad fileLoad;
 	private ModelToSceneAdder modelToSceneAdder;
 	private ApplicationStateDTO applicationStateDTO;
+	private PhysicsSpaceInitializer physicsSpaceInitializer;
 
 	public static void main(String[] args) {
 		loadGame();
@@ -86,9 +83,9 @@ public class LevelEditor extends SimpleApplication {
 	}
 
 	private void initializePhysicsSpace() {
-		BulletAppState state = new BulletAppState();
-		state.setDebugEnabled(true);
-		stateManager.attach(state);
+		physicsSpaceInitializer = new PhysicsSpaceInitializer(stateManager,
+				applicationStateDTO);
+		physicsSpaceInitializer.initialize();
 	}
 
 	private FileInputStream readFile() {
