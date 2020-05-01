@@ -26,7 +26,7 @@ public class ModelDeleteController implements AbstractController {
 					CharacterControl.class);
 			control.getPhysicsSpace()
 				   .remove(control);
-			control.getPhysicsSpace()
+			characterControl.getPhysicsSpace()
 				   .remove(characterControl);
 			selectedNode.removeControl(control);
 			selectedNode.removeControl(characterControl);

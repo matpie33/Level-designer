@@ -2,12 +2,22 @@ package dto;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 public class NodeDTO {
 
 	private Node node;
 	private ColorRGBA colorRGBA;
 	private boolean isColliding;
+	private Spatial collidingSpatial;
+
+	public Spatial getCollidingSpatial() {
+		return collidingSpatial;
+	}
+
+	public void setCollidingSpatial(Spatial collidingSpatial) {
+		this.collidingSpatial = collidingSpatial;
+	}
 
 	public boolean isColliding() {
 		return isColliding;
