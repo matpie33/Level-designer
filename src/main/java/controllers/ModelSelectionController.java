@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.MatParam;
@@ -8,10 +9,13 @@ import com.jme3.math.Ray;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
 import dto.NodeDTO;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class ModelSelectionController implements AbstractController {
@@ -44,8 +48,7 @@ public class ModelSelectionController implements AbstractController {
 		rootNode.collideWith(ray, collisionResults);
 		if (collisionResults.size() > 0) {
 			CollisionResult closestCollision = collisionResults.getClosestCollision();
-			Node geometry = closestCollision.getGeometry()
-											.getParent();
+			Node geometry = getNode(closestCollision);
 			if (isModelSelected(geometry)) {
 				return;
 			}
@@ -59,6 +62,17 @@ public class ModelSelectionController implements AbstractController {
 			clearPreviouslyHoveredModel();
 
 		}
+	}
+
+	private Node getNode(CollisionResult closestCollision) {
+		for (Node spatial = closestCollision.getGeometry()
+											.getParent();
+			 spatial != null; spatial = spatial.getParent()) {
+			if (spatial.getControl(GhostControl.class) != null) {
+				return spatial;
+			}
+		}
+		return null;
 	}
 
 	private boolean isModelSelected(Node node) {
@@ -93,7 +107,14 @@ public class ModelSelectionController implements AbstractController {
 
 	private ColorRGBA setColor(Node node, ColorRGBA color) {
 		ColorRGBA previousColorOfHoveredModel = null;
-		Geometry geometry = (Geometry) node.getChild(0);
+		List<Geometry> geometry = getGeometries(node);
+		geometry.forEach(
+				geo -> getColorRGBA(color, previousColorOfHoveredModel, geo));
+		return ColorRGBA.Red;
+	}
+
+	private ColorRGBA getColorRGBA(ColorRGBA color,
+			ColorRGBA previousColorOfHoveredModel, Geometry geometry) {
 		Optional<MatParam> optionalMaterial = geometry.getMaterial()
 													  .getMaterialDef()
 													  .getMaterialParams()
@@ -116,6 +137,26 @@ public class ModelSelectionController implements AbstractController {
 			}
 		}
 		return previousColorOfHoveredModel;
+	}
+
+	private List<Geometry> getGeometries(Node node) {
+
+		List<Geometry> geometries = new ArrayList<>();
+		for (Spatial child : node.getChildren()) {
+			if (child instanceof Geometry) {
+				geometries.add((Geometry) child);
+			}
+			else {
+				for (Spatial spatial : ((Node) child).getChildren()) {
+					if (spatial instanceof Node) {
+						geometries.addAll(getGeometries((Node) spatial));
+					}
+				}
+
+			}
+		}
+		return geometries;
+
 	}
 
 	private boolean oneOfColorParams(MatParam materialParameter) {

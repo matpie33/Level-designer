@@ -73,6 +73,9 @@ public class CollisionPreventControl extends AbstractControl
 	}
 
 	private boolean overlapsOtherObjects(GhostControl control) {
+		if (true){
+			return false;
+		}
 		List<PhysicsCollisionObject> overlappingObjects = control.getOverlappingObjects();
 		return overlappingObjects.size() > 1 || (overlappingObjects.size() == 1
 				&& !spatial.equals(overlappingObjects.get(0)

@@ -57,9 +57,9 @@ public class ModelToSceneAdder {
 		CollisionShape shape = new BoxCollisionShape(
 				((BoundingBox) spatial.getWorldBound()).getExtent(
 						new Vector3f()));
-		if (spatial.getKey()
-				   .getName()
-				   .contains("map")) {
+		String name = spatial.getKey()
+							 .getName();
+		if (name.contains("map") || name.contains("house")) {
 			shape = CollisionShapeFactory.createMeshShape(spatial);
 		}
 		CollisionPreventControl collisionPreventControl = new CollisionPreventControl(

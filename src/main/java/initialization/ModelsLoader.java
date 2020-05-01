@@ -43,7 +43,7 @@ public class ModelsLoader {
 	private void findAllModelsInPath(String path) {
 		File dir = new File(path);
 		File[] files = dir.listFiles(
-				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
+				(dir1, name) -> isModelOrSceneExtension(name));
 		for (File file : files) {
 			modelsRelativePaths.add(file.getName());
 		}
@@ -57,7 +57,7 @@ public class ModelsLoader {
 
 		File dir = new File(path);
 		File[] files = dir.listFiles(
-				(dir1, name) -> endsWith(name, ".mesh" + ".xml"));
+				(dir1, name) -> isModelOrSceneExtension(name));
 		return Arrays.stream(files)
 					 .map(file -> {
 						 SpatialDTO spatial = new SpatialDTO();
@@ -69,6 +69,10 @@ public class ModelsLoader {
 						 return spatial;
 					 })
 					 .collect(Collectors.toList());
+	}
+
+	private boolean isModelOrSceneExtension(String name) {
+		return endsWith(name, ".mesh.xml") || endsWith(name, ".scene");
 	}
 
 	private boolean endsWith(String fileName, String searchedSuffix) {
