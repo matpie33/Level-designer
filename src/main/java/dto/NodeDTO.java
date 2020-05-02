@@ -1,6 +1,7 @@
 package dto;
 
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
@@ -10,6 +11,24 @@ public class NodeDTO {
 	private ColorRGBA colorRGBA;
 	private boolean isColliding;
 	private Spatial collidingSpatial;
+	private float distanceToMoveOutOfCollision;
+	private Vector3f colisionPointLocalOnThisObject;
+
+	public float getDistanceToMoveOutOfCollision() {
+		return distanceToMoveOutOfCollision;
+	}
+
+	public void setDistanceToMoveOutOfCollision(float distanceToMoveOutOfCollision) {
+		this.distanceToMoveOutOfCollision = distanceToMoveOutOfCollision;
+	}
+
+	public Vector3f getColisionPointLocalOnThisObject() {
+		return colisionPointLocalOnThisObject;
+	}
+
+	public void setColisionPointLocalOnThisObject(Vector3f colisionPointLocalOnThisObject) {
+		this.colisionPointLocalOnThisObject = colisionPointLocalOnThisObject;
+	}
 
 	public Spatial getCollidingSpatial() {
 		return collidingSpatial;

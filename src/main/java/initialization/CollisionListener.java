@@ -42,10 +42,14 @@ public class CollisionListener implements PhysicsCollisionListener {
 		nodeASelection.ifPresent(node -> {
 			node.setColliding(true);
 			node.setCollidingSpatial(nodeB);
+			node.setColisionPointLocalOnThisObject(physicsCollisionEvent.getLocalPointA());
+			node.setDistanceToMoveOutOfCollision(physicsCollisionEvent.getDistance1());
 		});
 		nodeBSelection.ifPresent(node -> {
 			node.setColliding(true);
 			node.setCollidingSpatial(nodeA);
+			node.setColisionPointLocalOnThisObject(physicsCollisionEvent.getLocalPointB());
+			node.setDistanceToMoveOutOfCollision(physicsCollisionEvent.getDistance1());
 		});
 
 	}
