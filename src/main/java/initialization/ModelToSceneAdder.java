@@ -51,6 +51,9 @@ public class ModelToSceneAdder {
 		spatial.setLocalTranslation(spatialData.getPosition());
 		CharacterControl control = spatial.getControl(CharacterControl.class);
 		control.setPhysicsLocation(spatialData.getPosition());
+		control.setViewDirection(spatialData.getRotation()
+											.mult(new Vector3f(0, 0, 1)));
+
 	}
 
 	public void addControls(Spatial spatial) {

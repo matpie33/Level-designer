@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jme3.bullet.control.CharacterControl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -12,8 +13,8 @@ public class ModelRotationController implements AbstractController {
 
 	public ModelRotationController(ApplicationStateDTO applicationStateDTO) {
 		Quaternion quaternion = new Quaternion();
-		this.BY_Y_90_DEGREE_ROTATION = quaternion.fromAngleAxis(FastMath.DEG_TO_RAD * 90,
-				Vector3f.UNIT_Y);
+		this.BY_Y_90_DEGREE_ROTATION = quaternion.fromAngleAxis(
+				FastMath.DEG_TO_RAD * 90, Vector3f.UNIT_Y);
 		this.applicationStateDTO = applicationStateDTO;
 	}
 
@@ -25,6 +26,11 @@ public class ModelRotationController implements AbstractController {
 			for (NodeDTO selectedModel : applicationStateDTO.getSelectedModels()) {
 				selectedModel.getNode()
 							 .rotate(BY_Y_90_DEGREE_ROTATION);
+				CharacterControl control = selectedModel.getNode()
+														.getControl(
+																CharacterControl.class);
+				control.setViewDirection(BY_Y_90_DEGREE_ROTATION.mult(
+						control.getViewDirection()));
 			}
 		}
 	}
