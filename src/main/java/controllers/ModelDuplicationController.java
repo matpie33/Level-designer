@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -45,7 +46,7 @@ public class ModelDuplicationController implements AbstractController {
 				Vector3f whereToPlaceClone = duplicateObjectPositionController.findWhereToPlaceClone(
 						selectedNode);
 				clone.setLocalTranslation(whereToPlaceClone);
-				clone.getControl(GhostControl.class)
+				clone.getControl(CharacterControl.class)
 					 .setPhysicsLocation(whereToPlaceClone);
 				rootNode.attachChild(clone);
 			}
