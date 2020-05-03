@@ -1,11 +1,6 @@
 package controllers;
 
 import com.jme3.bounding.BoundingBox;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.SphereCollisionShape;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
@@ -85,11 +80,8 @@ public class DuplicateObjectPositionController {
 
 	private Vector3f calculateNewPosition(Node clonedSpatial, Vector3f position,
 			CollisionResult closestCollision, Vector3f rightDirection) {
-		CollisionShape collisionShape = clonedSpatial.getControl(
-				GhostControl.class)
-													 .getCollisionShape();
 		float sizeOfClonedSpatialInGivenDirection = calculateSizeOfSpatialInGivenDirection(
-				rightDirection, collisionShape);
+				rightDirection, clonedSpatial);
 		if (closestCollision.getDistance() == Float.MAX_VALUE) {
 			closestCollision.setDistance(0);
 		}
@@ -100,30 +92,12 @@ public class DuplicateObjectPositionController {
 	}
 
 	private float calculateSizeOfSpatialInGivenDirection(
-			Vector3f rightDirection, CollisionShape collisionShape) {
-		float sizeOfClonedSpatialInGivenDirection;
-		if (collisionShape instanceof SphereCollisionShape) {
-			sizeOfClonedSpatialInGivenDirection =
-					((SphereCollisionShape) collisionShape).getRadius() * 2;
-		}
-		else if (collisionShape instanceof CapsuleCollisionShape) {
+			Vector3f rightDirection, Node spatial) {
+		Vector3f extent = ((BoundingBox) spatial.getWorldBound()).getExtent(
+				new Vector3f());
 
-			sizeOfClonedSpatialInGivenDirection =
-					((CapsuleCollisionShape) collisionShape).getRadius() * 2;
-		}
-		else if (collisionShape instanceof BoxCollisionShape) {
-			boolean movesToX = rightDirection.getX() != 0;
-			Vector3f halfExtents = ((BoxCollisionShape) collisionShape).getHalfExtents();
-			sizeOfClonedSpatialInGivenDirection = movesToX ?
-					halfExtents.getX() :
-					halfExtents.getZ();
-			sizeOfClonedSpatialInGivenDirection *= 2;
-		}
-		else {
-			throw new UnsupportedOperationException(
-					"Unsupported shape: " + collisionShape.getClass());
-		}
-		return sizeOfClonedSpatialInGivenDirection;
+		return extent.mult(rightDirection)
+					 .length();
 	}
 
 	private ArrayList<Vector3f> getPointsToCheckCollisionsWith(

@@ -21,7 +21,7 @@ import java.util.List;
 public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
-	private final static boolean readFromFile = true;
+	private final static boolean startFromScratch = false;
 	private ModelsLoader modelsLoader;
 	private FileLoad fileLoad;
 	private ModelToSceneAdder modelToSceneAdder;
@@ -73,12 +73,14 @@ public class LevelEditor extends SimpleApplication {
 		modelsLoader.findAllModelsInPaths();
 		initializePhysicsSpace();
 		fileLoad = new FileLoad();
-		List<SpatialDTO> spatials = readFromFile ?
-				fileLoad.readFile(inputStream) :
-				modelsLoader.loadModels();
+		List<SpatialDTO> spatials = startFromScratch ?
+				modelsLoader.loadModels() :
+				fileLoad.readFile(inputStream);
 		modelToSceneAdder = new ModelToSceneAdder(modelsLoader, stateManager,
 				rootNode, cam, applicationStateDTO);
-		modelToSceneAdder.addModels(spatials);
+		if (!startFromScratch){
+			modelToSceneAdder.addModels(spatials);
+		}
 
 	}
 

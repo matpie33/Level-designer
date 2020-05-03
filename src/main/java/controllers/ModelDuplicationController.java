@@ -46,8 +46,12 @@ public class ModelDuplicationController implements AbstractController {
 				Vector3f whereToPlaceClone = duplicateObjectPositionController.findWhereToPlaceClone(
 						selectedNode);
 				clone.setLocalTranslation(whereToPlaceClone);
-				clone.getControl(CharacterControl.class)
-					 .setPhysicsLocation(whereToPlaceClone);
+				CharacterControl control = clone.getControl(
+						CharacterControl.class);
+				if (control != null) {
+					control
+						 .setPhysicsLocation(whereToPlaceClone);
+				}
 				rootNode.attachChild(clone);
 			}
 

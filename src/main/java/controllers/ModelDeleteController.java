@@ -24,12 +24,16 @@ public class ModelDeleteController implements AbstractController {
 			GhostControl control = selectedNode.getControl(GhostControl.class);
 			CharacterControl characterControl = selectedNode.getControl(
 					CharacterControl.class);
-			control.getPhysicsSpace()
-				   .remove(control);
-			characterControl.getPhysicsSpace()
-				   .remove(characterControl);
-			selectedNode.removeControl(control);
-			selectedNode.removeControl(characterControl);
+			if (control != null) {
+				control.getPhysicsSpace()
+					   .remove(control);
+				selectedNode.removeControl(control);
+			}
+			if (characterControl != null) {
+				characterControl.getPhysicsSpace()
+								.remove(characterControl);
+				selectedNode.removeControl(characterControl);
+			}
 			selectedNode.removeFromParent();
 		}
 		applicationStateDTO.clearSelectedModels();

@@ -29,8 +29,10 @@ public class ModelRotationController implements AbstractController {
 				CharacterControl control = selectedModel.getNode()
 														.getControl(
 																CharacterControl.class);
-				control.setViewDirection(BY_Y_90_DEGREE_ROTATION.mult(
-						control.getViewDirection()));
+				if (control != null) {
+					control.setViewDirection(BY_Y_90_DEGREE_ROTATION.mult(
+							control.getViewDirection()));
+				}
 			}
 		}
 	}
