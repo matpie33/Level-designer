@@ -50,34 +50,38 @@ public class ModelToSceneAdder {
 		spatial.setLocalRotation(spatialData.getRotation());
 		spatial.setLocalTranslation(spatialData.getPosition());
 		CharacterControl control = spatial.getControl(CharacterControl.class);
-		control.setPhysicsLocation(spatialData.getPosition());
-		control.setViewDirection(spatialData.getRotation()
-											.mult(new Vector3f(0, 0, 1)));
+		if (control != null) {
+
+			control.setPhysicsLocation(spatialData.getPosition());
+			control.setViewDirection(spatialData.getRotation()
+												.mult(new Vector3f(0, 0, 1)));
+		}
 
 	}
 
 	public void addControls(Spatial spatial) {
-		CollisionShape shape = new BoxCollisionShape(
-				((BoundingBox) spatial.getWorldBound()).getExtent(
-						new Vector3f()));
+
+		spatial.setName(spatial.getName() + " parent");
 		String name = spatial.getKey()
 							 .getName();
-		if (name.contains("map") || name.contains("house")) {
-			shape = CollisionShapeFactory.createMeshShape(spatial);
+		if (!name.contains("map") && !name.contains("house")) {
+			CollisionShape shape = new BoxCollisionShape(
+					((BoundingBox) spatial.getWorldBound()).getExtent(
+							new Vector3f()));
+			GhostControl ghostControl = new GhostControl(shape);
+			spatial.addControl(ghostControl);
+			CharacterControl control = new CharacterControl(shape, 0.1f);
+			spatial.addControl(control);
+			control.setGravity(Vector3f.ZERO);
+			BulletAppState state = appStateManager.getState(BulletAppState.class);
+			state.getPhysicsSpace()
+				 .add(control);
+			state.getPhysicsSpace()
+				 .add(ghostControl);
 		}
 		ObjectMovementControl objectMovementControl = new ObjectMovementControl(
 				applicationStateDTO, camera);
 		spatial.addControl(objectMovementControl);
-		GhostControl ghostControl = new GhostControl(shape);
-		spatial.addControl(ghostControl);
-		CharacterControl control = new CharacterControl(shape, 0.1f);
-		spatial.addControl(control);
-		control.setGravity(Vector3f.ZERO);
-		BulletAppState state = appStateManager.getState(BulletAppState.class);
-		state.getPhysicsSpace()
-			 .add(control);
-		state.getPhysicsSpace()
-			 .add(ghostControl);
 	}
 
 	private Spatial loadModel(SpatialDTO spatialData) {

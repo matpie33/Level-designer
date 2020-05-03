@@ -1,7 +1,6 @@
 package controllers;
 
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.MatParam;
@@ -50,7 +49,7 @@ public class ModelSelectionController implements AbstractController {
 		if (collisionResults.size() > 0) {
 			CollisionResult closestCollision = collisionResults.getClosestCollision();
 			Node geometry = getNode(closestCollision);
-			if (isModelSelected(geometry)) {
+			if (geometry == null || isModelSelected(geometry)) {
 				return;
 			}
 			clearPreviouslyHoveredModel();
@@ -69,11 +68,11 @@ public class ModelSelectionController implements AbstractController {
 		for (Node spatial = closestCollision.getGeometry()
 											.getParent();
 			 spatial != null; spatial = spatial.getParent()) {
-			if (spatial.getControl(CharacterControl.class) != null) {
+			if (spatial.getName().contains("parent")) {
 				return spatial;
 			}
 		}
-		return null;
+		return closestCollision.getGeometry().getParent();
 	}
 
 	private boolean isModelSelected(Node node) {
@@ -151,6 +150,9 @@ public class ModelSelectionController implements AbstractController {
 				for (Spatial spatial : ((Node) child).getChildren()) {
 					if (spatial instanceof Node) {
 						geometries.addAll(getGeometries((Node) spatial));
+					}
+					else{
+						geometries.add((Geometry)spatial);
 					}
 				}
 

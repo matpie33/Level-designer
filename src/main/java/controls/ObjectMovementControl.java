@@ -86,8 +86,12 @@ public class ObjectMovementControl extends AbstractControl {
 			walkDirection = camera.getUp()
 								  .mult(-movementSpeed);
 		}
-		if (walkDirection != null) {
+		if (walkDirection != null && control != null) {
 			control.setWalkDirection(walkDirection);
+		}
+		if (control == null && walkDirection != null) {
+			spatial.setLocalTranslation(spatial.getLocalTranslation()
+											   .add(walkDirection));
 		}
 	}
 
