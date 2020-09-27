@@ -7,7 +7,6 @@ import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -20,16 +19,16 @@ import java.util.List;
 
 public class ModelToSceneAdder {
 
-	private ModelsLoader modelsLoader;
+	private ModelsLoadAppState modelsLoadAppState;
 	private AppStateManager appStateManager;
 	private Node rootNode;
 	private Camera camera;
 	private ApplicationStateDTO applicationStateDTO;
 
-	public ModelToSceneAdder(ModelsLoader modelsLoader,
+	public ModelToSceneAdder(ModelsLoadAppState modelsLoadAppState,
 			AppStateManager appStateManager, Node rootNode, Camera camera,
 			ApplicationStateDTO applicationStateDTO) {
-		this.modelsLoader = modelsLoader;
+		this.modelsLoadAppState = modelsLoadAppState;
 		this.appStateManager = appStateManager;
 		this.rootNode = rootNode;
 		this.camera = camera;
@@ -86,7 +85,7 @@ public class ModelToSceneAdder {
 
 	private Spatial loadModel(SpatialDTO spatialData) {
 		String pathToModel = spatialData.getPathToModel();
-		return modelsLoader.loadModel(pathToModel);
+		return modelsLoadAppState.loadModel(pathToModel);
 	}
 
 }

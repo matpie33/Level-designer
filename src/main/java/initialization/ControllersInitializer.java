@@ -15,19 +15,19 @@ public class ControllersInitializer {
 	private AppSettings settings;
 	private LevelEditor levelEditor;
 	private BitmapFont guiFont;
-	private ModelsLoader modelsLoader;
+	private ModelsLoadAppState modelsLoadAppState;
 	private ApplicationStateDTO applicationStateDTO;
 	private List<AbstractController> controllers = new ArrayList<>();
 	private ModelToSceneAdder modelToSceneAdder;
 
 	public ControllersInitializer(AppSettings settings, LevelEditor levelEditor,
-			BitmapFont guiFont, ModelsLoader modelsLoader,
+			BitmapFont guiFont, ModelsLoadAppState modelsLoadAppState,
 			ApplicationStateDTO applicationStateDTO,
 			ModelToSceneAdder modelToSceneAdder) {
 		this.settings = settings;
 		this.levelEditor = levelEditor;
 		this.guiFont = guiFont;
-		this.modelsLoader = modelsLoader;
+		this.modelsLoadAppState = modelsLoadAppState;
 		this.applicationStateDTO = applicationStateDTO;
 		this.modelToSceneAdder = modelToSceneAdder;
 	}
@@ -53,14 +53,14 @@ public class ControllersInitializer {
 				levelEditor.getRootNode()));
 		controllers.add(new ModelDuplicationController(applicationStateDTO,
 				levelEditor.getRootNode(), modelSelectionController,
-				modelToSceneAdder, modelsLoader, levelEditor.getCamera()));
+				modelToSceneAdder, modelsLoadAppState, levelEditor.getCamera()));
 		controllers.add(new ModelDeleteController(applicationStateDTO));
 		controllers.add(new ModelRotationController(applicationStateDTO));
 		controllers.add(
 				new AccelerationDecelerationController(applicationStateDTO,
 						levelEditor.getFlyByCamera()));
 		controllers.add(new ModelsLoadController(applicationStateDTO,
-				levelEditor.getGuiNode(), modelsLoader,
+				levelEditor.getGuiNode(), modelsLoadAppState,
 				levelEditor.getRootNode(), levelEditor, modelToSceneAdder));
 	}
 

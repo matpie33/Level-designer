@@ -16,13 +16,13 @@ public class GuiController {
 	private LevelEditor levelEditor;
 	private Node guiNode;
 	private GuiGlobals guiGlobals;
-	private ModelsLoader modelsLoader;
+	private ModelsLoadAppState modelsLoadAppState;
 
 	public GuiController(LevelEditor levelEditor, Node guiNode,
-			ModelsLoader modelsLoader) {
+			ModelsLoadAppState modelsLoadAppState) {
 		this.levelEditor = levelEditor;
 		this.guiNode = guiNode;
-		this.modelsLoader = modelsLoader;
+		this.modelsLoadAppState = modelsLoadAppState;
 	}
 
 	public void initialize() {
@@ -44,8 +44,8 @@ public class GuiController {
 		listBox.addClickCommands(source -> {
 			Integer selection = source.getSelectionModel()
 									  .getSelection();
-			Spatial spatial = modelsLoader.addModel((String) source.getModel()
-																   .get(selection));
+			Spatial spatial = modelsLoadAppState.addModel((String) source.getModel()
+																		 .get(selection));
 			modelToSceneAdder.addControls(spatial);
 			guiNode.detachChild(container);
 			guiGlobals.setCursorEventsEnabled(false);

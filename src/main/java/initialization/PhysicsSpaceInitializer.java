@@ -17,7 +17,7 @@ public class PhysicsSpaceInitializer {
 
 	public void initialize() {
 		BulletAppState state = new BulletAppState();
-		state.setDebugEnabled(true);
+//		state.setDebugEnabled(true);
 		stateManager.attach(state);
 		state.getPhysicsSpace()
 			 .addCollisionListener(listener);

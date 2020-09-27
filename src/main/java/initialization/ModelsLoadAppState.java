@@ -1,5 +1,8 @@
 package initialization;
 
+import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.math.Vector3f;
@@ -13,7 +16,7 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ModelsLoader {
+public class ModelsLoadAppState extends AbstractAppState {
 
 	private Node rootNode;
 	private List<String> paths = new ArrayList<>();
@@ -23,12 +26,17 @@ public class ModelsLoader {
 	private Set<String> modelsRelativePaths = new HashSet<>();
 	private Camera camera;
 
-	public ModelsLoader(AssetManager assetManager, Camera camera,
+	public ModelsLoadAppState(AssetManager assetManager, Camera camera,
 			Node rootNode) {
 		this.assetManager = assetManager;
 		fileLoad = new FileLoad();
 		this.camera = camera;
 		this.rootNode = rootNode;
+	}
+
+	@Override
+	public void initialize(AppStateManager stateManager, Application app) {
+		super.initialize(stateManager, app);
 	}
 
 	public List<SpatialDTO> loadModels() {

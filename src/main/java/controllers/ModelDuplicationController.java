@@ -1,7 +1,6 @@
 package controllers;
 
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -9,26 +8,26 @@ import com.jme3.scene.Spatial;
 import dto.ApplicationStateDTO;
 import dto.NodeDTO;
 import initialization.ModelToSceneAdder;
-import initialization.ModelsLoader;
+import initialization.ModelsLoadAppState;
 
 public class ModelDuplicationController implements AbstractController {
 
 	private ApplicationStateDTO applicationStateDTO;
 	private Node rootNode;
 	private ModelSelectionController modelSelectionController;
-	private ModelsLoader modelsLoader;
+	private ModelsLoadAppState modelsLoadAppState;
 	private DuplicateObjectPositionController duplicateObjectPositionController;
 	private ModelToSceneAdder modelToSceneAdder;
 
 	public ModelDuplicationController(ApplicationStateDTO applicationStateDTO,
 			Node rootNode, ModelSelectionController modelSelectionController,
 			ModelToSceneAdder modelToSceneAdder,
-			ModelsLoader modelsLoader, Camera camera) {
+			ModelsLoadAppState modelsLoadAppState, Camera camera) {
 		this.applicationStateDTO = applicationStateDTO;
 		this.rootNode = rootNode;
 		this.modelSelectionController = modelSelectionController;
 		this.modelToSceneAdder = modelToSceneAdder;
-		this.modelsLoader = modelsLoader;
+		this.modelsLoadAppState = modelsLoadAppState;
 		duplicateObjectPositionController = new DuplicateObjectPositionController(
 				camera, rootNode);
 	}
@@ -60,8 +59,8 @@ public class ModelDuplicationController implements AbstractController {
 	}
 
 	private Node copyModel(Node parent) {
-		Spatial spatial = modelsLoader.loadModel(parent.getKey()
-													   .getName());
+		Spatial spatial = modelsLoadAppState.loadModel(parent.getKey()
+															 .getName());
 		modelToSceneAdder.addControls(spatial);
 		return (Node) spatial;
 	}

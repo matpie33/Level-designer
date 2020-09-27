@@ -22,7 +22,7 @@ public class LevelEditor extends SimpleApplication {
 
 	private ControllersInitializer controllersInitializer;
 	private final static boolean startFromScratch = false;
-	private ModelsLoader modelsLoader;
+	private ModelsLoadAppState modelsLoadAppState;
 	private FileLoad fileLoad;
 	private ModelToSceneAdder modelToSceneAdder;
 	private ApplicationStateDTO applicationStateDTO;
@@ -52,7 +52,7 @@ public class LevelEditor extends SimpleApplication {
 		addLight();
 		loadModels();
 		controllersInitializer = new ControllersInitializer(settings, this,
-				guiFont, modelsLoader, applicationStateDTO, modelToSceneAdder);
+				guiFont, modelsLoadAppState, applicationStateDTO, modelToSceneAdder);
 		controllersInitializer.initilize();
 		initCrosshair();
 		inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
@@ -67,16 +67,16 @@ public class LevelEditor extends SimpleApplication {
 	private void loadModels() {
 		PathToModelsReader pathToModelsReader = new PathToModelsReader();
 		List<String> paths = pathToModelsReader.readPaths();
-		modelsLoader = new ModelsLoader(assetManager, cam, rootNode);
-		modelsLoader.setPaths(paths);
+		modelsLoadAppState = new ModelsLoadAppState(assetManager, cam, rootNode);
+		modelsLoadAppState.setPaths(paths);
 		InputStream inputStream = readFile();
-		modelsLoader.findAllModelsInPaths();
+		modelsLoadAppState.findAllModelsInPaths();
 		initializePhysicsSpace();
 		fileLoad = new FileLoad();
 		List<SpatialDTO> spatials = startFromScratch ?
-				modelsLoader.loadModels() :
+				modelsLoadAppState.loadModels() :
 				fileLoad.readFile(inputStream);
-		modelToSceneAdder = new ModelToSceneAdder(modelsLoader, stateManager,
+		modelToSceneAdder = new ModelToSceneAdder(modelsLoadAppState, stateManager,
 				rootNode, cam, applicationStateDTO);
 		if (!startFromScratch){
 			modelToSceneAdder.addModels(spatials);
